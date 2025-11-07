@@ -6,47 +6,49 @@ stages:
   - build
   - deploy
 
-# 1. Installation der Abhängigkeiten
+# 1. Installation der Abhängigkeiten (Backend)
 install:
   stage: install
   script:
-    - echo "Installiere Abhängigkeiten..."
-    - npm ci
+    - echo "Installiere Abhängigkeiten im Backend..."
+    - cd backend
+    - npm ci || npm install
   artifacts:
     paths:
-      - node_modules/
+      - backend/node_modules/
     expire_in: "1 week"
 
-# 2. Ausführen der automatisierten Tests
+# 2. Tests (Backend)
 test_backend:
   stage: test
   script:
     - echo "Führe Unit- und Integrationstests aus..."
+    - cd backend
     - npm test
   needs:
     - install
   artifacts:
     when: always
     reports:
-      junit: report.xml
+      junit: backend/report.xml
     expire_in: "1 week"
 
-# 3. Build des Frontends (optional)
+# 3. Build (Frontend)
 build_frontend:
   stage: build
   script:
     - echo "Baue das React-Frontend..."
-    - cd ../frontend
-    - npm ci
+    - cd frontend
+    - npm ci || npm install
     - npm run build
   artifacts:
     paths:
-      - ../frontend/dist
+      - frontend/dist
     expire_in: "1 week"
   needs:
     - test_backend
 
-# 4. (Optional) Deployment
+# 4. Deployment (Optional)
 deploy:
   stage: deploy
   script:
