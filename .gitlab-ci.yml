@@ -1,45 +1,55 @@
 image: node:20
 
 stages:
-  - build
+  - install
   - test
-  - package
+  - build
   - deploy
 
+# 1. Installation der Abhängigkeiten
 install:
-  stage: build
+  stage: install
   script:
-    - npm ci --prefix frontend
-    - npm ci --prefix backend
+    - echo "Installiere Abhängigkeiten..."
+    - npm ci
   artifacts:
     paths:
-      - frontend/dist/
-    expire_in: 1 week
+      - node_modules/
+    expire_in: "1 week"
 
-test:
+# 2. Ausführen der automatisierten Tests
+test_backend:
   stage: test
   script:
-    - npm run test --prefix backend
+    - echo "Führe Unit- und Integrationstests aus..."
+    - npm test
   needs:
     - install
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+    expire_in: "1 week"
 
-build_image:
-  stage: package
-  image: docker:28.5.1
-  services:
-    - docker:28.5.1-dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
+# 3. Build des Frontends (optional)
+build_frontend:
+  stage: build
   script:
-    - docker build -t bmi_app:latest .
+    - echo "Baue das React-Frontend..."
+    - cd ../frontend
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - ../frontend/dist
+    expire_in: "1 week"
   needs:
-    - test
+    - test_backend
 
+# 4. (Optional) Deployment
 deploy:
   stage: deploy
   script:
-    - echo "Deployment erfolgreich abgeschlossen"
-  when: on_success
-  needs:
-    - build_image
+    - echo "Deployment abgeschlossen."
+  only:
+    - main
