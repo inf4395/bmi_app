@@ -1,3 +1,4 @@
+# Image par défaut pour les jobs Node.js
 image: node:20
 
 stages:
@@ -56,20 +57,24 @@ docker_build:
   services:
     - docker:28.5.1-dind
   variables:
-    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://docker:2375
+  before_script:
+    - echo "Starte Docker-Daemon..."
   script:
     - echo "Baue Docker-Image für das Backend..."
     - cd backend
+    - docker info
     - docker build -t bmi_app_backend:latest .
     - docker images
   needs:
     - build_frontend
 
-# 5 Deployment
+# 5 Deployment (Dummy-Job)
 deploy:
   stage: deploy
   script:
-    - echo "Deployment abgeschlossen."
+    - echo "Deployment abgeschlossen (simuliert)."
   only:
     - main
