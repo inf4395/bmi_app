@@ -1,82 +1,58 @@
-# Standard-Image für Docker-Jobs
-image: docker:28.5.1
-
-services:
-  - docker:28.5.1-dind
-
-variables:
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
-  DOCKER_HOST: tcp://docker:2375/
+# Standard Node.js Image
+image: node:20
 
 stages:
   - install
   - test
   - build
-  - docker_compose
   - deploy
 
-# 1 Abhängigkeiten im Backend installieren
-install:
+# 1) Backend Abhängigkeiten installieren
+install_backend:
   stage: install
-  image: node:20
   script:
-    - echo "Installiere Abhängigkeiten im Backend..."
+    - echo "Installiere Backend-Abhängigkeiten..."
     - cd backend
     - npm ci || npm install
   artifacts:
     paths:
       - backend/node_modules/
-    expire_in: "1 week"
+    expire_in: 1 week
 
-# 2 Tests im Backend ausführen
+# 2) Backend Tests (Unit + Integration)
 test_backend:
   stage: test
-  image: node:20
   script:
-    - echo "Führe Unit- und Integrationstests im Backend aus..."
+    - echo "Führe Backend-Tests aus..."
     - cd backend
     - npm test
   needs:
-    - install
+    - install_backend
   artifacts:
     when: always
-    reports:
-      junit: backend/report.xml
-    expire_in: "1 week"
+    expire_in: 1 week
 
-# 3 Frontend bauen (React)
+# 3) Frontend Build
 build_frontend:
   stage: build
-  image: node:20
   script:
-    - echo "Baue das React-Frontend..."
+    - echo "Baue React-Frontend..."
     - cd frontend
     - npm ci || npm install
     - npm run build
-  artifacts:
-    paths:
-      - frontend/dist
-    expire_in: "1 week"
   needs:
     - test_backend
+  artifacts:
+    paths:
+      - frontend/dist/
+    expire_in: 1 week
 
-# 4 Docker-Compose Build
-docker_compose:
-  stage: docker_compose
-  script:
-    - echo "Baue das gesamte Projekt mit Docker Compose..."
-    - docker info
-    - docker compose version
-    - docker compose build
-    - docker images
-  needs:
-    - build_frontend
-
-# 5 Deployment (Platzhalter)
+# 4) (Simuliertes) Deployment
 deploy:
   stage: deploy
   script:
-    - echo "Deployment abgeschlossen (nur Simulation, kein Server konfiguriert)."
+    - echo "Deployment erfolgreich simuliert."
   only:
     - main
+  needs:
+    - build_frontend
