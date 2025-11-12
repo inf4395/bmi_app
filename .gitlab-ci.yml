@@ -1,16 +1,25 @@
-# Image par défaut pour les jobs Node.js
-image: node:20
+# Standard-Image für Docker-Jobs
+image: docker:28.5.1
+
+services:
+  - docker:28.5.1-dind
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_HOST: tcp://docker:2375/
 
 stages:
   - install
   - test
   - build
-  - docker_build
+  - docker_compose
   - deploy
 
-# 1 Installation Backend
+# 1 Abhängigkeiten im Backend installieren
 install:
   stage: install
+  image: node:20
   script:
     - echo "Installiere Abhängigkeiten im Backend..."
     - cd backend
@@ -20,11 +29,12 @@ install:
       - backend/node_modules/
     expire_in: "1 week"
 
-# 2 Tests Backend
+# 2 Tests im Backend ausführen
 test_backend:
   stage: test
+  image: node:20
   script:
-    - echo "Führe Unit- und Integrationstests aus..."
+    - echo "Führe Unit- und Integrationstests im Backend aus..."
     - cd backend
     - npm test
   needs:
@@ -35,9 +45,10 @@ test_backend:
       junit: backend/report.xml
     expire_in: "1 week"
 
-# 3 Build Frontend
+# 3 Frontend bauen (React)
 build_frontend:
   stage: build
+  image: node:20
   script:
     - echo "Baue das React-Frontend..."
     - cd frontend
@@ -50,31 +61,22 @@ build_frontend:
   needs:
     - test_backend
 
-# 4 Docker Build (Backend)
-docker_build:
-  stage: docker_build
-  image: docker:28.5.1
-  services:
-    - docker:28.5.1-dind
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-    DOCKER_HOST: tcp://docker:2375
-  before_script:
-    - echo "Starte Docker-Daemon..."
+# 4 Docker-Compose Build
+docker_compose:
+  stage: docker_compose
   script:
-    - echo "Baue Docker-Image für das Backend..."
-    - cd backend
+    - echo "Baue das gesamte Projekt mit Docker Compose..."
     - docker info
-    - docker build -t bmi_app_backend:latest .
+    - docker compose version
+    - docker compose build
     - docker images
   needs:
     - build_frontend
 
-# 5 Deployment (Dummy-Job)
+# 5 Deployment (Platzhalter)
 deploy:
   stage: deploy
   script:
-    - echo "Deployment abgeschlossen (simuliert)."
+    - echo "Deployment abgeschlossen (nur Simulation, kein Server konfiguriert)."
   only:
     - main
