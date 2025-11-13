@@ -1,46 +1,52 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_HOST = "tcp://localhost:2375"
+    }
+
     stages {
-        stage('Build') {
+
+        stage('Install Backend') {
             steps {
-                echo 'Installing dependencies...'
-                sh 'npm ci --prefix frontend'
-                sh 'npm ci --prefix backend'
-                sh 'npm run build --prefix frontend'
+                echo "Installing backend dependencies..."
+                dir('backend') {
+                    sh 'npm ci || npm install'
+                }
             }
         }
 
-        stage('Test') {
+        stage('Run Tests') {
             steps {
-                echo 'Running tests...'
-                sh 'npm test --prefix backend'
+                echo "Running backend tests..."
+                dir('backend') {
+                    sh 'npm test'
+                }
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                echo "Building frontend..."
+                dir('frontend') {
+                    sh 'npm ci || npm install'
+                    sh 'npm run build'
+                }
             }
         }
 
         stage('Docker Build') {
             steps {
-                echo 'Building Docker image...'
-                sh 'docker build -t bmi_app:latest .'
+                echo "Building Docker images with docker-compose..."
+                sh 'docker-compose build'
             }
         }
 
-        stage('Deploy') {
+        stage('Docker Up (simulate deployment)') {
             steps {
-                echo 'Deployment erfolgreich abgeschlossen'
+                echo "Starting containers (simulation only)..."
+                sh 'docker-compose up -d'
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Pipeline abgeschlossen.'
-        }
-        success {
-            echo 'Pipeline erfolgreich!'
-        }
-        failure {
-            echo 'Pipeline fehlgeschlagen!'
         }
     }
 }
