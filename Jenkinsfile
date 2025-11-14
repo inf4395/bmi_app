@@ -1,51 +1,51 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_HOST = "tcp://localhost:2375"
+    tools {
+        nodejs "node20"
     }
 
     stages {
-
+        
         stage('Install Backend') {
             steps {
                 echo "Installing backend dependencies..."
                 dir('backend') {
-                    sh 'npm ci || npm install'
+                    sh "npm ci || npm install"
                 }
             }
         }
 
         stage('Run Tests') {
             steps {
-                echo "Running backend tests..."
+                echo "Running unit & integration tests..."
                 dir('backend') {
-                    sh 'npm test'
+                    sh "npm test"
                 }
             }
         }
 
         stage('Build Frontend') {
             steps {
-                echo "Building frontend..."
+                echo "Building the React frontend..."
                 dir('frontend') {
-                    sh 'npm ci || npm install'
-                    sh 'npm run build'
+                    sh "npm ci || npm install"
+                    sh "npm run build"
                 }
             }
         }
 
         stage('Docker Build') {
             steps {
-                echo "Building Docker images with docker-compose..."
-                sh 'docker-compose build'
+                echo "Building Docker images..."
+                sh "docker-compose build"
             }
         }
 
         stage('Docker Up (simulate deployment)') {
             steps {
-                echo "Starting containers (simulation only)..."
-                sh 'docker-compose up -d'
+                echo "Simulating deployment with Docker Compose..."
+                sh "docker-compose up -d"
             }
         }
     }
