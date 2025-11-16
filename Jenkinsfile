@@ -40,14 +40,14 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo "Building Docker images..."
-                sh "docker-compose build"
+                sh "docker compose build"
             }
         }
 
         stage('Docker Up (simulate deployment)') {
             steps {
                 echo "Simulating deployment with Docker Compose..."
-                sh "docker-compose up -d"
+                sh "docker compose up -d"
             }
         }
     }
