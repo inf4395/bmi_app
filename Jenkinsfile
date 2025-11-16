@@ -1,8 +1,10 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs "node20"
+    
+    environment {
+      
+        PATH = "/usr/local/bin:${env.PATH}"
     }
 
     stages {
