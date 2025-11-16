@@ -1,0 +1,17 @@
+FROM jenkins/jenkins:lts
+
+USER root
+
+# Installer Node.js 20 + npm + dépendances nécessaires
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
+    libatomic1 \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get clean
+
+# Vérification
+RUN node -v && npm -v
+
+USER jenkins
