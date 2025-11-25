@@ -6,13 +6,14 @@ import "./Programs.css";
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 const Programs = () => {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   const [currentBMI, setCurrentBMI] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedProgram, setSelectedProgram] = useState(null);
 
   useEffect(() => {
     fetchCurrentBMI();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchCurrentBMI = async () => {

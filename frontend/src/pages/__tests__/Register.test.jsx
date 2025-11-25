@@ -16,6 +16,7 @@ vi.mock("react-router-dom", async () => {
 });
 
 // Mock fetch
+// eslint-disable-next-line no-undef
 global.fetch = vi.fn();
 
 const renderWithProviders = (component) => {
@@ -30,7 +31,6 @@ describe("RegisterPage", () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
-    mockNavigate.mockClear();
   });
 
   it("renders registration form", () => {
@@ -56,7 +56,9 @@ describe("RegisterPage", () => {
       token: "mock-token",
     };
 
-    fetch.mockResolvedValueOnce({
+    // eslint-disable-next-line no-undef
+    global.    // eslint-disable-next-line no-undef
+    global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockResponse,
     });
@@ -69,7 +71,8 @@ describe("RegisterPage", () => {
     await user.click(screen.getByRole("button", { name: /Konto erstellen/i }));
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith(
+      // eslint-disable-next-line no-undef
+      expect(global.fetch).toHaveBeenCalledWith(
         expect.stringContaining("/auth/register"),
         expect.objectContaining({
           method: "POST",

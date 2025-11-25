@@ -6,7 +6,7 @@ import Navigation from "../components/Navigation.jsx";
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 const BmiCalculator = () => {
-  const { user, token, logout } = useAuth();
+  const { user, token } = useAuth();
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
@@ -50,7 +50,7 @@ const BmiCalculator = () => {
 
       const data = await response.json();
       setResult(data);
-    } catch (err) {
+    } catch {
       setError("Fehler beim Abrufen der Daten. Bitte erneut versuchen.");
     } finally {
       setLoading(false);

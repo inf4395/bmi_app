@@ -6,16 +6,16 @@ import LoginPage from "../Login";
 import { AuthProvider } from "../../context/AuthContext";
 
 // Mock useNavigate
-const mockNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
   const actual = await vi.importActual("react-router-dom");
   return {
     ...actual,
-    useNavigate: () => mockNavigate,
+    useNavigate: () => vi.fn(),
   };
 });
 
 // Mock fetch
+// eslint-disable-next-line no-undef
 global.fetch = vi.fn();
 
 const renderWithProviders = (component) => {
@@ -30,7 +30,6 @@ describe("LoginPage", () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
-    mockNavigate.mockClear();
   });
 
   it("renders login form", () => {
@@ -55,7 +54,8 @@ describe("LoginPage", () => {
       token: "mock-token",
     };
 
-    fetch.mockResolvedValueOnce({
+    // eslint-disable-next-line no-undef
+    global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockResponse,
     });
@@ -67,7 +67,8 @@ describe("LoginPage", () => {
     await user.click(screen.getByRole("button", { name: /Einloggen/i }));
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith(
+      // eslint-disable-next-line no-undef
+      expect(global.fetch).toHaveBeenCalledWith(
         expect.stringContaining("/auth/login"),
         expect.objectContaining({
           method: "POST",
@@ -83,7 +84,8 @@ describe("LoginPage", () => {
   it("displays error message on login failure", async () => {
     const user = userEvent.setup();
 
-    fetch.mockResolvedValueOnce({
+    // eslint-disable-next-line no-undef
+    global.fetch.mockResolvedValueOnce({
       ok: false,
       json: async () => ({ error: "Ungültige Zugangsdaten." }),
     });

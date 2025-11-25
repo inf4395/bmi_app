@@ -20,6 +20,7 @@ const Statistics = () => {
       setLoading(false);
       setError("Nicht angemeldet");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const fetchStatistics = async () => {
