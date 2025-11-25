@@ -84,9 +84,12 @@ describe("LoginPage", () => {
   it("displays error message on login failure", async () => {
     const user = userEvent.setup();
 
+    // Mock fetch to return an error response
     // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: false,
+      status: 401,
+      statusText: "Unauthorized",
       json: async () => ({ error: "Ungültige Zugangsdaten." }),
     });
 
@@ -94,11 +97,17 @@ describe("LoginPage", () => {
 
     await user.type(screen.getByLabelText(/E-Mail-Adresse/i), "test@example.com");
     await user.type(screen.getByLabelText(/Passwort/i), "wrong");
-    await user.click(screen.getByRole("button", { name: /Einloggen/i }));
+    
+    // Submit the form
+    const submitButton = screen.getByRole("button", { name: /Einloggen/i });
+    await user.click(submitButton);
 
-    await waitFor(() => {
-      expect(screen.getByText(/Ungültige Zugangsdaten/i)).toBeInTheDocument();
-    });
+    // Wait for the error to appear - the AuthContext should set the error state
+    // The error is set in the catch block of the request function
+    // Use findByText which automatically waits for the element to appear
+    const errorMessage = await screen.findByText(/Ungültige Zugangsdaten/i, {}, { timeout: 3000 });
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveClass("error-message");
   });
 });
 
