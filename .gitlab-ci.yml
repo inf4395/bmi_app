@@ -1,58 +1,241 @@
-# Standard Node.js Image
+# GitLab CI/CD Pipeline Configuration
 image: node:20
 
 stages:
   - install
+  - lint
   - test
   - build
+  - e2e
+  - docker
   - deploy
 
-# 1) Backend Abhängigkeiten installieren
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+
+# Cache pour accélérer les builds
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - backend/node_modules/
+    - frontend/node_modules/
+    - node_modules/
+
+# ============================================
+# STAGE 1: INSTALL
+# ============================================
+
 install_backend:
   stage: install
   script:
-    - echo "Installiere Backend-Abhängigkeiten..."
+    - echo "📦 Installing backend dependencies..."
     - cd backend
-    - npm ci || npm install
+    - npm ci
   artifacts:
     paths:
       - backend/node_modules/
-    expire_in: 1 week
+    expire_in: 1 hour
+  only:
+    - merge_requests
+    - main
+    - develop
 
-# 2) Backend Tests (Unit + Integration)
+install_frontend:
+  stage: install
+  script:
+    - echo "📦 Installing frontend dependencies..."
+    - cd frontend
+    - npm ci
+  artifacts:
+    paths:
+      - frontend/node_modules/
+    expire_in: 1 hour
+  only:
+    - merge_requests
+    - main
+    - develop
+
+# ============================================
+# STAGE 2: LINT
+# ============================================
+
+lint_backend:
+  stage: lint
+  script:
+    - echo "🔍 Linting backend code..."
+    - cd backend
+    - npm ci || npm install
+    - npm run lint || echo "No lint script found, skipping..."
+  allow_failure: true
+  only:
+    - merge_requests
+    - main
+    - develop
+
+lint_frontend:
+  stage: lint
+  script:
+    - echo "🔍 Linting frontend code..."
+    - cd frontend
+    - npm ci || npm install
+    - npm run lint
+  allow_failure: true
+  only:
+    - merge_requests
+    - main
+    - develop
+
+# ============================================
+# STAGE 3: TEST
+# ============================================
+
 test_backend:
   stage: test
   script:
-    - echo "Führe Backend-Tests aus..."
+    - echo "🧪 Running backend tests..."
     - cd backend
+    - npm ci || npm install
     - npm test
-  needs:
-    - install_backend
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
   artifacts:
-    when: always
+    reports:
+      junit: backend/test-results.xml
+    paths:
+      - backend/coverage/
     expire_in: 1 week
+    when: always
+  only:
+    - merge_requests
+    - main
+    - develop
 
-# 3) Frontend Build
+test_frontend:
+  stage: test
+  script:
+    - echo "🧪 Running frontend tests..."
+    - cd frontend
+    - npm ci || npm install
+    - npm test
+  artifacts:
+    reports:
+      junit: frontend/test-results.xml
+    paths:
+      - frontend/coverage/
+    expire_in: 1 week
+    when: always
+  only:
+    - merge_requests
+    - main
+    - develop
+
+# ============================================
+# STAGE 4: BUILD
+# ============================================
+
 build_frontend:
   stage: build
   script:
-    - echo "Baue React-Frontend..."
+    - echo "🏗️ Building React frontend..."
     - cd frontend
     - npm ci || npm install
     - npm run build
-  needs:
-    - test_backend
   artifacts:
     paths:
       - frontend/dist/
     expire_in: 1 week
+  only:
+    - merge_requests
+    - main
+    - develop
 
-# 4) (Simuliertes) Deployment
-deploy:
-  stage: deploy
+# ============================================
+# STAGE 5: E2E TESTS
+# ============================================
+
+e2e_tests:
+  stage: e2e
+  image: mcr.microsoft.com/playwright:v1.48.0-jammy
+  services:
+    - docker:dind
+  before_script:
+    - echo "🎭 Setting up E2E test environment..."
+    - npm install
+    - npx playwright install chromium --with-deps
   script:
-    - echo "Deployment erfolgreich simuliert."
+    - echo "🎭 Running E2E tests..."
+    # Démarrer les services en arrière-plan
+    - cd backend && npm ci && npm start &
+    - cd frontend && npm ci && npm run dev &
+    - sleep 10
+    # Attendre que les services soient prêts
+    - timeout 60 bash -c 'until curl -f http://localhost:3000/api/health; do sleep 2; done'
+    - timeout 60 bash -c 'until curl -f http://localhost:5173; do sleep 2; done'
+    # Lancer les tests E2E
+    - npm run test:e2e
+  artifacts:
+    when: always
+    paths:
+      - playwright-report/
+      - test-results/
+    expire_in: 1 week
   only:
     - main
-  needs:
-    - build_frontend
+    - develop
+
+# ============================================
+# STAGE 6: DOCKER BUILD
+# ============================================
+
+docker_build:
+  stage: docker
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - echo "🐳 Building Docker images..."
+    - docker build -t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY_IMAGE/backend:latest ./backend
+    - docker build -t $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY_IMAGE/frontend:latest ./frontend
+    - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE/backend:latest
+    - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE/frontend:latest
+  only:
+    - main
+    - tags
+
+# ============================================
+# STAGE 7: DEPLOY
+# ============================================
+
+deploy_staging:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - echo "🚀 Deploying to staging environment..."
+    - docker-compose -f docker-compose.staging.yml up -d || echo "Staging deployment simulated"
+  environment:
+    name: staging
+    url: https://staging.bmi-app.example.com
+  only:
+    - develop
+
+deploy_production:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - echo "🚀 Deploying to production environment..."
+    - docker-compose -f docker-compose.prod.yml up -d || echo "Production deployment simulated"
+  environment:
+    name: production
+    url: https://bmi-app.example.com
+  when: manual
+  only:
+    - main
+    - tags

@@ -1,2 +1,11 @@
-node_modules
-npm-debug.log
+node_modules/
+npm-debug.log*
+coverage/
+test-results/
+*.db
+*.db-journal
+.env
+.env.local
+*.log
+.git/
+.gitignore
