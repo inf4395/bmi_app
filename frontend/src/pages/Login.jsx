@@ -8,11 +8,10 @@ const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   useEffect(() => {
-    clearError();
     if (user) {
       navigate("/dashboard");
     }
-  }, [user, navigate, clearError]);
+  }, [user, navigate]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -21,6 +20,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    clearError(); // Clear any previous errors before submitting
     try {
       await login(formData);
       navigate("/dashboard");

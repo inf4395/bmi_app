@@ -90,11 +90,12 @@ describe("LoginPage", () => {
       ok: false,
       status: 401,
       statusText: "Unauthorized",
-      json: async () => ({ error: "Ungültige Zugangsdaten." }),
+      json: async () => Promise.resolve({ error: "Ungültige Zugangsdaten." }),
     });
 
     renderWithProviders(<LoginPage />);
 
+    // Fill in the form
     await user.type(screen.getByLabelText(/E-Mail-Adresse/i), "test@example.com");
     await user.type(screen.getByLabelText(/Passwort/i), "wrong");
     
@@ -104,7 +105,6 @@ describe("LoginPage", () => {
 
     // Wait for the error to appear - the AuthContext should set the error state
     // The error is set in the catch block of the request function
-    // Use findByText which automatically waits for the element to appear
     const errorMessage = await screen.findByText(/Ungültige Zugangsdaten/i, {}, { timeout: 3000 });
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveClass("error-message");
