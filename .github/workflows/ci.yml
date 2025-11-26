@@ -185,8 +185,8 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Install Playwright
-        run: npx playwright install --with-deps chromium
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Start backend server
         working-directory: backend

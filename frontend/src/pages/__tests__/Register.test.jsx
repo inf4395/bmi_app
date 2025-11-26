@@ -55,8 +55,7 @@ describe("RegisterPage", () => {
       token: "mock-token",
     };
 
-    // eslint-disable-next-line no-undef
-    global.    global.fetch.mockResolvedValueOnce({
+    global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockResponse,
     });
