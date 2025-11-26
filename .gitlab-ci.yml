@@ -249,10 +249,11 @@ deploy-staging:
     - docker-build-backend
     - docker-build-frontend
   script:
-    - echo "Deploying to staging..."
-    - echo "Add your deployment commands here"
-    - echo "Example: kubectl apply -f k8s/staging/"
-    - echo "Or: docker-compose -f docker-compose.staging.yml up -d"
+    - |
+      echo "Deploying to staging..."
+      echo "Add your deployment commands here"
+      echo "Example: kubectl apply -f k8s/staging/"
+      echo "Or: docker-compose -f docker-compose.staging.yml up -d"
   environment:
     name: staging
     url: https://staging.bmi-app.example.com
@@ -267,10 +268,11 @@ deploy-production:
     - docker-build-backend
     - docker-build-frontend
   script:
-    - echo "Deploying to production..."
-    - echo "Add your deployment commands here"
-    - echo "Example: kubectl apply -f k8s/production/"
-    - echo "Or: docker-compose -f docker-compose.prod.yml up -d"
+    - |
+      echo "Deploying to production..."
+      echo "Add your deployment commands here"
+      echo "Example: kubectl apply -f k8s/production/"
+      echo "Or: docker-compose -f docker-compose.prod.yml up -d"
   environment:
     name: production
     url: https://bmi-app.example.com
