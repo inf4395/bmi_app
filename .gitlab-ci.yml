@@ -161,21 +161,16 @@ e2e-tests:
     - cd ..
     - npx playwright install --with-deps chromium firefox webkit
   script:
-    # Start backend server in background
     - cd backend && npm start &
     - export BACKEND_PID=$!
-    # Start frontend server in background
     - cd frontend && npm run dev &
     - export FRONTEND_PID=$!
-    # Wait for servers to be ready
     - |
       echo "Waiting for backend server..."
       timeout 60 bash -c 'until curl -f http://localhost:3000/api/health; do sleep 2; done'
       echo "Waiting for frontend server..."
       timeout 60 bash -c 'until curl -f http://localhost:5173; do sleep 2; done'
-    # Run E2E tests
     - npm run test:e2e
-    # Cleanup
     - kill $BACKEND_PID || true
     - kill $FRONTEND_PID || true
   environment:
@@ -259,16 +254,16 @@ deploy-staging:
     - docker-build-backend
     - docker-build-frontend
   script:
-    - echo "🚀 Deploying to staging..."
+    - echo "Deploying to staging..."
     - echo "Add your deployment commands here"
     - echo "Example: kubectl apply -f k8s/staging/"
     - echo "Or: docker-compose -f docker-compose.staging.yml up -d"
   environment:
     name: staging
     url: https://staging.bmi-app.example.com
-  only:
-    - develop
-  when: manual
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      when: manual
 
 deploy-production:
   stage: deploy
@@ -277,13 +272,13 @@ deploy-production:
     - docker-build-backend
     - docker-build-frontend
   script:
-    - echo "🚀 Deploying to production..."
+    - echo "Deploying to production..."
     - echo "Add your deployment commands here"
     - echo "Example: kubectl apply -f k8s/production/"
     - echo "Or: docker-compose -f docker-compose.prod.yml up -d"
   environment:
     name: production
     url: https://bmi-app.example.com
-  only:
-    - main
-  when: manual
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: manual
