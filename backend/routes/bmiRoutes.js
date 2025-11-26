@@ -13,7 +13,28 @@ export default (db) => {
         return res.status(400).json({ error: "Fehlende Eingabedaten." });
       }
 
-      const bmi = weight / ((height / 100) * (height / 100));
+      // Validation des valeurs numériques
+      const heightNum = parseFloat(height);
+      const weightNum = parseFloat(weight);
+
+      if (isNaN(heightNum) || heightNum <= 0) {
+        return res.status(400).json({ error: "Die Höhe muss eine positive Zahl sein." });
+      }
+
+      if (isNaN(weightNum) || weightNum <= 0) {
+        return res.status(400).json({ error: "Das Gewicht muss eine positive Zahl sein." });
+      }
+
+      // Limites réalistes
+      if (heightNum < 50 || heightNum > 300) {
+        return res.status(400).json({ error: "Die Höhe muss zwischen 50 und 300 cm liegen." });
+      }
+
+      if (weightNum < 10 || weightNum > 500) {
+        return res.status(400).json({ error: "Das Gewicht muss zwischen 10 und 500 kg liegen." });
+      }
+
+      const bmi = weightNum / ((heightNum / 100) * (heightNum / 100));
 
       let status = "";
       if (bmi < 18.5) status = "Untergewicht";
@@ -22,12 +43,12 @@ export default (db) => {
       else status = "Adipositas";
 
       const userId = req.user.id;
-      console.log(`[BMI] Creating record for user_id: ${userId}`, { name, email, age, height, weight, bmi, status });
+      console.log(`[BMI] Creating record for user_id: ${userId}`, { name, email, age, height: heightNum, weight: weightNum, bmi, status });
       
       const result = await db.run(
         `INSERT INTO bmi_records (name, email, age, height, weight, bmi, status, user_id)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [name, email, age || null, height, weight, bmi, status, userId]
+        [name, email, age || null, heightNum, weightNum, bmi, status, userId]
       );
 
       console.log(`[BMI] Record created with id: ${result.lastID} for user ${userId}`);
@@ -78,7 +99,28 @@ export default (db) => {
         return res.status(400).json({ error: "Höhe und Gewicht sind erforderlich." });
       }
 
-      const bmi = weight / ((height / 100) * (height / 100));
+      // Validation des valeurs numériques
+      const heightNum = parseFloat(height);
+      const weightNum = parseFloat(weight);
+
+      if (isNaN(heightNum) || heightNum <= 0) {
+        return res.status(400).json({ error: "Die Höhe muss eine positive Zahl sein." });
+      }
+
+      if (isNaN(weightNum) || weightNum <= 0) {
+        return res.status(400).json({ error: "Das Gewicht muss eine positive Zahl sein." });
+      }
+
+      // Limites réalistes
+      if (heightNum < 50 || heightNum > 300) {
+        return res.status(400).json({ error: "Die Höhe muss zwischen 50 und 300 cm liegen." });
+      }
+
+      if (weightNum < 10 || weightNum > 500) {
+        return res.status(400).json({ error: "Das Gewicht muss zwischen 10 und 500 kg liegen." });
+      }
+
+      const bmi = weightNum / ((heightNum / 100) * (heightNum / 100));
       let status = "";
       if (bmi < 18.5) status = "Untergewicht";
       else if (bmi < 25) status = "Normalgewicht";
@@ -89,7 +131,7 @@ export default (db) => {
         `UPDATE bmi_records
          SET name = ?, email = ?, height = ?, weight = ?, bmi = ?, status = ?
          WHERE id = ? AND user_id = ?`,
-        [name, email, height, weight, bmi, status, id, req.user.id]
+        [name, email, heightNum, weightNum, bmi, status, id, req.user.id]
       );
 
       if (result.changes === 0) {

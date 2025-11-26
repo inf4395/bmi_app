@@ -14,6 +14,17 @@ export default (db) => {
         return res.status(400).json({ error: "Name, E-Mail und Passwort sind erforderlich." });
       }
 
+      // Validation de l'email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: "Ungültige E-Mail-Adresse." });
+      }
+
+      // Validation du mot de passe
+      if (password.length < 6) {
+        return res.status(400).json({ error: "Das Passwort muss mindestens 6 Zeichen lang sein." });
+      }
+
       const existing = await db.get(`SELECT id FROM users WHERE email = ?`, [email.toLowerCase()]);
       if (existing) {
         return res.status(409).json({ error: "Ein Konto mit dieser E-Mail existiert bereits." });
@@ -112,8 +123,24 @@ export default (db) => {
         return res.status(400).json({ error: "Name und E-Mail sind erforderlich." });
       }
 
+      // Validation de l'email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: "Ungültige E-Mail-Adresse." });
+      }
+
       // Convertir height en nombre ou null
-      const heightValue = height ? parseFloat(height) : null;
+      let heightValue = height ? parseFloat(height) : null;
+      
+      // Validation de la hauteur si fournie
+      if (heightValue !== null && !isNaN(heightValue)) {
+        if (heightValue < 0) {
+          return res.status(400).json({ error: "Die Höhe muss eine positive Zahl sein." });
+        }
+        if (heightValue > 0 && (heightValue < 50 || heightValue > 300)) {
+          return res.status(400).json({ error: "Die Höhe muss zwischen 50 und 300 cm liegen." });
+        }
+      }
       
       // Vérifier que birthDate est valide si fourni
       let birthDateValue = birthDate || null;

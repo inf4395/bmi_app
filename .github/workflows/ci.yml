@@ -207,6 +207,8 @@ jobs:
 
       - name: Run E2E tests
         run: npm run test:e2e
+        env:
+          CI: true
 
       - name: Upload E2E test results
         if: always()
@@ -299,7 +301,7 @@ jobs:
 
       - name: Deploy to staging
         run: |
-          echo "🚀 Deploying to staging..."
+          echo " Deploying to staging..."
           # Add your deployment commands here
           # Example: kubectl apply -f k8s/staging/
           # Or: docker-compose -f docker-compose.staging.yml up -d
@@ -318,7 +320,7 @@ jobs:
 
       - name: Deploy to production
         run: |
-          echo "🚀 Deploying to production..."
+          echo " Deploying to production..."
           # Add your deployment commands here
           # Example: kubectl apply -f k8s/production/
           # Or: docker-compose -f docker-compose.prod.yml up -d
