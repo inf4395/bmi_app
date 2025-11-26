@@ -8,7 +8,8 @@ let app;
 let db;
 
 beforeAll(async () => {
-  db = await initDB();
+  // Utiliser une base de données en mémoire pour éviter les conflits
+  db = await initDB(":memory:");
   app = express();
   app.use(cors());
   app.use(express.json());

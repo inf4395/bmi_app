@@ -12,7 +12,8 @@ let validToken;
 let userId;
 
 beforeAll(async () => {
-  db = await initDB();
+  // Utiliser une base de données en mémoire pour éviter les conflits
+  db = await initDB(":memory:");
   app = express();
   app.use(cors());
   app.use(express.json());
@@ -29,12 +30,20 @@ beforeAll(async () => {
     password,
   });
 
+  if (registerResponse.statusCode !== 201) {
+    throw new Error(`Registration failed: ${JSON.stringify(registerResponse.body)}`);
+  }
+
   userId = registerResponse.body.user.id;
 
   const loginResponse = await request(app).post("/api/auth/login").send({
     email: testEmail,
     password,
   });
+
+  if (loginResponse.statusCode !== 200 || !loginResponse.body.token) {
+    throw new Error(`Login failed: ${JSON.stringify(loginResponse.body)}`);
+  }
 
   validToken = loginResponse.body.token;
 });

@@ -11,7 +11,8 @@ let db;
 let token;
 
 beforeAll(async () => {
-  db = await initDB();
+  // Utiliser une base de données en mémoire pour éviter les conflits
+  db = await initDB(":memory:");
   app = express();
   app.use(cors());
   app.use(express.json());
@@ -23,16 +24,24 @@ beforeAll(async () => {
   const testEmail = `testuser_${Date.now()}@example.com`;
   const password = "Secret123!";
 
-  await request(app).post("/api/auth/register").send({
+  const registerResponse = await request(app).post("/api/auth/register").send({
     name: "Stats Tester",
     email: testEmail,
     password,
   });
 
+  if (registerResponse.statusCode !== 201) {
+    throw new Error(`Registration failed: ${JSON.stringify(registerResponse.body)}`);
+  }
+
   const loginResponse = await request(app).post("/api/auth/login").send({
     email: testEmail,
     password,
   });
+
+  if (loginResponse.statusCode !== 200 || !loginResponse.body.token) {
+    throw new Error(`Login failed: ${JSON.stringify(loginResponse.body)}`);
+  }
 
   token = loginResponse.body.token;
 

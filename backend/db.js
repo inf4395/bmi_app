@@ -1,11 +1,19 @@
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 
-export const initDB = async () => {
+export const initDB = async (filename = "./bmi.db") => {
   const db = await open({
-    filename: "./bmi.db",
+    filename,
     driver: sqlite3.Database,
   });
+  
+  // Configurer SQLite pour gérer mieux la concurrence
+  await db.exec("PRAGMA busy_timeout = 5000;"); // Attendre jusqu'à 5 secondes si la DB est verrouillée
+  
+  // Le mode WAL ne fonctionne pas avec les bases de données en mémoire
+  if (filename !== ":memory:") {
+    await db.exec("PRAGMA journal_mode = WAL;"); // Mode WAL pour de meilleures performances en lecture
+  }
 
   await db.exec(`
     CREATE TABLE IF NOT EXISTS users (
