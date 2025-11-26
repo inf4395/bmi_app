@@ -112,7 +112,7 @@ describe("Statistics", () => {
       .mockResolvedValueOnce({
         ok: false,
         status: 500,
-        json: async () => ({ error: "Server error" }),
+        text: async () => "Server error",
       })
       .mockResolvedValueOnce({
         ok: true,
@@ -122,8 +122,10 @@ describe("Statistics", () => {
     renderWithProviders(<Statistics />);
 
     await waitFor(() => {
-      // Statistics component makes two API calls, so we need to handle both
-      const errorElement = screen.queryByText(/Fehler/i) || screen.queryByText(/Server error/i);
+      // Statistics component displays error in a div with error message
+      // The component calls recordsRes.text() which should work with our mock
+      const errorElement = screen.queryByText(/Fehler/i) || 
+                          screen.queryByText(/Fehler beim Laden der Historie/i);
       expect(errorElement).toBeTruthy();
     }, { timeout: 3000 });
   });

@@ -64,7 +64,9 @@ describe("Dashboard", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Willkommen zurück/i)).toBeInTheDocument();
-      expect(screen.getByText(/Test User/i)).toBeInTheDocument();
+      // "Test User" appears in navigation and heading, so use getAllByText
+      const userElements = screen.getAllByText(/Test User/i);
+      expect(userElements.length).toBeGreaterThan(0);
     }, { timeout: 3000 });
   });
 
