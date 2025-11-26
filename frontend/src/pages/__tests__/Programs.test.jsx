@@ -6,7 +6,6 @@ import Programs from "../Programs";
 import { AuthProvider } from "../../context/AuthContext";
 
 // Mock fetch
-// eslint-disable-next-line no-undef
 global.fetch = vi.fn();
 
 const renderWithProviders = (component) => {
@@ -27,7 +26,6 @@ describe("Programs", () => {
   });
 
   it("renders loading state", () => {
-    // eslint-disable-next-line no-undef
     global.fetch.mockImplementation(() => new Promise(() => {}));
 
     renderWithProviders(<Programs />);
@@ -39,7 +37,6 @@ describe("Programs", () => {
       latestBMI: 23.0, // Normalgewicht
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockStats,
@@ -58,7 +55,6 @@ describe("Programs", () => {
       latestBMI: 27.0, // Übergewicht
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockStats,
@@ -76,7 +72,6 @@ describe("Programs", () => {
       latestBMI: 17.0, // Untergewicht
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockStats,
@@ -94,7 +89,6 @@ describe("Programs", () => {
       latestBMI: null,
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockStats,
@@ -113,7 +107,6 @@ describe("Programs", () => {
       latestBMI: 23.0,
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockStats,
@@ -138,7 +131,6 @@ describe("Programs", () => {
       latestBMI: 23.0,
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockStats,

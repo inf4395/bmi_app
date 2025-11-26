@@ -4,7 +4,6 @@ import { AuthProvider, useAuth } from "../AuthContext";
 import { BrowserRouter } from "react-router-dom";
 
 // Mock fetch
-// eslint-disable-next-line no-undef
 global.fetch = vi.fn();
 
 const wrapper = ({ children }) => (
@@ -42,7 +41,6 @@ describe("AuthContext", () => {
       token: "new-token",
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockResponse,
@@ -73,7 +71,6 @@ describe("AuthContext", () => {
       token: "login-token",
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockResponse,
@@ -95,7 +92,6 @@ describe("AuthContext", () => {
   });
 
   it("handles login error", async () => {
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: false,
       json: async () => ({ error: "Invalid credentials" }),

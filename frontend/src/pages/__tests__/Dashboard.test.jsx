@@ -5,7 +5,6 @@ import Dashboard from "../Dashboard";
 import { AuthProvider } from "../../context/AuthContext";
 
 // Mock fetch
-// eslint-disable-next-line no-undef
 global.fetch = vi.fn();
 
 const renderWithProviders = (component) => {
@@ -27,7 +26,6 @@ describe("Dashboard", () => {
   });
 
   it("renders dashboard with loading state", () => {
-    // eslint-disable-next-line no-undef
     global.fetch.mockImplementation(() => new Promise(() => {})); // Never resolves
 
     renderWithProviders(<Dashboard />);
@@ -52,7 +50,6 @@ describe("Dashboard", () => {
       },
     ];
 
-    // eslint-disable-next-line no-undef
     global.fetch
       .mockResolvedValueOnce({
         ok: true,
@@ -89,7 +86,6 @@ describe("Dashboard", () => {
       },
     ];
 
-    // eslint-disable-next-line no-undef
     global.fetch
       .mockResolvedValueOnce({
         ok: true,
@@ -114,7 +110,6 @@ describe("Dashboard", () => {
     const mockStats = { totalRecords: 0 };
     const mockHistory = [];
 
-    // eslint-disable-next-line no-undef
     global.fetch
       .mockResolvedValueOnce({
         ok: true,
@@ -135,7 +130,6 @@ describe("Dashboard", () => {
   });
 
   it("handles API errors gracefully", async () => {
-    // eslint-disable-next-line no-undef
     global.fetch.mockRejectedValueOnce(new Error("Network error"));
 
     renderWithProviders(<Dashboard />);

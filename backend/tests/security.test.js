@@ -123,13 +123,14 @@ describe("Security Tests", () => {
 
     test("protège contre l'injection SQL dans le nom", async () => {
       const maliciousName = "Test'; DROP TABLE users; --";
+      const uniqueEmail = `sqltest_${Date.now()}@example.com`;
       
       const response = await request(app)
         .put("/api/auth/profile")
         .set("Authorization", `Bearer ${validToken}`)
         .send({
           name: maliciousName,
-          email: "test@example.com",
+          email: uniqueEmail,
         });
 
       // Le nom devrait être échappé et stocké tel quel
@@ -137,6 +138,7 @@ describe("Security Tests", () => {
       // Vérifier que la table existe toujours
       const user = await db.get("SELECT * FROM users WHERE id = ?", [userId]);
       expect(user).toBeDefined();
+      expect(user.name).toBe(maliciousName); // Le nom est stocké tel quel (échappé par SQLite)
     });
 
     test("protège contre l'injection SQL dans les paramètres de requête", async () => {
@@ -283,18 +285,21 @@ describe("Security Tests", () => {
   describe("Input Sanitization", () => {
     test("sanitise les entrées XSS potentielles dans le nom", async () => {
       const xssPayload = "<script>alert('XSS')</script>";
+      const uniqueEmail = `xsstest_${Date.now()}@example.com`;
 
       const response = await request(app)
         .put("/api/auth/profile")
         .set("Authorization", `Bearer ${validToken}`)
         .send({
           name: xssPayload,
-          email: "test@example.com",
+          email: uniqueEmail,
         });
 
       expect(response.statusCode).toBe(200);
       // Le nom devrait être stocké tel quel (la sanitization se fait côté frontend)
       // Mais on vérifie qu'il n'y a pas d'erreur serveur
+      const user = await db.get("SELECT * FROM users WHERE id = ?", [userId]);
+      expect(user.name).toBe(xssPayload);
     });
   });
 });

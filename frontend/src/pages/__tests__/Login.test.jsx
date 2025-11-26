@@ -15,7 +15,6 @@ vi.mock("react-router-dom", async () => {
 });
 
 // Mock fetch
-// eslint-disable-next-line no-undef
 global.fetch = vi.fn();
 
 const renderWithProviders = (component) => {
@@ -54,7 +53,6 @@ describe("LoginPage", () => {
       token: "mock-token",
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockResponse,
@@ -67,7 +65,6 @@ describe("LoginPage", () => {
     await user.click(screen.getByRole("button", { name: /Einloggen/i }));
 
     await waitFor(() => {
-      // eslint-disable-next-line no-undef
       expect(global.fetch).toHaveBeenCalledWith(
         expect.stringContaining("/auth/login"),
         expect.objectContaining({
@@ -85,7 +82,6 @@ describe("LoginPage", () => {
     const user = userEvent.setup();
 
     // Mock fetch to return an error response
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: false,
       status: 401,

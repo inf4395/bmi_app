@@ -6,7 +6,6 @@ import Profile from "../Profile";
 import { AuthProvider } from "../../context/AuthContext";
 
 // Mock fetch
-// eslint-disable-next-line no-undef
 global.fetch = vi.fn();
 
 const renderWithProviders = (component) => {
@@ -36,7 +35,6 @@ describe("Profile", () => {
       height: 180,
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ user: mockUser }),
@@ -62,7 +60,6 @@ describe("Profile", () => {
       height: 180,
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ user: mockUser }),
@@ -128,7 +125,6 @@ describe("Profile", () => {
       email: "test@example.com",
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ user: mockUser }),

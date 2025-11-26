@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render } from "@testing-library/react";
-import { axe, toHaveNoViolations } from "jest-axe";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "../../context/AuthContext";
 import LoginPage from "../Login";
@@ -8,10 +7,7 @@ import RegisterPage from "../Register";
 import Dashboard from "../Dashboard";
 import BmiCalculator from "../BmiCalculator";
 
-expect.extend(toHaveNoViolations);
-
 // Mock fetch
-// eslint-disable-next-line no-undef
 global.fetch = vi.fn();
 
 const renderWithProviders = (component) => {
@@ -60,7 +56,6 @@ describe("Accessibility Tests", () => {
     const mockStats = { totalRecords: 0 };
     const mockHistory = [];
 
-    // eslint-disable-next-line no-undef
     global.fetch
       .mockResolvedValueOnce({
         ok: true,

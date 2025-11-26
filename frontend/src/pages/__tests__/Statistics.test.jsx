@@ -5,7 +5,6 @@ import Statistics from "../Statistics";
 import { AuthProvider } from "../../context/AuthContext";
 
 // Mock fetch
-// eslint-disable-next-line no-undef
 global.fetch = vi.fn();
 
 const renderWithProviders = (component) => {
@@ -26,7 +25,6 @@ describe("Statistics", () => {
   });
 
   it("renders loading state", () => {
-    // eslint-disable-next-line no-undef
     global.fetch.mockImplementation(() => new Promise(() => {}));
 
     renderWithProviders(<Statistics />);
@@ -61,7 +59,6 @@ describe("Statistics", () => {
       weightChange: 5,
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch
       .mockResolvedValueOnce({
         ok: true,
@@ -91,7 +88,6 @@ describe("Statistics", () => {
       weightChange: null,
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch
       .mockResolvedValueOnce({
         ok: true,
@@ -112,7 +108,6 @@ describe("Statistics", () => {
   });
 
   it("displays error message on API failure", async () => {
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: false,
       status: 500,
@@ -145,7 +140,6 @@ describe("Statistics", () => {
       latestWeight: 75,
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch
       .mockResolvedValueOnce({
         ok: true,

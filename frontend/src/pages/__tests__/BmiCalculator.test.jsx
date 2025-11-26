@@ -6,7 +6,6 @@ import BmiCalculator from "../BmiCalculator";
 import { AuthProvider } from "../../context/AuthContext";
 
 // Mock fetch
-// eslint-disable-next-line no-undef
 global.fetch = vi.fn();
 
 const renderWithProviders = (component) => {
@@ -56,7 +55,6 @@ describe("BmiCalculator", () => {
       status: "Normalgewicht",
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockResponse,
@@ -79,7 +77,6 @@ describe("BmiCalculator", () => {
   it("displays error message on API failure", async () => {
     const user = userEvent.setup();
 
-    // eslint-disable-next-line no-undef
     global.fetch.mockResolvedValueOnce({
       ok: false,
       status: 500,
@@ -98,8 +95,7 @@ describe("BmiCalculator", () => {
     });
   });
 
-  it("validates required fields", async () => {
-    const user = userEvent.setup();
+  it("validates required fields", () => {
     renderWithProviders(<BmiCalculator />);
 
     const heightInput = screen.getByLabelText(/Größe/i);
