@@ -149,9 +149,6 @@ build-frontend:
 e2e-tests:
   stage: e2e
   image: node:${NODE_VERSION}
-  services:
-    - name: mcr.microsoft.com/playwright:v1.48.0-focal
-      alias: playwright
   dependencies:
     - build-frontend
   before_script:
@@ -206,7 +203,6 @@ docker-build-backend:
   script:
     - |
       if [ -n "$CI_REGISTRY_USER" ]; then
-        BACKEND_TAGS="$CI_REGISTRY_USER/bmi-app-backend:latest,$CI_REGISTRY_USER/bmi-app-backend:$CI_COMMIT_SHA"
         docker build -t $CI_REGISTRY_USER/bmi-app-backend:latest -t $CI_REGISTRY_USER/bmi-app-backend:$CI_COMMIT_SHA ./backend
         docker push $CI_REGISTRY_USER/bmi-app-backend:latest || echo "Push skipped"
         docker push $CI_REGISTRY_USER/bmi-app-backend:$CI_COMMIT_SHA || echo "Push skipped"
@@ -232,7 +228,6 @@ docker-build-frontend:
   script:
     - |
       if [ -n "$CI_REGISTRY_USER" ]; then
-        FRONTEND_TAGS="$CI_REGISTRY_USER/bmi-app-frontend:latest,$CI_REGISTRY_USER/bmi-app-frontend:$CI_COMMIT_SHA"
         docker build -t $CI_REGISTRY_USER/bmi-app-frontend:latest -t $CI_REGISTRY_USER/bmi-app-frontend:$CI_COMMIT_SHA ./frontend
         docker push $CI_REGISTRY_USER/bmi-app-frontend:latest || echo "Push skipped"
         docker push $CI_REGISTRY_USER/bmi-app-frontend:$CI_COMMIT_SHA || echo "Push skipped"
@@ -261,9 +256,9 @@ deploy-staging:
   environment:
     name: staging
     url: https://staging.bmi-app.example.com
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "develop"'
-      when: manual
+  only:
+    - develop
+  when: manual
 
 deploy-production:
   stage: deploy
@@ -279,6 +274,6 @@ deploy-production:
   environment:
     name: production
     url: https://bmi-app.example.com
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-      when: manual
+  only:
+    - main
+  when: manual
