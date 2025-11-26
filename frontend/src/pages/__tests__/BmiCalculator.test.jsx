@@ -65,9 +65,12 @@ describe("BmiCalculator", () => {
 
     renderWithProviders(<BmiCalculator />);
 
+    // Fill in age field as well (required)
+    const ageInput = screen.getByPlaceholderText(/z\. B\. 25/i);
     const heightInput = screen.getByPlaceholderText(/z\. B\. 180/i);
     const weightInput = screen.getByPlaceholderText(/z\. B\. 75/i);
     
+    await user.type(ageInput, "25");
     await user.type(heightInput, "180");
     await user.type(weightInput, "75");
     
@@ -94,9 +97,12 @@ describe("BmiCalculator", () => {
 
     renderWithProviders(<BmiCalculator />);
 
+    // Fill in age field as well (required)
+    const ageInput = screen.getByPlaceholderText(/z\. B\. 25/i);
     const heightInput = screen.getByPlaceholderText(/z\. B\. 180/i);
     const weightInput = screen.getByPlaceholderText(/z\. B\. 75/i);
     
+    await user.type(ageInput, "25");
     await user.type(heightInput, "180");
     await user.type(weightInput, "75");
     
