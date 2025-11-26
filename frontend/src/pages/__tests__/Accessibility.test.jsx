@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "../../context/AuthContext";
 import LoginPage from "../Login";
@@ -66,13 +66,13 @@ describe("Accessibility Tests", () => {
         json: async () => mockHistory,
       });
 
-    renderWithProviders(<Dashboard />);
+    const { container } = renderWithProviders(<Dashboard />);
     
-    // Attendre que le contenu soit chargé
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    
-    const heading = document.querySelector('h1');
-    expect(heading).toBeInTheDocument();
+    // Attendre que le contenu soit chargé avec waitFor
+    await waitFor(() => {
+      const heading = container.querySelector('h1');
+      expect(heading).toBeInTheDocument();
+    }, { timeout: 3000 });
   });
 
   it("BMI Calculator should have accessible form elements", () => {

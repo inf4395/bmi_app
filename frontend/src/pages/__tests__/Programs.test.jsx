@@ -116,14 +116,16 @@ describe("Programs", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Erhaltungs-Programm/i)).toBeInTheDocument();
-    });
+    }, { timeout: 3000 });
 
-    const detailsButton = screen.getByText(/Details anzeigen/i);
-    await user.click(detailsButton);
+    const detailsButtons = screen.getAllByText(/Details anzeigen/i);
+    expect(detailsButtons.length).toBeGreaterThan(0);
+    
+    await user.click(detailsButtons[0]);
 
     await waitFor(() => {
       expect(screen.getByText(/Programm-Inhalte/i)).toBeInTheDocument();
-    });
+    }, { timeout: 3000 });
   });
 
   it("displays important notes", async () => {

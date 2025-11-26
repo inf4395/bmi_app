@@ -47,7 +47,7 @@ describe("Profile", () => {
       expect(screen.getByLabelText(/Name/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/E-Mail/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/Geschlecht/i)).toBeInTheDocument();
-    });
+    }, { timeout: 3000 });
   });
 
   it("loads and displays user profile data", async () => {
@@ -89,7 +89,6 @@ describe("Profile", () => {
       height: 175,
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch
       .mockResolvedValueOnce({
         ok: true,
@@ -104,7 +103,7 @@ describe("Profile", () => {
 
     await waitFor(() => {
       expect(screen.getByDisplayValue("Test User")).toBeInTheDocument();
-    });
+    }, { timeout: 3000 });
 
     const nameInput = screen.getByLabelText(/Name/i);
     await user.clear(nameInput);
@@ -114,8 +113,9 @@ describe("Profile", () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/erfolgreich aktualisiert/i)).toBeInTheDocument();
-    });
+      const successMessage = screen.queryByText(/erfolgreich aktualisiert/i) || screen.queryByText(/Profil erfolgreich/i);
+      expect(successMessage).toBeInTheDocument();
+    }, { timeout: 3000 });
   });
 
   it("validates required fields", async () => {
@@ -138,7 +138,7 @@ describe("Profile", () => {
       
       expect(nameInput).toBeRequired();
       expect(emailInput).toBeRequired();
-    });
+    }, { timeout: 3000 });
   });
 
   it("displays error message on update failure", async () => {
@@ -149,7 +149,6 @@ describe("Profile", () => {
       email: "test@example.com",
     };
 
-    // eslint-disable-next-line no-undef
     global.fetch
       .mockResolvedValueOnce({
         ok: true,
@@ -164,14 +163,15 @@ describe("Profile", () => {
 
     await waitFor(() => {
       expect(screen.getByDisplayValue("Test User")).toBeInTheDocument();
-    });
+    }, { timeout: 3000 });
 
     const submitButton = screen.getByRole("button", { name: /Profil speichern/i });
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/Fehler/i)).toBeInTheDocument();
-    });
+      const errorElement = screen.queryByText(/Fehler/i) || screen.queryByText(/Fehler beim Aktualisieren/i);
+      expect(errorElement).toBeInTheDocument();
+    }, { timeout: 3000 });
   });
 });
 

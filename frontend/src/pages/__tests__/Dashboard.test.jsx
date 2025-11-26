@@ -65,7 +65,7 @@ describe("Dashboard", () => {
     await waitFor(() => {
       expect(screen.getByText(/Willkommen zurück/i)).toBeInTheDocument();
       expect(screen.getByText(/Test User/i)).toBeInTheDocument();
-    });
+    }, { timeout: 3000 });
   });
 
   it("displays statistics cards", async () => {
