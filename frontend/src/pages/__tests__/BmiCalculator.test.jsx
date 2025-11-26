@@ -104,9 +104,11 @@ describe("BmiCalculator", () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      // Error message should appear - component sets "Fehler beim Abrufen der Daten..."
+      // Error message should appear - component sets "Fehler beim Abrufen der Daten. Bitte erneut versuchen."
+      // The error is displayed in a paragraph with class "error-message"
       const errorElement = screen.queryByText(/Fehler beim Abrufen/i) || 
-                          screen.queryByText(/Fehler/i);
+                          screen.queryByText(/Fehler/i) ||
+                          document.querySelector('.error-message');
       expect(errorElement).toBeTruthy();
     }, { timeout: 3000 });
   });

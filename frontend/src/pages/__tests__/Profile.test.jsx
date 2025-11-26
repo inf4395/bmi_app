@@ -172,16 +172,13 @@ describe("Profile", () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      // Check for error message - Profile component displays errors in a message div with class "message message-error"
-      const errorElement = screen.queryByText(/Fehler/i) || 
-                          screen.queryByText(/Fehler beim Aktualisieren/i) ||
+      // Check for error message - Profile component displays errors in a message div
+      // The error message should contain the error text from the response
+      const errorElement = screen.queryByText(/Fehler beim Aktualisieren/i) ||
+                          screen.queryByText(/Fehler/i) ||
                           document.querySelector('.message.message-error');
-      // The error should be displayed, but if not, at least verify the form is still there
-      if (!errorElement) {
-        expect(screen.getByDisplayValue("Test User")).toBeInTheDocument();
-      } else {
-        expect(errorElement).toBeTruthy();
-      }
+      // Verify error is displayed or form is still accessible
+      expect(errorElement || screen.getByDisplayValue("Test User")).toBeTruthy();
     }, { timeout: 3000 });
   });
 });
