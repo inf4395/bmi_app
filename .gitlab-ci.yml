@@ -1,8 +1,11 @@
 # GitLab CI/CD Pipeline Configuration
-image: node:20
+# Équivalent à GitHub Actions pour comparaison
+
+variables:
+  NODE_VERSION: "20"
+  FF_USE_LEGACY_KUBERNETES_EXECUTION_STRATEGY: "true"
 
 stages:
-  - install
   - lint
   - test
   - build
@@ -10,232 +13,277 @@ stages:
   - docker
   - deploy
 
-variables:
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: "/certs"
-
-# Cache pour accélérer les builds
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - backend/node_modules/
-    - frontend/node_modules/
-    - node_modules/
-
 # ============================================
-# STAGE 1: INSTALL
+# BACKEND LINT
 # ============================================
 
-install_backend:
-  stage: install
-  script:
-    - echo "📦 Installing backend dependencies..."
-    - cd backend
-    - npm ci
-  artifacts:
+backend-lint:
+  stage: lint
+  image: node:${NODE_VERSION}
+  cache:
+    key: backend-npm-cache
     paths:
       - backend/node_modules/
-    expire_in: 1 hour
+  before_script:
+    - cd backend
+    - npm ci
+  script:
+    - npm run lint || echo "No lint script, skipping..."
   only:
-    - merge_requests
     - main
     - develop
+    - merge_requests
+    - /^feature\/.*$/
 
-install_frontend:
-  stage: install
-  script:
-    - echo "📦 Installing frontend dependencies..."
-    - cd frontend
-    - npm ci
-  artifacts:
+# ============================================
+# FRONTEND LINT
+# ============================================
+
+frontend-lint:
+  stage: lint
+  image: node:${NODE_VERSION}
+  cache:
+    key: frontend-npm-cache
     paths:
       - frontend/node_modules/
-    expire_in: 1 hour
-  only:
-    - merge_requests
-    - main
-    - develop
-
-# ============================================
-# STAGE 2: LINT
-# ============================================
-
-lint_backend:
-  stage: lint
-  script:
-    - echo "🔍 Linting backend code..."
-    - cd backend
-    - npm ci || npm install
-    - npm run lint || echo "No lint script found, skipping..."
-  allow_failure: true
-  only:
-    - merge_requests
-    - main
-    - develop
-
-lint_frontend:
-  stage: lint
-  script:
-    - echo "🔍 Linting frontend code..."
+  before_script:
     - cd frontend
-    - npm ci || npm install
+    - npm ci
+  script:
     - npm run lint
-  allow_failure: true
   only:
-    - merge_requests
     - main
     - develop
+    - merge_requests
+    - /^feature\/.*$/
 
 # ============================================
-# STAGE 3: TEST
+# BACKEND TESTS
 # ============================================
 
-test_backend:
+backend-test:
   stage: test
-  script:
-    - echo "🧪 Running backend tests..."
+  image: node:${NODE_VERSION}
+  cache:
+    key: backend-npm-cache
+    paths:
+      - backend/node_modules/
+  before_script:
     - cd backend
-    - npm ci || npm install
+    - npm ci
+  script:
     - npm test
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
   artifacts:
-    reports:
-      junit: backend/test-results.xml
+    when: always
     paths:
       - backend/coverage/
-    expire_in: 1 week
-    when: always
+    expire_in: 7 days
   only:
-    - merge_requests
     - main
     - develop
+    - merge_requests
+    - /^feature\/.*$/
 
-test_frontend:
+# ============================================
+# FRONTEND TESTS
+# ============================================
+
+frontend-test:
   stage: test
-  script:
-    - echo "🧪 Running frontend tests..."
+  image: node:${NODE_VERSION}
+  cache:
+    key: frontend-npm-cache
+    paths:
+      - frontend/node_modules/
+  before_script:
     - cd frontend
-    - npm ci || npm install
+    - npm ci
+  script:
     - npm test
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
   artifacts:
-    reports:
-      junit: frontend/test-results.xml
+    when: always
     paths:
       - frontend/coverage/
-    expire_in: 1 week
-    when: always
+    expire_in: 7 days
   only:
-    - merge_requests
     - main
     - develop
+    - merge_requests
+    - /^feature\/.*$/
 
 # ============================================
-# STAGE 4: BUILD
+# BUILD FRONTEND
 # ============================================
 
-build_frontend:
+build-frontend:
   stage: build
-  script:
-    - echo "🏗️ Building React frontend..."
+  image: node:${NODE_VERSION}
+  cache:
+    key: frontend-npm-cache
+    paths:
+      - frontend/node_modules/
+  dependencies:
+    - backend-test
+    - frontend-test
+  before_script:
     - cd frontend
-    - npm ci || npm install
+    - npm ci
+  script:
     - npm run build
   artifacts:
     paths:
       - frontend/dist/
-    expire_in: 1 week
+    expire_in: 7 days
   only:
-    - merge_requests
     - main
     - develop
+    - merge_requests
+    - /^feature\/.*$/
 
 # ============================================
-# STAGE 5: E2E TESTS
+# E2E TESTS
 # ============================================
 
-e2e_tests:
+e2e-tests:
   stage: e2e
-  image: mcr.microsoft.com/playwright:v1.48.0-jammy
+  image: node:${NODE_VERSION}
   services:
-    - docker:dind
+    - name: mcr.microsoft.com/playwright:v1.48.0-focal
+      alias: playwright
+  dependencies:
+    - build-frontend
   before_script:
-    - echo "🎭 Setting up E2E test environment..."
-    - npm install
-    - npx playwright install chromium --with-deps
+    - npm ci
+    - cd backend && npm ci
+    - cd ../frontend && npm ci
+    - cd ..
+    - npx playwright install --with-deps chromium firefox webkit
   script:
-    - echo "🎭 Running E2E tests..."
-    # Démarrer les services en arrière-plan
-    - cd backend && npm ci && npm start &
-    - cd frontend && npm ci && npm run dev &
-    - sleep 10
-    # Attendre que les services soient prêts
-    - timeout 60 bash -c 'until curl -f http://localhost:3000/api/health; do sleep 2; done'
-    - timeout 60 bash -c 'until curl -f http://localhost:5173; do sleep 2; done'
-    # Lancer les tests E2E
+    # Start backend server in background
+    - cd backend && npm start &
+    - export BACKEND_PID=$!
+    # Start frontend server in background
+    - cd frontend && npm run dev &
+    - export FRONTEND_PID=$!
+    # Wait for servers to be ready
+    - |
+      echo "Waiting for backend server..."
+      timeout 60 bash -c 'until curl -f http://localhost:3000/api/health; do sleep 2; done'
+      echo "Waiting for frontend server..."
+      timeout 60 bash -c 'until curl -f http://localhost:5173; do sleep 2; done'
+    # Run E2E tests
     - npm run test:e2e
+    # Cleanup
+    - kill $BACKEND_PID || true
+    - kill $FRONTEND_PID || true
+  environment:
+    name: test
+    url: http://localhost:5173
   artifacts:
     when: always
     paths:
       - playwright-report/
-      - test-results/
-    expire_in: 1 week
+    expire_in: 7 days
+  only:
+    - main
+    - develop
+    - merge_requests
+    - /^feature\/.*$/
+
+# ============================================
+# DOCKER BUILD
+# ============================================
+
+docker-build-backend:
+  stage: docker
+  image: docker:24-dind
+  services:
+    - docker:24-dind
+  dependencies:
+    - e2e-tests
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY || echo "Docker login skipped"
+  script:
+    - |
+      if [ -n "$CI_REGISTRY_USER" ]; then
+        BACKEND_TAGS="$CI_REGISTRY_USER/bmi-app-backend:latest,$CI_REGISTRY_USER/bmi-app-backend:$CI_COMMIT_SHA"
+        docker build -t $CI_REGISTRY_USER/bmi-app-backend:latest -t $CI_REGISTRY_USER/bmi-app-backend:$CI_COMMIT_SHA ./backend
+        docker push $CI_REGISTRY_USER/bmi-app-backend:latest || echo "Push skipped"
+        docker push $CI_REGISTRY_USER/bmi-app-backend:$CI_COMMIT_SHA || echo "Push skipped"
+      else
+        docker build -t bmi-app-backend:latest -t bmi-app-backend:$CI_COMMIT_SHA ./backend
+      fi
+  only:
+    - main
+    - develop
+
+docker-build-frontend:
+  stage: docker
+  image: docker:24-dind
+  services:
+    - docker:24-dind
+  dependencies:
+    - e2e-tests
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY || echo "Docker login skipped"
+  script:
+    - |
+      if [ -n "$CI_REGISTRY_USER" ]; then
+        FRONTEND_TAGS="$CI_REGISTRY_USER/bmi-app-frontend:latest,$CI_REGISTRY_USER/bmi-app-frontend:$CI_COMMIT_SHA"
+        docker build -t $CI_REGISTRY_USER/bmi-app-frontend:latest -t $CI_REGISTRY_USER/bmi-app-frontend:$CI_COMMIT_SHA ./frontend
+        docker push $CI_REGISTRY_USER/bmi-app-frontend:latest || echo "Push skipped"
+        docker push $CI_REGISTRY_USER/bmi-app-frontend:$CI_COMMIT_SHA || echo "Push skipped"
+      else
+        docker build -t bmi-app-frontend:latest -t bmi-app-frontend:$CI_COMMIT_SHA ./frontend
+      fi
   only:
     - main
     - develop
 
 # ============================================
-# STAGE 6: DOCKER BUILD
+# DEPLOY
 # ============================================
 
-docker_build:
-  stage: docker
-  image: docker:latest
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
-    - echo "🐳 Building Docker images..."
-    - docker build -t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY_IMAGE/backend:latest ./backend
-    - docker build -t $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY_IMAGE/frontend:latest ./frontend
-    - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA
-    - docker push $CI_REGISTRY_IMAGE/backend:latest
-    - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA
-    - docker push $CI_REGISTRY_IMAGE/frontend:latest
-  only:
-    - main
-    - tags
-
-# ============================================
-# STAGE 7: DEPLOY
-# ============================================
-
-deploy_staging:
+deploy-staging:
   stage: deploy
-  image: docker:latest
-  services:
-    - docker:dind
+  image: alpine:latest
+  dependencies:
+    - docker-build-backend
+    - docker-build-frontend
   script:
-    - echo "🚀 Deploying to staging environment..."
-    - docker-compose -f docker-compose.staging.yml up -d || echo "Staging deployment simulated"
+    - echo "🚀 Deploying to staging..."
+    - echo "Add your deployment commands here"
+    - echo "Example: kubectl apply -f k8s/staging/"
+    - echo "Or: docker-compose -f docker-compose.staging.yml up -d"
   environment:
     name: staging
     url: https://staging.bmi-app.example.com
   only:
     - develop
+  when: manual
 
-deploy_production:
+deploy-production:
   stage: deploy
-  image: docker:latest
-  services:
-    - docker:dind
+  image: alpine:latest
+  dependencies:
+    - docker-build-backend
+    - docker-build-frontend
   script:
-    - echo "🚀 Deploying to production environment..."
-    - docker-compose -f docker-compose.prod.yml up -d || echo "Production deployment simulated"
+    - echo "🚀 Deploying to production..."
+    - echo "Add your deployment commands here"
+    - echo "Example: kubectl apply -f k8s/production/"
+    - echo "Or: docker-compose -f docker-compose.prod.yml up -d"
   environment:
     name: production
     url: https://bmi-app.example.com
-  when: manual
   only:
     - main
-    - tags
+  when: manual

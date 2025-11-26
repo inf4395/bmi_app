@@ -1,0 +1,38 @@
+{
+  "platform": "jenkins",
+  "runs": 5,
+  "timestamp": "20250101_120000",
+  "executions": [
+    {
+      "run": 1,
+      "duration": 252.3,
+      "start_time": 1704110400.0,
+      "end_time": 1704110652.3
+    },
+    {
+      "run": 2,
+      "duration": 248.7,
+      "start_time": 1704110700.0,
+      "end_time": 1704110948.7
+    },
+    {
+      "run": 3,
+      "duration": 255.1,
+      "start_time": 1704111000.0,
+      "end_time": 1704111255.1
+    },
+    {
+      "run": 4,
+      "duration": 250.5,
+      "start_time": 1704111300.0,
+      "end_time": 1704111550.5
+    },
+    {
+      "run": 5,
+      "duration": 249.8,
+      "start_time": 1704111600.0,
+      "end_time": 1704111849.8
+    }
+  ]
+}
+

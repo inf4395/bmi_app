@@ -1,0 +1,38 @@
+{
+  "platform": "github",
+  "runs": 5,
+  "timestamp": "20250101_120000",
+  "executions": [
+    {
+      "run": 1,
+      "duration": 245.3,
+      "start_time": 1704110400.0,
+      "end_time": 1704110645.3
+    },
+    {
+      "run": 2,
+      "duration": 243.5,
+      "start_time": 1704110700.0,
+      "end_time": 1704110943.5
+    },
+    {
+      "run": 3,
+      "duration": 250.1,
+      "start_time": 1704111000.0,
+      "end_time": 1704111250.1
+    },
+    {
+      "run": 4,
+      "duration": 238.7,
+      "start_time": 1704111300.0,
+      "end_time": 1704111538.7
+    },
+    {
+      "run": 5,
+      "duration": 247.2,
+      "start_time": 1704111600.0,
+      "end_time": 1704111847.2
+    }
+  ]
+}
+

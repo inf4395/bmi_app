@@ -140,8 +140,8 @@ pipeline {
             steps {
                 echo "🎭 Running E2E tests..."
                 script {
-                    // Install Playwright
-                    sh "npx playwright install chromium --with-deps || true"
+                    // Install Playwright browsers (all browsers like GitHub Actions)
+                    sh "npx playwright install --with-deps chromium firefox webkit || true"
                     
                     // Start backend in background
                     sh """
