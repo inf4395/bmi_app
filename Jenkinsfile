@@ -56,11 +56,7 @@ pipeline {
                     post {
                         always {
                             junit 'backend/test-results.xml'
-                            publishHTML([
-                                reportDir: 'backend/coverage',
-                                reportFiles: 'index.html',
-                                reportName: 'Backend Coverage Report'
-                            ])
+                            // publishHTML plugin not available - using archiveArtifacts instead
                             archiveArtifacts artifacts: 'backend/coverage/**/*', allowEmptyArchive: true
                         }
                     }
@@ -76,11 +72,7 @@ pipeline {
                     post {
                         always {
                             junit 'frontend/test-results.xml'
-                            publishHTML([
-                                reportDir: 'frontend/coverage',
-                                reportFiles: 'index.html',
-                                reportName: 'Frontend Coverage Report'
-                            ])
+                            // publishHTML plugin not available - using archiveArtifacts instead
                             archiveArtifacts artifacts: 'frontend/coverage/**/*', allowEmptyArchive: true
                         }
                     }
@@ -169,11 +161,7 @@ pipeline {
                         fi
                     """
                     // Archive E2E test results
-                    publishHTML([
-                        reportDir: 'playwright-report',
-                        reportFiles: 'index.html',
-                        reportName: 'E2E Test Report'
-                    ])
+                    // publishHTML plugin not available - using archiveArtifacts instead
                     archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
                 }
             }
