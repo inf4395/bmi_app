@@ -26,8 +26,8 @@ body {
 a {
   color: #0a9396;
   text-decoration: none;
-}
+  }
 
-a:hover {
+  a:hover {
   text-decoration: underline;
 }
