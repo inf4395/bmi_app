@@ -46,8 +46,12 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await db.close();
-});
+  // Attendre que toutes les opérations asynchrones soient terminées
+  await new Promise(resolve => setTimeout(resolve, 100));
+  if (db) {
+    await db.close();
+  }
+}, 10000);
 
 // Test 1 : POST /api/bmi
 test("POST /api/bmi erstellt neuen Datensatz", async () => {

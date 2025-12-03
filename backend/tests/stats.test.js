@@ -70,8 +70,12 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await db.close();
-});
+  // Attendre que toutes les opérations asynchrones soient terminées
+  await new Promise(resolve => setTimeout(resolve, 100));
+  if (db) {
+    await db.close();
+  }
+}, 10000);
 
 describe("Statistics Routes", () => {
   // Test GET /api/stats/summary

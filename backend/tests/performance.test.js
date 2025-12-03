@@ -47,7 +47,7 @@ beforeAll(async () => {
 
   // Créer quelques enregistrements pour les tests de performance
   for (let i = 0; i < 10; i++) {
-    await request(app)
+    const response = await request(app)
       .post("/api/bmi")
       .set("Authorization", `Bearer ${token}`)
       .send({
@@ -56,12 +56,21 @@ beforeAll(async () => {
         height: 180,
         weight: 75 + i,
       });
+    
+    // Attendre que la réponse soit complète
+    if (response.statusCode !== 200) {
+      console.warn(`Warning: BMI record creation failed for iteration ${i}: ${response.statusCode}`);
+    }
   }
-});
+}, 60000); // Timeout de 60 secondes pour beforeAll
 
 afterAll(async () => {
-  await db.close();
-});
+  // Attendre que toutes les opérations asynchrones soient terminées
+  await new Promise(resolve => setTimeout(resolve, 100));
+  if (db) {
+    await db.close();
+  }
+}, 10000);
 
 describe("Performance Tests", () => {
   const MAX_RESPONSE_TIME = 1000; // 1 seconde en millisecondes
