@@ -76,10 +76,37 @@ const Statistics = () => {
       month: "short",
       day: "numeric",
     }),
-    bmi: parseFloat(record.bmi).toFixed(1),
-    weight: parseFloat(record.weight).toFixed(1),
+    bmi: parseFloat(record.bmi),
+    weight: parseFloat(record.weight),
     fullDate: record.created_at,
   }));
+
+  // Calculer les domaines dynamiques pour les axes
+  const calculateDomain = (dataKey, minValue = null) => {
+    if (chartData.length === 0) return ["auto", "auto"];
+    
+    const values = chartData.map(d => d[dataKey]);
+    const min = minValue !== null ? Math.min(minValue, Math.min(...values)) : Math.min(...values);
+    const max = Math.max(...values);
+    
+    // Si min et max sont identiques (une seule valeur), ajouter une marge fixe
+    if (min === max) {
+      const padding = minValue !== null && minValue < min ? Math.max(1, min * 0.1) : Math.max(1, min * 0.1);
+      return [Math.max(0, min - padding).toFixed(1), (max + padding).toFixed(1)];
+    }
+    
+    // Ajouter une marge de 10% en haut et en bas pour que la courbe ne touche pas les bords
+    const range = max - min;
+    const padding = range * 0.1;
+    
+    const domainMin = Math.max(0, min - padding);
+    const domainMax = max + padding;
+    
+    return [domainMin.toFixed(1), domainMax.toFixed(1)];
+  };
+
+  const bmiDomain = calculateDomain("bmi");
+  const weightDomain = calculateDomain("weight", 10);
 
   if (loading) {
     return (
@@ -168,8 +195,16 @@ const Statistics = () => {
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis domain={["auto", "auto"]} />
+                <XAxis 
+                  dataKey="date" 
+                  label={{ value: 'Datum', position: 'insideBottom', offset: -5, style: { textAnchor: 'middle', fill: '#666' } }}
+                />
+                <YAxis 
+                  domain={bmiDomain}
+                  label={{ value: 'BMI', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#666' } }}
+                  allowDecimals={false}
+                  tickFormatter={(value) => Math.round(value)}
+                />
                 <Tooltip />
                 <Legend />
                 <Line
@@ -189,8 +224,14 @@ const Statistics = () => {
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis domain={["auto", "auto"]} />
+                <XAxis 
+                  dataKey="date" 
+                  label={{ value: 'Datum', position: 'insideBottom', offset: -5, style: { textAnchor: 'middle', fill: '#666' } }}
+                />
+                <YAxis 
+                  domain={weightDomain}
+                  label={{ value: 'Gewicht (kg)', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#666' } }}
+                />
                 <Tooltip />
                 <Legend />
                 <Line

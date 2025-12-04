@@ -1,0 +1,105 @@
+{
+  "timestamp": "2025-12-04T15-44-23-129Z",
+  "system": {
+    "timestamp": "2025-12-04T15-44-23-129Z",
+    "platform": "win32",
+    "nodeVersion": "v22.19.0",
+    "cpu": {
+      "info": "\r\r\n\r\r\nName=Intel(R) Core(TM) i7-4700MQ CPU @ 2.40GHz\r\r\nNumberOfCores=4\r\r\nNumberOfLogicalProcessors=8\r\r\n\r\r\n\r\r\n\r\r\n"
+    },
+    "memory": {
+      "info": "\r\r\n\r\r\nTotalPhysicalMemory=25645871104\r\r\n\r\r\n\r\r\n\r\r\n"
+    },
+    "disk": {
+      "info": "\r\r\n\r\r\nCaption=C:\r\r\nFreeSpace=95048990720\r\r\nSize=261430693888\r\r\n\r\r\n\r\r\nCaption=D:\r\r\nFreeSpace=213736566784\r\r\nSize=249964785664\r\r\n\r\r\n\r\r\nCaption=F:\r\r\nFreeSpace=\r\r\nSize=\r\r\n\r\r\n\r\r\n\r\r\n"
+    },
+    "process": {
+      "cpu": {
+        "user": 109000,
+        "system": 31000
+      },
+      "memory": {
+        "rss": 33189888,
+        "heapTotal": 6127616,
+        "heapUsed": 5441488,
+        "external": 1951240,
+        "arrayBuffers": 17460
+      }
+    }
+  },
+  "pipeline": {
+    "stages": {
+      "lint": {
+        "estimatedCpu": "10-20%",
+        "estimatedMemory": "200-400 MB",
+        "estimatedDuration": "30-60s",
+        "description": "Analyse statique du code"
+      },
+      "test": {
+        "estimatedCpu": "30-50%",
+        "estimatedMemory": "500-800 MB",
+        "estimatedDuration": "15-30s",
+        "description": "Exécution des tests unitaires"
+      },
+      "build": {
+        "estimatedCpu": "40-60%",
+        "estimatedMemory": "1-2 GB",
+        "estimatedDuration": "60-120s",
+        "description": "Compilation et build de l'application"
+      },
+      "e2e": {
+        "estimatedCpu": "20-40%",
+        "estimatedMemory": "800 MB - 1.5 GB",
+        "estimatedDuration": "120-300s",
+        "description": "Tests end-to-end avec Playwright"
+      },
+      "docker": {
+        "estimatedCpu": "30-50%",
+        "estimatedMemory": "1-2 GB",
+        "estimatedDuration": "180-300s",
+        "description": "Build des images Docker"
+      },
+      "deploy": {
+        "estimatedCpu": "10-30%",
+        "estimatedMemory": "300-600 MB",
+        "estimatedDuration": "30-90s",
+        "description": "Déploiement de l'application"
+      }
+    },
+    "total": {
+      "estimatedCpu": "40-60%",
+      "estimatedMemory": "2-4 GB",
+      "estimatedDuration": "6-10 minutes",
+      "description": "Pipeline complet"
+    }
+  },
+  "costs": {
+    "github": {
+      "ubuntu_latest": {
+        "cpu": 0.002,
+        "memory": 0.001,
+        "network": 0.0001
+      }
+    },
+    "gitlab": {
+      "shared": {
+        "cpu": 0.0025,
+        "memory": 0.0012,
+        "network": 0.0001
+      }
+    },
+    "jenkins": {
+      "self_hosted": {
+        "infrastructure": 20,
+        "maintenance": 200,
+        "variable": 0
+      }
+    }
+  },
+  "recommendations": [
+    "Utiliser le cache npm pour réduire le temps de build",
+    "Exécuter les tests en parallèle quand possible",
+    "Optimiser les images Docker pour réduire la taille",
+    "Utiliser des runners plus puissants pour les builds lourds"
+  ]
+}

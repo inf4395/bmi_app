@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="61" failures="0" errors="0" time="14.0767638">
+    <testsuite name="src/components/__tests__/Navigation.test.jsx" timestamp="2025-12-04T12:30:01.402Z" hostname="DESKTOP-A2DTOR2" tests="2" failures="0" errors="0" skipped="0" time="0.1790907">
+        <testcase classname="src/components/__tests__/Navigation.test.jsx" name="Navigation Component &gt; renders navigation links" time="0.1529854">
+        </testcase>
+        <testcase classname="src/components/__tests__/Navigation.test.jsx" name="Navigation Component &gt; displays user name when logged in" time="0.0203226">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/__tests__/ProtectedRoute.test.jsx" timestamp="2025-12-04T12:30:01.405Z" hostname="DESKTOP-A2DTOR2" tests="2" failures="0" errors="0" skipped="0" time="0.0967717">
+        <testcase classname="src/components/__tests__/ProtectedRoute.test.jsx" name="ProtectedRoute &gt; renders children when user is authenticated" time="0.0818575">
+        </testcase>
+        <testcase classname="src/components/__tests__/ProtectedRoute.test.jsx" name="ProtectedRoute &gt; redirects to login when user is not authenticated" time="0.0097683">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/context/__tests__/AuthContext.test.jsx" timestamp="2025-12-04T12:30:01.406Z" hostname="DESKTOP-A2DTOR2" tests="6" failures="0" errors="0" skipped="0" time="0.1636179">
+        <testcase classname="src/context/__tests__/AuthContext.test.jsx" name="AuthContext &gt; initializes with no user when localStorage is empty" time="0.0625213">
+        </testcase>
+        <testcase classname="src/context/__tests__/AuthContext.test.jsx" name="AuthContext &gt; initializes with user from localStorage" time="0.0087659">
+        </testcase>
+        <testcase classname="src/context/__tests__/AuthContext.test.jsx" name="AuthContext &gt; registers a new user successfully" time="0.0369734">
+            <system-out>
+API Request: http://localhost:3000/api/auth/register { name: [32m&apos;New User&apos;[39m, email: [32m&apos;new@example.com&apos;[39m, password: [32m&apos;password123&apos;[39m }
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/context/__tests__/AuthContext.test.jsx" name="AuthContext &gt; logs in a user successfully" time="0.0297938">
+            <system-out>
+API Request: http://localhost:3000/api/auth/login { email: [32m&apos;test@example.com&apos;[39m, password: [32m&apos;password123&apos;[39m }
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/context/__tests__/AuthContext.test.jsx" name="AuthContext &gt; handles login error" time="0.0075123">
+            <system-out>
+API Request: http://localhost:3000/api/auth/login { email: [32m&apos;test@example.com&apos;[39m, password: [32m&apos;wrong&apos;[39m }
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/context/__tests__/AuthContext.test.jsx" name="AuthContext &gt; logs out a user" time="0.0100011">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/__tests__/Accessibility.test.jsx" timestamp="2025-12-04T12:30:01.411Z" hostname="DESKTOP-A2DTOR2" tests="6" failures="0" errors="0" skipped="0" time="0.4854198">
+        <testcase classname="src/pages/__tests__/Accessibility.test.jsx" name="Accessibility Tests &gt; Login page should have proper form labels" time="0.1450927">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Accessibility.test.jsx" name="Accessibility Tests &gt; Register page should have proper form labels" time="0.0274112">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Accessibility.test.jsx" name="Accessibility Tests &gt; Dashboard should have accessible headings" time="0.1481382">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Accessibility.test.jsx" name="Accessibility Tests &gt; BMI Calculator should have accessible form elements" time="0.0985778">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Accessibility.test.jsx" name="Accessibility Tests &gt; forms should have proper labels" time="0.0401704">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Accessibility.test.jsx" name="Accessibility Tests &gt; buttons should be accessible" time="0.0188115">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/__tests__/BmiCalculator.test.jsx" timestamp="2025-12-04T12:30:01.413Z" hostname="DESKTOP-A2DTOR2" tests="5" failures="0" errors="0" skipped="0" time="2.4916374">
+        <testcase classname="src/pages/__tests__/BmiCalculator.test.jsx" name="BmiCalculator &gt; renders BMI calculator form" time="0.2944048">
+        </testcase>
+        <testcase classname="src/pages/__tests__/BmiCalculator.test.jsx" name="BmiCalculator &gt; pre-fills form with user data" time="0.05233">
+        </testcase>
+        <testcase classname="src/pages/__tests__/BmiCalculator.test.jsx" name="BmiCalculator &gt; calculates and displays BMI result" time="1.0774772">
+        </testcase>
+        <testcase classname="src/pages/__tests__/BmiCalculator.test.jsx" name="BmiCalculator &gt; displays error message on API failure" time="0.9894027">
+        </testcase>
+        <testcase classname="src/pages/__tests__/BmiCalculator.test.jsx" name="BmiCalculator &gt; validates required fields" time="0.0700508">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/__tests__/Dashboard.test.jsx" timestamp="2025-12-04T12:30:01.415Z" hostname="DESKTOP-A2DTOR2" tests="5" failures="0" errors="0" skipped="0" time="0.8965446">
+        <testcase classname="src/pages/__tests__/Dashboard.test.jsx" name="Dashboard &gt; renders dashboard with loading state" time="0.1830171">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Dashboard.test.jsx" name="Dashboard &gt; displays user welcome message" time="0.2895026">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Dashboard.test.jsx" name="Dashboard &gt; displays statistics cards" time="0.163831">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Dashboard.test.jsx" name="Dashboard &gt; displays action cards" time="0.1157156">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Dashboard.test.jsx" name="Dashboard &gt; handles API errors gracefully" time="0.1278741">
+            <system-err>
+Fehler beim Laden der Dashboard-Daten: Error: Network error
+    at C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/src/pages/__tests__/Dashboard.test.jsx:135:40
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:919:26
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1244:20
+    at new Promise (&lt;anonymous&gt;)
+    at runWithTimeout [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1210:10[90m)[39m
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1654:37
+    at Traces.$ [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.U4xDYhzZ.js:115:27[90m)[39m
+    at trace [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4mvitest[24m/dist/chunks/test.DqQZzsWf.js:234:21[90m)[39m
+    at runTest [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1654:12[90m)[39m
+
+            </system-err>
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/__tests__/Login.test.jsx" timestamp="2025-12-04T12:30:01.419Z" hostname="DESKTOP-A2DTOR2" tests="4" failures="0" errors="0" skipped="0" time="2.6368505">
+        <testcase classname="src/pages/__tests__/Login.test.jsx" name="LoginPage &gt; renders login form" time="0.5094912">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Login.test.jsx" name="LoginPage &gt; shows link to registration page" time="0.0489175">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Login.test.jsx" name="LoginPage &gt; submits login form with valid credentials" time="1.0953043">
+            <system-out>
+API Request: http://localhost:3000/api/auth/login { email: [32m&apos;test@example.com&apos;[39m, password: [32m&apos;password123&apos;[39m }
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Login.test.jsx" name="LoginPage &gt; displays error message on login failure" time="0.9657">
+            <system-out>
+API Request: http://localhost:3000/api/auth/login { email: [32m&apos;test@example.com&apos;[39m, password: [32m&apos;wrong&apos;[39m }
+
+            </system-out>
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/__tests__/Profile.test.jsx" timestamp="2025-12-04T12:30:01.421Z" hostname="DESKTOP-A2DTOR2" tests="5" failures="0" errors="0" skipped="0" time="1.5773571">
+        <testcase classname="src/pages/__tests__/Profile.test.jsx" name="Profile &gt; renders profile form" time="0.4986573">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Profile.test.jsx" name="Profile &gt; loads and displays user profile data" time="0.0992163">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Profile.test.jsx" name="Profile &gt; updates profile successfully" time="0.7348588">
+            <system-out>
+Saving profile: {
+  name: [32m&apos;Updated Name&apos;[39m,
+  email: [32m&apos;test@example.com&apos;[39m,
+  gender: [1mnull[22m,
+  birthDate: [1mnull[22m,
+  height: [1mnull[22m
+}
+
+Profile update response status: [90mundefined[39m
+
+Profile updated successfully: {
+  user: {
+    id: [33m1[39m,
+    name: [32m&apos;Updated Name&apos;[39m,
+    email: [32m&apos;updated@example.com&apos;[39m,
+    gender: [32m&apos;weiblich&apos;[39m,
+    height: [33m175[39m
+  },
+  message: [32m&apos;Profil erfolgreich aktualisiert.&apos;[39m
+}
+
+            </system-out>
+            <system-err>
+Fehler beim Laden des Profils: TypeError: Cannot read properties of undefined (reading &apos;ok&apos;)
+    at fetchProfile (C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/src/pages/Profile.jsx:32:20)
+    at handleSubmit (C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/src/pages/Profile.jsx:96:7)
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Profile.test.jsx" name="Profile &gt; validates required fields" time="0.0666366">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Profile.test.jsx" name="Profile &gt; displays error message on update failure" time="0.1698982">
+            <system-out>
+Saving profile: {
+  name: [32m&apos;Test User&apos;[39m,
+  email: [32m&apos;test@example.com&apos;[39m,
+  gender: [1mnull[22m,
+  birthDate: [1mnull[22m,
+  height: [1mnull[22m
+}
+
+Profile update response status: [90mundefined[39m
+
+            </system-out>
+            <system-err>
+Profile update error: { error: [32m&apos;Fehler beim Aktualisieren&apos;[39m }
+Error updating profile: Error: Fehler beim Aktualisieren
+    at handleSubmit (C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/src/pages/Profile.jsx:84:15)
+
+            </system-err>
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/__tests__/Programs.test.jsx" timestamp="2025-12-04T12:30:01.426Z" hostname="DESKTOP-A2DTOR2" tests="14" failures="0" errors="0" skipped="0" time="2.7394739">
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; renders loading state" time="0.1934691">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; displays programs for normal weight BMI" time="0.159743">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; displays programs for overweight BMI" time="0.1836209">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; displays programs for underweight BMI" time="0.0791114">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; displays empty state when no BMI data" time="0.0853287">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; expands program details when clicked" time="0.3977237">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; displays important notes" time="0.0953468">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; displays programs for obesity BMI" time="0.0870875">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; handles fetch error gracefully" time="0.1009879">
+            <system-err>
+Fehler beim Laden des BMI: Error: Network error
+    at C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/src/pages/__tests__/Programs.test.jsx:166:40
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:919:26
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1244:20
+    at new Promise (&lt;anonymous&gt;)
+    at runWithTimeout [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1210:10[90m)[39m
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1654:37
+    at Traces.$ [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.U4xDYhzZ.js:115:27[90m)[39m
+    at trace [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4mvitest[24m/dist/chunks/test.DqQZzsWf.js:234:21[90m)[39m
+    at runTest [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1654:12[90m)[39m
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; handles response not ok in fetchCurrentBMI" time="0.0892249">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; successfully starts a program" time="0.3351651">
+            <system-out>
+Starting program: {
+  id: [33m3[39m,
+  type: [32m&apos;Fitness&apos;[39m,
+  title: [32m&apos;Erhaltungs-Programm&apos;[39m,
+  description: [32m&apos;Gesundes Gewicht halten und Fitness verbessern&apos;[39m,
+  duration: [32m&apos;Dauerhaft&apos;[39m,
+  difficulty: [32m&apos;Alle Level&apos;[39m,
+  exercises: [
+    [32m&apos;Ausgewogene Ernährung beibehalten&apos;[39m,
+    [32m&apos;Kardio: 150 Minuten pro Woche&apos;[39m,
+    [32m&apos;Krafttraining: 2x pro Woche&apos;[39m,
+    [32m&apos;Flexibilitätstraining&apos;[39m
+  ]
+}
+Sending request to: http://localhost:3000/api/programs/start
+Payload: {
+  programType: [32m&apos;Fitness&apos;[39m,
+  programName: [32m&apos;Erhaltungs-Programm&apos;[39m,
+  description: [32m&apos;Gesundes Gewicht halten und Fitness verbessern&apos;[39m,
+  duration: [32m&apos;Dauerhaft&apos;[39m
+}
+
+Response status: [90mundefined[39m
+Response ok: [33mtrue[39m
+
+Success data: {
+  id: [33m1[39m,
+  message: [32m&apos;Programm erfolgreich gestartet!&apos;[39m,
+  program: { id: [33m1[39m, programType: [32m&apos;Fitness&apos;[39m, programName: [32m&apos;Erhaltungs-Programm&apos;[39m }
+}
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; handles program start error" time="0.4684595">
+            <system-out>
+Starting program: {
+  id: [33m3[39m,
+  type: [32m&apos;Fitness&apos;[39m,
+  title: [32m&apos;Erhaltungs-Programm&apos;[39m,
+  description: [32m&apos;Gesundes Gewicht halten und Fitness verbessern&apos;[39m,
+  duration: [32m&apos;Dauerhaft&apos;[39m,
+  difficulty: [32m&apos;Alle Level&apos;[39m,
+  exercises: [
+    [32m&apos;Ausgewogene Ernährung beibehalten&apos;[39m,
+    [32m&apos;Kardio: 150 Minuten pro Woche&apos;[39m,
+    [32m&apos;Krafttraining: 2x pro Woche&apos;[39m,
+    [32m&apos;Flexibilitätstraining&apos;[39m
+  ]
+}
+Sending request to: http://localhost:3000/api/programs/start
+Payload: {
+  programType: [32m&apos;Fitness&apos;[39m,
+  programName: [32m&apos;Erhaltungs-Programm&apos;[39m,
+  description: [32m&apos;Gesundes Gewicht halten und Fitness verbessern&apos;[39m,
+  duration: [32m&apos;Dauerhaft&apos;[39m
+}
+
+Response status: [33m500[39m
+Response ok: [33mfalse[39m
+
+            </system-out>
+            <system-err>
+Error response: { error: [32m&apos;Server error&apos;[39m }
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; handles program start network error" time="0.3428132">
+            <system-out>
+Starting program: {
+  id: [33m3[39m,
+  type: [32m&apos;Fitness&apos;[39m,
+  title: [32m&apos;Erhaltungs-Programm&apos;[39m,
+  description: [32m&apos;Gesundes Gewicht halten und Fitness verbessern&apos;[39m,
+  duration: [32m&apos;Dauerhaft&apos;[39m,
+  difficulty: [32m&apos;Alle Level&apos;[39m,
+  exercises: [
+    [32m&apos;Ausgewogene Ernährung beibehalten&apos;[39m,
+    [32m&apos;Kardio: 150 Minuten pro Woche&apos;[39m,
+    [32m&apos;Krafttraining: 2x pro Woche&apos;[39m,
+    [32m&apos;Flexibilitätstraining&apos;[39m
+  ]
+}
+Sending request to: http://localhost:3000/api/programs/start
+Payload: {
+  programType: [32m&apos;Fitness&apos;[39m,
+  programName: [32m&apos;Erhaltungs-Programm&apos;[39m,
+  description: [32m&apos;Gesundes Gewicht halten und Fitness verbessern&apos;[39m,
+  duration: [32m&apos;Dauerhaft&apos;[39m
+}
+
+            </system-out>
+            <system-err>
+Fehler beim Starten des Programms: Error: Network error
+    at C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/src/pages/__tests__/Programs.test.jsx:291:30
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:919:26
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1244:20
+    at new Promise (&lt;anonymous&gt;)
+    at runWithTimeout [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1210:10[90m)[39m
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1654:37
+    at Traces.$ [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.U4xDYhzZ.js:115:27[90m)[39m
+    at trace [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4mvitest[24m/dist/chunks/test.DqQZzsWf.js:234:21[90m)[39m
+    at runTest [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1654:12[90m)[39m
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Programs.test.jsx" name="Programs &gt; displays workout video section" time="0.1121613">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/__tests__/Register.test.jsx" timestamp="2025-12-04T12:30:01.432Z" hostname="DESKTOP-A2DTOR2" tests="4" failures="0" errors="0" skipped="0" time="2.0170032">
+        <testcase classname="src/pages/__tests__/Register.test.jsx" name="RegisterPage &gt; renders registration form" time="0.5048769">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Register.test.jsx" name="RegisterPage &gt; shows link to login page" time="0.0475245">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Register.test.jsx" name="RegisterPage &gt; submits registration form with valid data" time="1.2198938">
+            <system-out>
+API Request: http://localhost:3000/api/auth/register { name: [32m&apos;New User&apos;[39m, email: [32m&apos;new@example.com&apos;[39m, password: [32m&apos;password123&apos;[39m }
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Register.test.jsx" name="RegisterPage &gt; validates password minimum length" time="0.2357612">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/__tests__/Statistics.test.jsx" timestamp="2025-12-04T12:30:01.435Z" hostname="DESKTOP-A2DTOR2" tests="8" failures="0" errors="0" skipped="0" time="0.792997">
+        <testcase classname="src/pages/__tests__/Statistics.test.jsx" name="Statistics &gt; renders loading state" time="0.1893886">
+            <system-out>
+Fetching statistics... http://localhost:3000/api
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Statistics.test.jsx" name="Statistics &gt; displays statistics with data" time="0.2164859">
+            <system-out>
+Fetching statistics... http://localhost:3000/api
+
+Records response: [90mundefined[39m [33mtrue[39m
+Stats response: [90mundefined[39m [33mtrue[39m
+
+Records data: [
+  {
+    id: [33m1[39m,
+    weight: [33m75[39m,
+    height: [33m180[39m,
+    bmi: [33m23.15[39m,
+    status: [32m&apos;Normalgewicht&apos;[39m,
+    created_at: [32m&apos;2025-12-04T12:29:55.489Z&apos;[39m
+  },
+  {
+    id: [33m2[39m,
+    weight: [33m80[39m,
+    height: [33m180[39m,
+    bmi: [33m24.69[39m,
+    status: [32m&apos;Normalgewicht&apos;[39m,
+    created_at: [32m&apos;2025-12-04T12:29:55.490Z&apos;[39m
+  }
+]
+Stats data: {
+  totalRecords: [33m2[39m,
+  averageBMI: [33m23.92[39m,
+  latestBMI: [33m23.15[39m,
+  latestWeight: [33m75[39m,
+  weightChange: [33m5[39m
+}
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Statistics.test.jsx" name="Statistics &gt; displays empty state when no data" time="0.0825597">
+            <system-out>
+Fetching statistics... http://localhost:3000/api
+
+Records response: [90mundefined[39m [33mtrue[39m
+Stats response: [90mundefined[39m [33mtrue[39m
+
+Records data: []
+Stats data: {
+  totalRecords: [33m0[39m,
+  averageBMI: [1mnull[22m,
+  latestBMI: [1mnull[22m,
+  latestWeight: [1mnull[22m,
+  weightChange: [1mnull[22m
+}
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Statistics.test.jsx" name="Statistics &gt; displays error message on API failure" time="0.0695262">
+            <system-out>
+Fetching statistics... http://localhost:3000/api
+
+Records response: [33m500[39m [33mfalse[39m
+Stats response: [90mundefined[39m [33mtrue[39m
+
+            </system-out>
+            <system-err>
+Error fetching records: Server error
+Fehler beim Laden der Statistiken: Error: Fehler beim Laden der Historie: 500
+    at fetchStatistics (C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/src/pages/Statistics.jsx:48:15)
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Statistics.test.jsx" name="Statistics &gt; displays records table when data exists" time="0.0630767">
+            <system-out>
+Fetching statistics... http://localhost:3000/api
+
+Records response: [90mundefined[39m [33mtrue[39m
+Stats response: [90mundefined[39m [33mtrue[39m
+
+Records data: [
+  {
+    id: [33m1[39m,
+    weight: [33m75[39m,
+    height: [33m180[39m,
+    bmi: [33m23.15[39m,
+    status: [32m&apos;Normalgewicht&apos;[39m,
+    created_at: [32m&apos;2025-12-04T12:29:55.858Z&apos;[39m
+  }
+]
+Stats data: {
+  totalRecords: [33m1[39m,
+  averageBMI: [33m23.15[39m,
+  latestBMI: [33m23.15[39m,
+  latestWeight: [33m75[39m
+}
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Statistics.test.jsx" name="Statistics &gt; handles missing token" time="0.0506208">
+        </testcase>
+        <testcase classname="src/pages/__tests__/Statistics.test.jsx" name="Statistics &gt; handles stats API error" time="0.0617135">
+            <system-out>
+Fetching statistics... http://localhost:3000/api
+
+Records response: [90mundefined[39m [33mtrue[39m
+Stats response: [33m500[39m [33mfalse[39m
+
+            </system-out>
+            <system-err>
+Error fetching stats: Stats error
+Fehler beim Laden der Statistiken: Error: Fehler beim Laden der Statistiken: 500
+    at fetchStatistics (C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/src/pages/Statistics.jsx:54:15)
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/pages/__tests__/Statistics.test.jsx" name="Statistics &gt; handles fetch error in fetchStatistics" time="0.0521563">
+            <system-out>
+Fetching statistics... http://localhost:3000/api
+
+            </system-out>
+            <system-err>
+Fehler beim Laden der Statistiken: Error: Network error
+    at C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/src/pages/__tests__/Statistics.test.jsx:213:40
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:145:11
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:919:26
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1244:20
+    at new Promise (&lt;anonymous&gt;)
+    at runWithTimeout [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1210:10[90m)[39m
+    at [90mfile:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1654:37
+    at Traces.$ [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.U4xDYhzZ.js:115:27[90m)[39m
+    at trace [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4mvitest[24m/dist/chunks/test.DqQZzsWf.js:234:21[90m)[39m
+    at runTest [90m(file:///C:/Users/serge/OneDrive/Bureau/BACHELOR_carine/bmi_app/frontend/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:1654:12[90m)[39m
+
+            </system-err>
+        </testcase>
+    </testsuite>
+</testsuites>

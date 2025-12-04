@@ -1,0 +1,39 @@
+{
+  "platform": "github",
+  "execution_id": "run_001",
+  "timestamp": "2025-01-26T10:00:00Z",
+  "branch": "main",
+  "trigger": "push",
+  "duration": {
+    "total": 297,
+    "stages": {
+      "lint_backend": 19,
+      "lint_frontend": 10,
+      "test_backend": 20,
+      "test_frontend": 19,
+      "build_frontend": 21,
+      "e2e_tests": 129,
+      "docker_build": 106,
+      "deploy": 7
+    }
+  },
+  "resources": {
+    "cpu_usage_percent": 0,
+    "memory_usage_mb": 0,
+    "network_usage_mb": 0
+  },
+  "success": true,
+  "errors": [],
+  "queue_time": 0,
+  "runner_type": "ubuntu-latest",
+  "artifacts": {
+    "count": 4,
+    "total_size_mb": 15.3
+  },
+  "cache": {
+    "hit": true,
+    "size_mb": 250
+  },
+  "notes": "Remplacer avec les données réelles depuis GitHub Actions UI"
+}
+

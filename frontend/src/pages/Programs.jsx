@@ -10,6 +10,9 @@ const Programs = () => {
   const [currentBMI, setCurrentBMI] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedProgram, setSelectedProgram] = useState(null);
+  const [startingProgram, setStartingProgram] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [successProgramId, setSuccessProgramId] = useState(null);
 
   useEffect(() => {
     fetchCurrentBMI();
@@ -172,6 +175,59 @@ const Programs = () => {
     return programs[status] || [];
   };
 
+  const handleStartProgram = async (program) => {
+    console.log("Starting program:", program);
+    setStartingProgram(program.id);
+    setSuccessMessage(null);
+    setSuccessProgramId(null);
+    
+    try {
+      const url = `${API_BASE_URL}/programs/start`;
+      const payload = {
+        programType: program.type,
+        programName: program.title,
+        description: program.description,
+        duration: program.duration,
+      };
+      
+      console.log("Sending request to:", url);
+      console.log("Payload:", payload);
+      
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Success data:", data);
+        setSuccessMessage(`Programm "${program.title}" erfolgreich gestartet!`);
+        setSuccessProgramId(program.id);
+        // Masquer le message après 5 secondes
+        setTimeout(() => {
+          setSuccessMessage(null);
+          setSuccessProgramId(null);
+        }, 5000);
+      } else {
+        const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+        console.error("Error response:", errorData);
+        alert(`Fehler: ${errorData.error || "Programm konnte nicht gestartet werden."}`);
+      }
+    } catch (error) {
+      console.error("Fehler beim Starten des Programms:", error);
+      alert("Fehler beim Starten des Programms. Bitte versuchen Sie es erneut.");
+    } finally {
+      setStartingProgram(null);
+    }
+  };
+
   const recommendedPrograms = getRecommendedPrograms();
 
   if (loading) {
@@ -200,8 +256,14 @@ const Programs = () => {
           </div>
         ) : (
           <div className="programs-grid">
-            {recommendedPrograms.map((program) => (
+            {recommendedPrograms.map((program, index) => (
               <div key={program.id} className="program-card">
+                <div className="program-image">
+                  <img 
+                    src={`/images/programm${index % 2 === 0 ? '1' : '2'}.jpg`} 
+                    alt={program.title}
+                  />
+                </div>
                 <div className="program-header">
                   <span className={`program-type program-type-${program.type.toLowerCase()}`}>
                     {program.type}
@@ -229,7 +291,18 @@ const Programs = () => {
                         <li key={index}>{exercise}</li>
                       ))}
                     </ul>
-                    <button className="start-program-btn">Programm starten</button>
+                    {successMessage && successProgramId === program.id && (
+                      <div className="program-success-message">
+                        ✅ {successMessage}
+                      </div>
+                    )}
+                    <button 
+                      className="start-program-btn"
+                      onClick={() => handleStartProgram(program)}
+                      disabled={startingProgram === program.id}
+                    >
+                      {startingProgram === program.id ? "Wird gestartet..." : "Programm starten"}
+                    </button>
                   </div>
                 )}
               </div>
@@ -254,6 +327,24 @@ const Programs = () => {
               Höre auf deinen Körper und gönne dir ausreichend Ruhe und Regeneration.
             </li>
           </ul>
+        </div>
+
+        <div className="workout-video-section">
+          <h2> Workout-Training Video</h2>
+          <p className="video-description">
+            Lass dich von diesem Trainingsvideo motivieren und starte noch heute mit deinem Fitness-Programm!
+          </p>
+          <div className="video-container">
+            <iframe
+              width="100%"
+              height="500"
+              src="https://www.youtube.com/embed/AdqrTg_hpEQ"
+              title="Workout Training Video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,146 @@
+{
+  "timestamp": "2025-12-04T16-35-27-646Z",
+  "feedbackTime": {
+    "average": "0.40s",
+    "min": "0.18s",
+    "max": "0.58s",
+    "samples": 6,
+    "breakdown": {
+      "commit_to_start": "5-30s",
+      "execution": "0.40s",
+      "notification": "1-5s"
+    }
+  },
+  "debuggingEase": {
+    "logQuality": {
+      "score": 8,
+      "description": "Logs structurés avec timestamps et contextes",
+      "improvements": [
+        "Ajouter des logs de niveau DEBUG pour le développement",
+        "Implémenter un système de tracing distribué"
+      ]
+    },
+    "errorMessages": {
+      "score": 7,
+      "description": "Messages d'erreur clairs avec codes HTTP appropriés",
+      "improvements": [
+        "Ajouter des codes d'erreur personnalisés",
+        "Inclure des liens vers la documentation dans les erreurs"
+      ]
+    },
+    "testOutput": {
+      "score": 9,
+      "description": "Sortie de tests détaillée avec coverage",
+      "improvements": [
+        "Ajouter des snapshots pour les tests visuels",
+        "Implémenter des tests de régression automatiques"
+      ]
+    },
+    "ciLogs": {
+      "score": 8,
+      "description": "Logs CI/CD structurés par stage",
+      "improvements": [
+        "Ajouter des annotations dans les PRs",
+        "Implémenter des dashboards de monitoring"
+      ]
+    }
+  },
+  "errorResolution": {
+    "averageResolutionTime": {
+      "critical": "15-30 minutes",
+      "high": "1-2 heures",
+      "medium": "2-4 heures",
+      "low": "1 jour"
+    },
+    "factors": {
+      "testCoverage": {
+        "impact": "high",
+        "description": "Couverture de code élevée permet de détecter les erreurs rapidement"
+      },
+      "logging": {
+        "impact": "high",
+        "description": "Logs détaillés facilitent l'identification des problèmes"
+      },
+      "documentation": {
+        "impact": "medium",
+        "description": "Documentation claire réduit le temps de compréhension"
+      },
+      "ciFeedback": {
+        "impact": "high",
+        "description": "Feedback rapide du CI permet de corriger immédiatement"
+      }
+    },
+    "recommendations": [
+      "Implémenter des alertes automatiques pour les erreurs critiques",
+      "Créer un runbook pour les erreurs courantes",
+      "Ajouter des métriques de temps de résolution",
+      "Organiser des sessions de post-mortem pour les erreurs importantes"
+    ]
+  },
+  "survey": {
+    "questions": [
+      {
+        "id": 1,
+        "question": "À quel point le pipeline CI/CD facilite-t-il votre travail quotidien ?",
+        "type": "scale",
+        "scale": "1-10",
+        "category": "productivity"
+      },
+      {
+        "id": 2,
+        "question": "Quelle est la qualité des messages d'erreur du pipeline ?",
+        "type": "scale",
+        "scale": "1-10",
+        "category": "debugging"
+      },
+      {
+        "id": 3,
+        "question": "Le temps de feedback du pipeline est-il acceptable ?",
+        "type": "scale",
+        "scale": "1-10",
+        "category": "feedback"
+      },
+      {
+        "id": 4,
+        "question": "À quel point est-il facile de déboguer les problèmes dans le pipeline ?",
+        "type": "scale",
+        "scale": "1-10",
+        "category": "debugging"
+      },
+      {
+        "id": 5,
+        "question": "La documentation du pipeline est-elle suffisante ?",
+        "type": "scale",
+        "scale": "1-10",
+        "category": "documentation"
+      },
+      {
+        "id": 6,
+        "question": "Quels sont les principaux points d'amélioration du pipeline ?",
+        "type": "text",
+        "category": "improvements"
+      },
+      {
+        "id": 7,
+        "question": "Quelle plateforme CI/CD préférez-vous et pourquoi ?",
+        "type": "text",
+        "category": "preference"
+      }
+    ],
+    "template": "developer-satisfaction-survey.md"
+  },
+  "overallScore": {
+    "productivity": 8,
+    "debugging": 8,
+    "feedback": 7,
+    "documentation": 7,
+    "average": 7.5
+  },
+  "recommendations": [
+    "Réduire le temps de feedback en optimisant les tests",
+    "Améliorer les messages d'erreur avec plus de contexte",
+    "Créer des guides de debugging pour les erreurs courantes",
+    "Implémenter des notifications en temps réel pour les builds",
+    "Organiser des sessions de feedback avec l'équipe"
+  ]
+}

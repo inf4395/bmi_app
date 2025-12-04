@@ -167,5 +167,57 @@ describe("Statistics", () => {
       expect(hasTable).toBeTruthy();
     }, { timeout: 3000 });
   });
+
+  it("handles missing token", () => {
+    localStorage.removeItem("bmi_app_token");
+    
+    renderWithProviders(<Statistics />);
+    
+    // When token is missing, it should show error immediately
+    expect(screen.getByText(/Nicht angemeldet/i)).toBeInTheDocument();
+  });
+
+  it("handles stats API error", async () => {
+    const mockRecords = [
+      {
+        id: 1,
+        weight: 75,
+        height: 180,
+        bmi: 23.15,
+        status: "Normalgewicht",
+        created_at: new Date().toISOString(),
+      },
+    ];
+
+    global.fetch
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockRecords,
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        text: async () => "Stats error",
+      });
+
+    renderWithProviders(<Statistics />);
+
+    await waitFor(() => {
+      const errorElement = screen.queryByText(/Fehler/i) || 
+                          screen.queryByText(/Fehler beim Laden der Statistiken/i);
+      expect(errorElement).toBeTruthy();
+    }, { timeout: 3000 });
+  });
+
+  it("handles fetch error in fetchStatistics", async () => {
+    global.fetch.mockRejectedValueOnce(new Error("Network error"));
+
+    renderWithProviders(<Statistics />);
+
+    await waitFor(() => {
+      const errorElement = screen.queryByText(/Fehler/i);
+      expect(errorElement).toBeTruthy();
+    }, { timeout: 3000 });
+  });
 });
 

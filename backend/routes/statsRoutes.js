@@ -93,6 +93,82 @@ export default (db) => {
     }
   });
 
+  // POST — Programme starten (sauvegarder un programme pour l'utilisateur)
+  router.post("/programs/start", requireAuth, async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const { programType, programName, description, duration } = req.body;
+
+      if (!programType || !programName) {
+        return res.status(400).json({ error: "Programmtyp und Programmname sind erforderlich." });
+      }
+
+      // Calculer la date de fin basée sur la durée
+      const startDate = new Date().toISOString().split('T')[0];
+      let endDate = null;
+      
+      if (duration) {
+        const weeks = parseInt(duration.match(/\d+/)?.[0] || 0);
+        if (weeks > 0) {
+          const end = new Date();
+          end.setDate(end.getDate() + (weeks * 7));
+          endDate = end.toISOString().split('T')[0];
+        }
+      }
+
+      console.log(`[Programs] Starting program for user_id: ${userId}`, {
+        programType,
+        programName,
+        startDate,
+        endDate
+      });
+
+      const result = await db.run(
+        `INSERT INTO user_programs (user_id, program_type, program_name, description, start_date, end_date, status)
+         VALUES (?, ?, ?, ?, ?, ?, 'active')`,
+        [userId, programType, programName, description || null, startDate, endDate]
+      );
+
+      console.log(`[Programs] Program started with id: ${result.lastID} for user ${userId}`);
+
+      res.json({
+        id: result.lastID,
+        message: "Programm erfolgreich gestartet!",
+        program: {
+          id: result.lastID,
+          programType,
+          programName,
+          description,
+          startDate,
+          endDate,
+          status: 'active'
+        }
+      });
+    } catch (error) {
+      console.error("Fehler beim Starten des Programms:", error);
+      res.status(500).json({ error: "Serverfehler", details: error.message });
+    }
+  });
+
+  // GET — Programme de l'utilisateur
+  router.get("/programs", requireAuth, async (req, res) => {
+    try {
+      const userId = req.user.id;
+      
+      const programs = await db.all(
+        `SELECT * FROM user_programs 
+         WHERE user_id = ? 
+         ORDER BY created_at DESC`,
+        [userId]
+      );
+
+      res.json(programs);
+    } catch (error) {
+      console.error("Fehler beim Abrufen der Programme:", error);
+      res.status(500).json({ error: "Serverfehler" });
+    }
+  });
+
   return router;
 };
 

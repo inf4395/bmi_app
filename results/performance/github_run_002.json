@@ -1,0 +1,39 @@
+{
+  "platform": "github",
+  "execution_id": "run_002",
+  "timestamp": "2025-01-26T11:00:00Z",
+  "branch": "main",
+  "trigger": "push",
+  "duration": {
+    "total": 296,
+    "stages": {
+      "lint_backend": 15,
+      "lint_frontend": 13,
+      "test_backend": 19,
+      "test_frontend": 20,
+      "build_frontend": 22,
+      "e2e_tests": 120,
+      "docker_build": 111,
+      "deploy": 6
+    }
+  },
+  "resources": {
+    "cpu_usage_percent": 0,
+    "memory_usage_mb": 0,
+    "network_usage_mb": 0
+  },
+  "success": true,
+  "errors": [],
+  "queue_time": 0,
+  "runner_type": "ubuntu-latest",
+  "artifacts": {
+    "count": 0,
+    "total_size_mb": 0
+  },
+  "cache": {
+    "hit": false,
+    "size_mb": 0
+  },
+  "notes": "À remplir avec les données réelles"
+}
+

@@ -45,12 +45,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // Attendre que toutes les opérations asynchrones soient terminées
-  await new Promise(resolve => setTimeout(resolve, 100));
-  if (db) {
-    await db.close();
-  }
-}, 10000);
+  await db.close();
+});
 
 describe("Validation Tests", () => {
   describe("Email Validation", () => {

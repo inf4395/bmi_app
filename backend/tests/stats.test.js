@@ -132,5 +132,162 @@ describe("Statistics Routes", () => {
     expect(response.body[0]).toHaveProperty("weight");
     expect(response.body[0]).toHaveProperty("created_at");
   });
+
+  // Test POST /api/programs/start
+  test("POST /api/programs/start crée un nouveau programme", async () => {
+    const response = await request(app)
+      .post("/api/programs/start")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        programType: "Fitness",
+        programName: "Test Programm",
+        description: "Ein Test-Programm",
+        duration: "12 Wochen",
+      });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("message");
+    expect(response.body).toHaveProperty("program");
+    expect(response.body.program.programType).toBe("Fitness");
+    expect(response.body.program.programName).toBe("Test Programm");
+    expect(response.body.program.status).toBe("active");
+  });
+
+  // Test POST /api/programs/start avec données manquantes
+  test("POST /api/programs/start retourne une erreur si données manquantes", async () => {
+    const response = await request(app)
+      .post("/api/programs/start")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        programType: "Fitness",
+        // programName manquant
+      });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty("error");
+  });
+
+  // Test GET /api/programs
+  test("GET /api/programs retourne les programmes de l'utilisateur", async () => {
+    // Créer d'abord un programme
+    await request(app)
+      .post("/api/programs/start")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        programType: "Sport",
+        programName: "Programm 1",
+        description: "Description 1",
+        duration: "8 Wochen",
+      });
+
+    const response = await request(app)
+      .get("/api/programs")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.length).toBeGreaterThan(0);
+    expect(response.body[0]).toHaveProperty("program_type");
+    expect(response.body[0]).toHaveProperty("program_name");
+    expect(response.body[0]).toHaveProperty("status");
+  });
+
+  // Test GET /api/stats/detailed avec startDate
+  test("GET /api/stats/detailed avec startDate filtre les résultats", async () => {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
+    const startDateStr = startDate.toISOString().split('T')[0];
+
+    const response = await request(app)
+      .get(`/api/stats/detailed?startDate=${startDateStr}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+  });
+
+  // Test GET /api/stats/detailed avec endDate
+  test("GET /api/stats/detailed avec endDate filtre les résultats", async () => {
+    const endDate = new Date();
+    const endDateStr = endDate.toISOString().split('T')[0];
+
+    const response = await request(app)
+      .get(`/api/stats/detailed?endDate=${endDateStr}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+  });
+
+  // Test GET /api/stats/detailed avec startDate et endDate
+  test("GET /api/stats/detailed avec startDate et endDate filtre les résultats", async () => {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
+    const startDateStr = startDate.toISOString().split('T')[0];
+    const endDate = new Date();
+    const endDateStr = endDate.toISOString().split('T')[0];
+
+    const response = await request(app)
+      .get(`/api/stats/detailed?startDate=${startDateStr}&endDate=${endDateStr}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+  });
+
+  // Test POST /api/programs/start avec duration sans nombre
+  test("POST /api/programs/start avec duration invalide", async () => {
+    const response = await request(app)
+      .post("/api/programs/start")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        programType: "Fitness",
+        programName: "Test Programm",
+        duration: "Dauerhaft", // Pas de nombre
+      });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty("id");
+    // endDate devrait être null si duration n'a pas de nombre
+  });
+
+  // Test POST /api/programs/start sans description
+  test("POST /api/programs/start sans description", async () => {
+    const response = await request(app)
+      .post("/api/programs/start")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        programType: "Sport",
+        programName: "Programm sans description",
+      });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty("id");
+    // description peut être null ou undefined si non fournie
+    expect(response.body.program.description === null || response.body.program.description === undefined).toBe(true);
+  });
+
+  // Test GET /api/history avec limit
+  test("GET /api/history retourne l'historique avec limite", async () => {
+    const response = await request(app)
+      .get("/api/history?limit=1")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.length).toBeLessThanOrEqual(1);
+  });
+
+  // Test GET /api/history sans limite
+  test("GET /api/history retourne tout l'historique", async () => {
+    const response = await request(app)
+      .get("/api/history")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.length).toBeGreaterThan(0);
+  });
 });
 

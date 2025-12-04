@@ -1,0 +1,38 @@
+{
+  "platform": "gitlab",
+  "execution_id": "pipeline_002",
+  "timestamp": "2025-01-26T11:00:00Z",
+  "branch": "main",
+  "trigger": "push",
+  "duration": {
+    "total": 583,
+    "stages": {
+      "lint_backend": 44,
+      "lint_frontend": 20,
+      "test_backend": 61,
+      "test_frontend": 52,
+      "build_frontend": 62,
+      "e2e_tests": 328,
+      "deploy": 16
+    }
+  },
+  "resources": {
+    "cpu_usage_percent": 0,
+    "memory_usage_mb": 0,
+    "network_usage_mb": 0
+  },
+  "success": true,
+  "errors": [],
+  "queue_time": 3,
+  "runner_type": "shared",
+  "artifacts": {
+    "count": 27,
+    "total_size_mb": 1.70
+  },
+  "cache": {
+    "hit": false,
+    "size_mb": 0
+  },
+  "notes": "À remplir avec les données réelles"
+}
+

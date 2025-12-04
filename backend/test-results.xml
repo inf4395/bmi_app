@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Backend Tests" tests="77" failures="0" errors="0" time="18.396">
+  <testsuite name="tests\performance.test.js" errors="0" failures="0" skipped="0" timestamp="2025-12-04T16:37:23" time="7.959" tests="18">
+    <testcase classname="Performance Tests" name="POST /api/bmi répond en moins de 1 seconde" time="0.02">
+    </testcase>
+    <testcase classname="Performance Tests" name="GET /api/history répond en moins de 1 seconde" time="0.019">
+    </testcase>
+    <testcase classname="Performance Tests" name="GET /api/stats/summary répond en moins de 1 seconde" time="0.026">
+    </testcase>
+    <testcase classname="Performance Tests" name="GET /api/stats/detailed répond en moins de 1 seconde" time="0.011">
+    </testcase>
+    <testcase classname="Performance Tests" name="POST /api/auth/login répond en moins de 1 seconde" time="0.258">
+    </testcase>
+    <testcase classname="Performance Tests" name="GET /api/auth/me répond en moins de 500ms" time="0.01">
+    </testcase>
+    <testcase classname="Performance Tests" name="PUT /api/auth/profile répond en moins de 1 seconde" time="0.015">
+    </testcase>
+    <testcase classname="Performance Tests" name="peut gérer plusieurs requêtes simultanées" time="0.061">
+    </testcase>
+    <testcase classname="Load Testing - Tests de charge" name="Load test: POST /api/bmi avec 20 requêtes séquentielles" time="0.21">
+    </testcase>
+    <testcase classname="Load Testing - Tests de charge" name="Load test: GET /api/stats/summary avec 20 requêtes parallèles" time="0.176">
+    </testcase>
+    <testcase classname="Load Testing - Tests de charge" name="Load test: GET /api/history avec différentes limites" time="0.033">
+    </testcase>
+    <testcase classname="Stress Testing - Tests de stress" name="Stress test: Création massive de records BMI" time="0.357">
+    </testcase>
+    <testcase classname="Stress Testing - Tests de stress" name="Stress test: Requêtes simultanées sur /api/stats/summary" time="0.237">
+    </testcase>
+    <testcase classname="Scalability Testing - Tests de scalabilité" name="Scalabilité: Performance avec différents volumes de données" time="0.903">
+    </testcase>
+    <testcase classname="Scalability Testing - Tests de scalabilité" name="Scalabilité: Performance avec requêtes parallèles croissantes" time="0.513">
+    </testcase>
+    <testcase classname="Performance Metrics - Métriques de performance" name="Métriques: Temps de réponse pour toutes les routes principales" time="0.214">
+    </testcase>
+    <testcase classname="Performance Metrics - Métriques de performance" name="Métriques: Throughput pour POST /api/bmi" time="0.135">
+    </testcase>
+    <testcase classname="Performance Metrics - Métriques de performance" name="Métriques: Latence p50, p95, p99 pour GET /api/stats/summary" time="0.95">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests\security.test.js" errors="0" failures="0" skipped="0" timestamp="2025-12-04T16:37:32" time="2.05" tests="14">
+    <testcase classname="Security Tests › JWT Token Validation" name="rejette une requête sans token" time="0.008">
+    </testcase>
+    <testcase classname="Security Tests › JWT Token Validation" name="rejette un token invalide" time="0.006">
+    </testcase>
+    <testcase classname="Security Tests › JWT Token Validation" name="rejette un token malformé" time="0.007">
+    </testcase>
+    <testcase classname="Security Tests › JWT Token Validation" name="rejette un token expiré" time="0.01">
+    </testcase>
+    <testcase classname="Security Tests › JWT Token Validation" name="rejette un token avec un secret incorrect" time="0.01">
+    </testcase>
+    <testcase classname="Security Tests › JWT Token Validation" name="accepte un token valide" time="0.011">
+    </testcase>
+    <testcase classname="Security Tests › SQL Injection Protection" name="protège contre l&apos;injection SQL dans l&apos;email" time="0.007">
+    </testcase>
+    <testcase classname="Security Tests › SQL Injection Protection" name="protège contre l&apos;injection SQL dans le nom" time="0.016">
+    </testcase>
+    <testcase classname="Security Tests › SQL Injection Protection" name="protège contre l&apos;injection SQL dans les paramètres de requête" time="0.013">
+    </testcase>
+    <testcase classname="Security Tests › Authorization Tests" name="empêche un utilisateur d&apos;accéder aux données d&apos;un autre utilisateur" time="0.273">
+    </testcase>
+    <testcase classname="Security Tests › Authorization Tests" name="empêche un utilisateur de supprimer les données d&apos;un autre utilisateur" time="0.237">
+    </testcase>
+    <testcase classname="Security Tests › Password Security" name="les mots de passe sont hashés (ne sont pas stockés en clair)" time="0.112">
+    </testcase>
+    <testcase classname="Security Tests › Password Security" name="rejette la connexion avec un mauvais mot de passe" time="0.223">
+    </testcase>
+    <testcase classname="Security Tests › Input Sanitization" name="sanitise les entrées XSS potentielles dans le nom" time="0.011">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests\auth.test.js" errors="0" failures="0" skipped="0" timestamp="2025-12-04T16:37:35" time="1.911" tests="6">
+    <testcase classname="Authentication Routes" name="POST /api/auth/register crée un nouvel utilisateur" time="0.154">
+    </testcase>
+    <testcase classname="Authentication Routes" name="POST /api/auth/register rejette un email déjà utilisé" time="0.115">
+    </testcase>
+    <testcase classname="Authentication Routes" name="POST /api/auth/login connecte un utilisateur valide" time="0.219">
+    </testcase>
+    <testcase classname="Authentication Routes" name="POST /api/auth/login rejette un mauvais mot de passe" time="0.22">
+    </testcase>
+    <testcase classname="Authentication Routes" name="GET /api/auth/me retourne les informations de l&apos;utilisateur" time="0.128">
+    </testcase>
+    <testcase classname="Authentication Routes" name="PUT /api/auth/profile met à jour le profil utilisateur" time="0.118">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests\stats.test.js" errors="0" failures="0" skipped="0" timestamp="2025-12-04T16:37:37" time="1.477" tests="13">
+    <testcase classname="Statistics Routes" name="GET /api/stats/summary retourne les statistiques résumées" time="0.014">
+    </testcase>
+    <testcase classname="Statistics Routes" name="GET /api/stats/summary retourne des valeurs nulles si aucun enregistrement" time="0.224">
+    </testcase>
+    <testcase classname="Statistics Routes" name="GET /api/stats/detailed retourne les statistiques détaillées" time="0.008">
+    </testcase>
+    <testcase classname="Statistics Routes" name="POST /api/programs/start crée un nouveau programme" time="0.01">
+    </testcase>
+    <testcase classname="Statistics Routes" name="POST /api/programs/start retourne une erreur si données manquantes" time="0.008">
+    </testcase>
+    <testcase classname="Statistics Routes" name="GET /api/programs retourne les programmes de l&apos;utilisateur" time="0.019">
+    </testcase>
+    <testcase classname="Statistics Routes" name="GET /api/stats/detailed avec startDate filtre les résultats" time="0.008">
+    </testcase>
+    <testcase classname="Statistics Routes" name="GET /api/stats/detailed avec endDate filtre les résultats" time="0.009">
+    </testcase>
+    <testcase classname="Statistics Routes" name="GET /api/stats/detailed avec startDate et endDate filtre les résultats" time="0.006">
+    </testcase>
+    <testcase classname="Statistics Routes" name="POST /api/programs/start avec duration invalide" time="0.008">
+    </testcase>
+    <testcase classname="Statistics Routes" name="POST /api/programs/start sans description" time="0.008">
+    </testcase>
+    <testcase classname="Statistics Routes" name="GET /api/history retourne l&apos;historique avec limite" time="0.011">
+    </testcase>
+    <testcase classname="Statistics Routes" name="GET /api/history retourne tout l&apos;historique" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests\bmi.test.js" errors="0" failures="0" skipped="0" timestamp="2025-12-04T16:37:38" time="1.153" tests="4">
+    <testcase classname="" name="POST /api/bmi erstellt neuen Datensatz" time="0.012">
+    </testcase>
+    <testcase classname="" name="GET /api/history gibt Liste der letzten Berechnungen zurück" time="0.01">
+    </testcase>
+    <testcase classname="" name="PUT /api/bmi/:id aktualisiert einen Datensatz" time="0.016">
+    </testcase>
+    <testcase classname="" name="DELETE /api/bmi/:id löscht einen Datensatz" time="0.02">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests\validation.test.js" errors="0" failures="0" skipped="0" timestamp="2025-12-04T16:37:39" time="1.143" tests="16">
+    <testcase classname="Validation Tests › Email Validation" name="rejette un email invalide lors de l&apos;inscription" time="0.009">
+    </testcase>
+    <testcase classname="Validation Tests › Email Validation" name="rejette un email vide lors de l&apos;inscription" time="0.011">
+    </testcase>
+    <testcase classname="Validation Tests › Email Validation" name="rejette un email invalide lors de la connexion" time="0.006">
+    </testcase>
+    <testcase classname="Validation Tests › Password Validation" name="rejette un mot de passe trop court" time="0.007">
+    </testcase>
+    <testcase classname="Validation Tests › Password Validation" name="rejette un mot de passe vide" time="0.006">
+    </testcase>
+    <testcase classname="Validation Tests › BMI Input Validation" name="rejette un poids négatif" time="0.009">
+    </testcase>
+    <testcase classname="Validation Tests › BMI Input Validation" name="rejette un poids de zéro" time="0.008">
+    </testcase>
+    <testcase classname="Validation Tests › BMI Input Validation" name="rejette une hauteur négative" time="0.01">
+    </testcase>
+    <testcase classname="Validation Tests › BMI Input Validation" name="rejette une hauteur de zéro" time="0.009">
+    </testcase>
+    <testcase classname="Validation Tests › BMI Input Validation" name="rejette une hauteur trop grande (limite réaliste)" time="0.008">
+    </testcase>
+    <testcase classname="Validation Tests › BMI Input Validation" name="rejette un poids trop élevé (limite réaliste)" time="0.01">
+    </testcase>
+    <testcase classname="Validation Tests › BMI Input Validation" name="rejette des valeurs manquantes" time="0.008">
+    </testcase>
+    <testcase classname="Validation Tests › Name Validation" name="rejette un nom vide lors de l&apos;inscription" time="0.008">
+    </testcase>
+    <testcase classname="Validation Tests › Name Validation" name="rejette un nom manquant lors de l&apos;inscription" time="0.006">
+    </testcase>
+    <testcase classname="Validation Tests › Profile Validation" name="rejette un email invalide lors de la mise à jour du profil" time="0.015">
+    </testcase>
+    <testcase classname="Validation Tests › Profile Validation" name="rejette une hauteur négative dans le profil" time="0.011">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests\calculateBMI.test.js" errors="0" failures="0" skipped="0" timestamp="2025-12-04T16:37:40" time="0.29" tests="6">
+    <testcase classname="calculateBMI" name="berechnet korrekt den BMI und Status für Normalgewicht" time="0.003">
+    </testcase>
+    <testcase classname="calculateBMI" name="gibt &apos;Untergewicht&apos; zurück, wenn BMI unter 18.5 liegt" time="0">
+    </testcase>
+    <testcase classname="calculateBMI" name="gibt &apos;Übergewicht&apos; zurück, wenn BMI über 25 liegt" time="0.001">
+    </testcase>
+    <testcase classname="calculateBMI" name="gibt &apos;Adipositas&apos; zurück, wenn BMI über 30 liegt" time="0.001">
+    </testcase>
+    <testcase classname="calculateBMI" name="gibt &apos;starkes Untergewicht&apos; zurück, wenn BMI unter 16 liegt" time="0">
+    </testcase>
+    <testcase classname="calculateBMI" name="wirft Fehler bei ungültigen Eingaben" time="0.02">
+    </testcase>
+  </testsuite>
+</testsuites>

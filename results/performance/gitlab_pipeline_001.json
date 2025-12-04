@@ -1,0 +1,38 @@
+{
+  "platform": "gitlab",
+  "execution_id": "pipeline_001",
+  "timestamp": "2025-01-26T10:00:00Z",
+  "branch": "main",
+  "trigger": "push",
+  "duration": {
+    "total": 564,
+    "stages": {
+      "lint_backend": 35,
+      "lint_frontend": 36,
+      "test_backend": 43,
+      "test_frontend": 41,
+      "build_frontend": 43,
+      "e2e_tests": 351,
+      "deploy": 15
+    }
+  },
+  "resources": {
+    "cpu_usage_percent": 0,
+    "memory_usage_mb": 0,
+    "network_usage_mb": 0
+  },
+  "success": true,
+  "errors": [],
+  "queue_time": 3,
+  "runner_type": "shared",
+  "artifacts": {
+    "count": 14,
+    "total_size_mb": 22.24
+  },
+  "cache": {
+    "hit": true,
+    "size_mb": 200
+  },
+  "notes": "Remplacer avec les données réelles depuis GitLab CI UI"
+}
+

@@ -17,8 +17,22 @@ describe("calculateBMI", () => {
     expect(result.status).toBe("Übergewicht");
   });
 
+  test("gibt 'Adipositas' zurück, wenn BMI über 30 liegt", () => {
+    const result = calculateBMI(1.7, 100);
+    expect(result.status).toBe("Adipositas");
+    expect(result.bmi).toBeGreaterThan(30);
+  });
+
+  test("gibt 'starkes Untergewicht' zurück, wenn BMI unter 16 liegt", () => {
+    const result = calculateBMI(1.75, 40);
+    expect(result.status).toBe("starkes Untergewicht");
+    expect(result.bmi).toBeLessThan(16);
+  });
+
   test("wirft Fehler bei ungültigen Eingaben", () => {
     expect(() => calculateBMI(0, 70)).toThrow("Ungültige Eingaben");
     expect(() => calculateBMI(1.8, -5)).toThrow("Ungültige Eingaben");
+    expect(() => calculateBMI(null, 70)).toThrow("Ungültige Eingaben");
+    expect(() => calculateBMI(1.8, null)).toThrow("Ungültige Eingaben");
   });
 });

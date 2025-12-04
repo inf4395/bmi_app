@@ -1,0 +1,33 @@
+{
+  "timestamp": "2025-12-04T15-44-10-542Z",
+  "projects": {
+    "backend": {
+      "project": "backend",
+      "timestamp": "2025-12-04T15-44-10-542Z",
+      "coverage": null,
+      "security": {
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 2,
+          "high": 1,
+          "critical": 0,
+          "total": 3
+        },
+        "summary": {
+          "total": 3,
+          "critical": 0,
+          "high": 1,
+          "moderate": 2,
+          "low": 0,
+          "info": 0
+        }
+      },
+      "complexity": null
+    }
+  },
+  "summary": {
+    "totalVulnerabilities": 3,
+    "averageCoverage": "0.00"
+  }
+}

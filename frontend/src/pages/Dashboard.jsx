@@ -60,8 +60,13 @@ const Dashboard = () => {
       <Navigation />
       <div className="dashboard-content">
         <div className="dashboard-header">
-          <h1>Willkommen zurück, {user?.name}!</h1>
-          <p>Hier ist eine Übersicht über deine Gesundheitsdaten</p>
+          <div className="header-image">
+            <img src="/images/willkommen.jpg" alt="Gesundheit" />
+          </div>
+          <div className="header-text">
+            <h1>Willkommen zurück, {user?.name}!</h1>
+            <p>Hier ist eine Übersicht über deine Gesundheitsdaten</p>
+          </div>
         </div>
 
         <div className="stats-grid">
@@ -113,22 +118,34 @@ const Dashboard = () => {
         </div>
 
         <div className="dashboard-actions">
-          <Link to="/bmi" className="action-card">
-            <div className="action-icon">➕</div>
-            <h3>Neue BMI-Messung</h3>
-            <p>Füge eine neue Gewichts- und Größenmessung hinzu</p>
+          <Link to="/bmi" className="action-card action-card-bmi">
+            <div className="action-image">
+              <img src="/images/neubmi.jpg" alt="BMI Messung" />
+            </div>
+            <div className="action-content">
+              <h3>Neue BMI-Messung</h3>
+              <p>Füge eine neue Gewichts- und Größenmessung hinzu</p>
+            </div>
           </Link>
 
-          <Link to="/statistiken" className="action-card">
-            <div className="action-icon">📊</div>
-            <h3>Statistiken ansehen</h3>
-            <p>Analysiere deine Entwicklung mit detaillierten Grafiken</p>
+          <Link to="/statistiken" className="action-card action-card-stats">
+            <div className="action-image">
+              <img src="/images/statistique.JPG" alt="Statistiken" />
+            </div>
+            <div className="action-content">
+              <h3>Statistiken ansehen</h3>
+              <p>Analysiere deine Entwicklung mit detaillierten Grafiken</p>
+            </div>
           </Link>
 
-          <Link to="/programme" className="action-card">
-            <div className="action-icon">💪</div>
-            <h3>Programme entdecken</h3>
-            <p>Finde personalisierte Trainings- und Ernährungspläne</p>
+          <Link to="/programme" className="action-card action-card-programs">
+            <div className="action-image">
+              <img src="/images/foto3.jpg" alt="Programme" />
+            </div>
+            <div className="action-content">
+              <h3>Programme entdecken</h3>
+              <p>Finde personalisierte Trainings- und Ernährungspläne</p>
+            </div>
           </Link>
         </div>
 
