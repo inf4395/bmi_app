@@ -274,7 +274,6 @@ deploy-staging:
     url: https://staging.bmi-app.example.com
   only:
     - develop
-  when: manual
 
 deploy-production:
   stage: deploy
@@ -293,4 +292,3 @@ deploy-production:
     url: https://bmi-app.example.com
   only:
     - main
-  when: manual

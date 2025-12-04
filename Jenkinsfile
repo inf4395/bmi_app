@@ -250,14 +250,14 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'develop') {
-                        echo "Deploying to staging environment..."
+                        echo "Deploying to staging..."
                         echo "Add your deployment commands here"
                         echo "Example: kubectl apply -f k8s/staging/"
                         echo "Or: docker-compose -f docker-compose.staging.yml up -d"
                         echo "Note: Deployment is simulated for CI/CD comparison purposes"
                         // Deployment simulation - no actual deployment for comparison
                     } else if (env.BRANCH_NAME == 'main') {
-                        echo "Deploying to production environment..."
+                        echo "Deploying to production..."
                         echo "Add your deployment commands here"
                         echo "Example: kubectl apply -f k8s/production/"
                         echo "Or: docker-compose -f docker-compose.prod.yml up -d"
