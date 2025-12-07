@@ -32,7 +32,7 @@ const RegisterPage = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1>Registrierung_neu</h1>
+        <h1>Registrierung</h1>
         <p className="auth-subtitle">Erstellen Sie ein Konto, um Ihre BMI-Historie zu speichern.</p>
         <form onSubmit={handleSubmit} className="auth-form">
           <label>
