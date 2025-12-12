@@ -34,7 +34,7 @@ const RegisterPage = () => {
       <div className="auth-card">
         <h1>Registrierung</h1>
         
-        <p className="auth-subtitle">Erstellen Sie ein Konto, um Ihre BMI-Historie zu speichern test.</p>
+        <p className="auth-subtitle">Erstellen Sie ein Konto, um Ihre BMI-Historie zu speichern.</p>
         <form onSubmit={handleSubmit} className="auth-form">
           <label>
             Ihr Name

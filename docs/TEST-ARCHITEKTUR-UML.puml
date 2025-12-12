@@ -1,0 +1,359 @@
+@startuml Test_Pyramide
+!theme plain
+skinparam componentStyle rectangle
+
+package "Test-Pyramide" {
+    [E2E Tests\n3 Dateien\nPlaywright] as E2E
+    [Integration Tests\n7 Dateien\nJest] as Integration
+    [Unit Tests\n11 Dateien\nVitest] as Unit
+}
+
+E2E --> Integration
+Integration --> Unit
+
+@enduml
+
+@startuml Test_Uebersicht
+!theme plain
+skinparam componentStyle rectangle
+
+package "Frontend Tests (Vitest)" {
+    [Login.test.jsx] as F1
+    [Register.test.jsx] as F2
+    [Dashboard.test.jsx] as F3
+    [BmiCalculator.test.jsx] as F4
+    [Statistics.test.jsx] as F5
+    [Programs.test.jsx] as F6
+    [Profile.test.jsx] as F7
+    [Accessibility.test.jsx] as F8
+    [AuthContext.test.jsx] as F9
+    [ProtectedRoute.test.jsx] as F10
+    [Navigation.test.jsx] as F11
+}
+
+package "Backend Tests (Jest)" {
+    [auth.test.js] as B1
+    [bmi.test.js] as B2
+    [stats.test.js] as B3
+    [calculateBMI.test.js] as B4
+    [validation.test.js] as B5
+    [security.test.js] as B6
+    [performance.test.js] as B7
+}
+
+package "E2E Tests (Playwright)" {
+    [auth.spec.js] as E1
+    [bmi-flow.spec.js] as E2
+    [navigation.spec.js] as E3
+}
+
+@enduml
+
+@startuml Frontend_Tests_Detail
+!theme plain
+skinparam classAttributeIconSize 0
+
+package "Pages Tests" {
+    class LoginTest {
+        + Form Rendering
+        + Form Submission
+        + Error Handling
+        + Navigation
+    }
+    
+    class RegisterTest {
+        + Form Rendering
+        + Registration Flow
+        + Validation
+        + Error Messages
+    }
+    
+    class DashboardTest {
+        + User Data Display
+        + Component Rendering
+        + Navigation Links
+    }
+    
+    class BmiCalculatorTest {
+        + Form Input
+        + BMI Calculation
+        + Result Display
+        + API Integration
+    }
+    
+    class StatisticsTest {
+        + Chart Rendering
+        + Data Display
+        + Empty State
+    }
+    
+    class ProgramsTest {
+        + Program List
+        + Program Creation
+        + Program Display
+    }
+    
+    class ProfileTest {
+        + Profile Display
+        + Profile Update
+        + Form Validation
+    }
+    
+    class AccessibilityTest {
+        + ARIA Labels
+        + Keyboard Navigation
+        + Screen Reader
+    }
+}
+
+package "Components Tests" {
+    class ProtectedRouteTest {
+        + Auth Check
+        + Redirect Logic
+        + Route Protection
+    }
+    
+    class NavigationTest {
+        + Link Rendering
+        + Logout Function
+        + Active State
+    }
+}
+
+package "Context Tests" {
+    class AuthContextTest {
+        + Login Function
+        + Register Function
+        + Logout Function
+        + Token Management
+        + State Persistence
+    }
+}
+
+LoginTest --> AuthContextTest
+RegisterTest --> AuthContextTest
+DashboardTest --> AuthContextTest
+DashboardTest --> ProtectedRouteTest
+DashboardTest --> NavigationTest
+BmiCalculatorTest --> AuthContextTest
+BmiCalculatorTest --> ProtectedRouteTest
+BmiCalculatorTest --> NavigationTest
+StatisticsTest --> AuthContextTest
+StatisticsTest --> ProtectedRouteTest
+StatisticsTest --> NavigationTest
+ProgramsTest --> AuthContextTest
+ProgramsTest --> ProtectedRouteTest
+ProgramsTest --> NavigationTest
+ProfileTest --> AuthContextTest
+ProfileTest --> ProtectedRouteTest
+ProfileTest --> NavigationTest
+
+@enduml
+
+@startuml Backend_Tests_Detail
+!theme plain
+skinparam classAttributeIconSize 0
+
+package "API Route Tests" {
+    class AuthTest {
+        + POST /api/auth/register
+        + POST /api/auth/login
+        + GET /api/auth/me
+        + Password Hashing
+        + JWT Generation
+        + Error Handling
+    }
+    
+    class BmiTest {
+        + POST /api/bmi
+        + GET /api/bmi/history
+        + BMI Calculation
+        + Data Validation
+        + Database Storage
+    }
+    
+    class StatsTest {
+        + GET /api/stats/summary
+        + GET /api/stats/detailed
+        + Data Aggregation
+        + Statistics Calculation
+    }
+}
+
+package "Utility Tests" {
+    class CalculateBMITest {
+        + BMI Formula
+        + Status Categories
+        + Edge Cases
+        + Invalid Input
+    }
+}
+
+package "Validation Tests" {
+    class ValidationTest {
+        + Email Validation
+        + Password Validation
+        + Input Sanitization
+        + Type Checking
+    }
+}
+
+package "Security Tests" {
+    class SecurityTest {
+        + JWT Verification
+        + Token Expiration
+        + Unauthorized Access
+        + SQL Injection
+        + XSS Prevention
+        + Password Security
+    }
+}
+
+package "Performance Tests" {
+    class PerformanceTest {
+        + Response Time
+        + Throughput
+        + Database Queries
+        + Concurrent Requests
+        + Load Testing
+    }
+}
+
+AuthTest --> CalculateBMITest
+BmiTest --> CalculateBMITest
+AuthTest --> ValidationTest
+BmiTest --> ValidationTest
+AuthTest --> SecurityTest
+BmiTest --> SecurityTest
+StatsTest --> SecurityTest
+AuthTest --> PerformanceTest
+BmiTest --> PerformanceTest
+StatsTest --> PerformanceTest
+
+@enduml
+
+@startuml E2E_Tests_Detail
+!theme plain
+skinparam componentStyle rectangle
+
+package "E2E Tests (Playwright)" {
+    [auth.spec.js\n- User Registration\n- User Login\n- Invalid Login\n- Error Messages] as E1
+    [bmi-flow.spec.js\n- BMI Calculation\n- Result Display\n- Statistics Navigation\n- Programs Navigation] as E2
+    [navigation.spec.js\n- Page Navigation\n- Route Protection\n- Logout Flow\n- Protected Routes] as E3
+}
+
+package "Browser Support" {
+    [Chromium] as B1
+    [Firefox] as B2
+    [WebKit] as B3
+}
+
+E1 --> B1
+E1 --> B2
+E1 --> B3
+E2 --> B1
+E2 --> B2
+E2 --> B3
+E3 --> B1
+E3 --> B2
+E3 --> B3
+
+@enduml
+
+@startuml Test_Ausfuehrung_Sequenz
+!theme plain
+autonumber
+
+participant "CI/CD Pipeline" as CI
+participant "Frontend Tests" as FT
+participant "Backend Tests" as BT
+participant "E2E Tests" as E2E
+participant "Backend Server" as BE
+participant "Frontend Server" as FE
+
+CI -> FT: npm test (Vitest)
+CI -> BT: npm test (Jest)
+FT --> CI: ✅ 11 Test-Dateien
+BT --> CI: ✅ 7 Test-Dateien
+
+CI -> BE: Start Backend (Port 3000)
+CI -> FE: Start Frontend (Port 5173)
+BE --> CI: ✅ Server Ready
+FE --> CI: ✅ Server Ready
+
+CI -> E2E: npx playwright test
+E2E -> BE: HTTP Requests
+E2E -> FE: Browser Automation
+E2E --> CI: ✅ 3 Test-Dateien
+
+@enduml
+
+@startuml Test_Frameworks
+!theme plain
+skinparam componentStyle rectangle
+
+package "Frontend Testing" {
+    [Vitest\nTest Runner] as V1
+    [Testing Library\nComponent Testing] as V2
+    [User Event\nUser Interaction] as V3
+    [Jest DOM\nDOM Matchers] as V4
+    [Jest Axe\nAccessibility] as V5
+}
+
+package "Backend Testing" {
+    [Jest\nTest Runner] as J1
+    [Supertest\nHTTP Testing] as J2
+    [SQLite Memory\nTest Database] as J3
+}
+
+package "E2E Testing" {
+    [Playwright\nBrowser Automation] as P1
+    [Chromium\nBrowser] as P2
+    [Firefox\nBrowser] as P3
+    [WebKit\nBrowser] as P4
+}
+
+V1 --> V2
+V1 --> V3
+V1 --> V4
+V1 --> V5
+J1 --> J2
+J1 --> J3
+P1 --> P2
+P1 --> P3
+P1 --> P4
+
+@enduml
+
+@startuml Test_Kategorien
+!theme plain
+skinparam componentStyle rectangle
+
+package "Test-Kategorien" {
+    [Frontend Unit Tests\n11 Dateien\nVitest\nUnit, Component] as FU
+    [Backend Unit Tests\n4 Dateien\nJest\nUnit, Integration] as BU
+    [Backend Security Tests\n1 Datei\nJest\nSecurity] as BS
+    [Backend Performance Tests\n1 Datei\nJest\nPerformance] as BP
+    [Backend Validation Tests\n1 Datei\nJest\nValidation] as BV
+    [E2E Tests\n3 Dateien\nPlaywright\nEnd-to-End] as E2E
+}
+
+note right of FU
+  Coverage: 97.1%
+  ~61 Tests
+end note
+
+note right of BU
+  ~77 Tests
+  (inkl. 18 Performance-Tests)
+end note
+
+note right of E2E
+  3 Browser
+  Chromium, Firefox, WebKit
+end note
+
+@enduml
+
+
+
