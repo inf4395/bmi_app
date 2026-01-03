@@ -24,8 +24,8 @@ const LoginPage = () => {
     try {
       await login(formData);
       navigate("/bmi");
-    } catch {
-      
+    } catch (e){
+      console.error("Login failed:", e);
     }
   };
 
