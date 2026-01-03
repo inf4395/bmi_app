@@ -173,22 +173,23 @@ pipeline {
         // ============================================
         
         stage('Deploy') {
-  when {
-    expression {
-      env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'develop' ||
-      env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'origin/develop'
+            when {
+                expression {
+                    env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'develop' ||
+                    env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'origin/develop'
+                }
+            }
+            steps {
+                script {
+                    if (env.BRANCH_NAME == 'develop' || env.GIT_BRANCH == 'origin/develop') {
+                        echo "Deploying to staging (simulated)..."
+                    } else if (env.BRANCH_NAME == 'main' || env.GIT_BRANCH == 'origin/main') {
+                        echo "Deploying to production (simulated)..."
+                    }
+                }
+            }
+        }
     }
-  }
-  steps {
-    script {
-      if (env.BRANCH_NAME == 'develop' || env.GIT_BRANCH == 'origin/develop') {
-        echo "Deploying to staging (simulated)..."
-      } else if (env.BRANCH_NAME == 'main' || env.GIT_BRANCH == 'origin/main') {
-        echo "Deploying to production (simulated)..."
-      }
-    }
-  }
-}
 
     post {
         always {
