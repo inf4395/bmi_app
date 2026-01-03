@@ -56,7 +56,6 @@ pipeline {
                     post {
                         always {
                             junit testResults: 'backend/test-results.xml', allowEmptyResults: true
-                            // publishHTML plugin not available - using archiveArtifacts instead
                             archiveArtifacts artifacts: 'backend/coverage/**/*', allowEmptyArchive: true
                         }
                     }
@@ -72,7 +71,6 @@ pipeline {
                     post {
                         always {
                             junit testResults: 'frontend/test-results.xml', allowEmptyResults: true
-                            // publishHTML plugin not available - using archiveArtifacts instead
                             archiveArtifacts artifacts: 'frontend/coverage/**/*', allowEmptyArchive: true
                         }
                     }
@@ -107,49 +105,40 @@ pipeline {
             steps {
                 echo "Running E2E tests..."
                 script {
-                    // Install root dependencies
                     sh "npm ci || npm install || echo 'No root package.json'"
                     
-                    // Install backend dependencies
                     dir('backend') {
                         sh "npm ci || npm install"
                     }
                     
-                    // Install frontend dependencies
                     dir('frontend') {
                         sh "npm ci || npm install"
                     }
                     
-                    // Install Playwright browsers (all browsers like GitHub Actions and GitLab CI)
                     sh "npx playwright install --with-deps chromium firefox webkit"
                     
-                    // Start backend in background
                     sh """
                         cd backend
                         npm start > ../backend.log 2>&1 &
                         echo \$! > ../backend.pid
                     """
                     
-                    // Start frontend in background with explicit host for Vite (equity with Docker/dev)
                     sh """
                         cd frontend
-                        npm run dev -- --host 0.0.0.0 > ../frontend.log 2>&1 &
+                        npm run dev -- --host 0.0.0.0 --port 5173 > ../frontend.log 2>&1 &
                         echo \$! > ../frontend.pid
                     """
                     
-                    // Wait for servers to be ready
                     sh """
                         timeout 60 bash -c 'until curl -f http://localhost:3000/api/health; do sleep 2; done'
                         timeout 60 bash -c 'until curl -f http://localhost:5173; do sleep 2; done'
                     """
                     
-                    // Run E2E tests (do not mask failures for fair comparison)
                     sh "npm run test:e2e"
                 }
             }
             post {
                 always {
-                    // Stop background processes
                     sh """
                         if [ -f backend.pid ]; then
                             kill \$(cat backend.pid) || true
@@ -160,8 +149,6 @@ pipeline {
                             rm frontend.pid
                         fi
                     """
-                    // Archive E2E test results
-                    // publishHTML plugin not available - using archiveArtifacts instead
                     archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
                 }
             }
@@ -182,9 +169,21 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'develop' || env.GIT_BRANCH == 'origin/develop') {
-                        echo "Deploying to staging (simulated)..."
+                        sh """
+                            echo "Deploying to staging..."
+                            echo "Add your deployment commands here"
+                            echo "Example: kubectl apply -f k8s/staging/"
+                            echo "Or: docker-compose -f docker-compose.staging.yml up -d"
+                            echo "Note: Deployment is simulated for CI/CD comparison purposes"
+                        """
                     } else if (env.BRANCH_NAME == 'main' || env.GIT_BRANCH == 'origin/main') {
-                        echo "Deploying to production (simulated)..."
+                        sh """
+                            echo "Deploying to production..."
+                            echo "Add your deployment commands here"
+                            echo "Example: kubectl apply -f k8s/production/"
+                            echo "Or: docker-compose -f docker-compose.prod.yml up -d"
+                            echo "Note: Deployment is simulated for CI/CD comparison purposes"
+                        """
                     }
                 }
             }
@@ -195,17 +194,13 @@ pipeline {
         always {
             script {
                 echo "Cleaning up..."
-                // cleanWs() requires a node context, so we'll skip it
-                // The workspace will be cleaned automatically by Jenkins
             }
         }
         success {
             echo "Pipeline succeeded!"
-            // Optionally send notification
         }
         failure {
             echo "Pipeline failed!"
-            // Optionally send notification
         }
         unstable {
             echo "Pipeline unstable!"
