@@ -243,8 +243,8 @@ pipeline {
         stage('Deploy') {
             when {
                 anyOf {
-                    branch 'main'
-                    branch 'develop'
+                    branch 'origin/main'
+                    branch 'origin/develop'
                 }
             }
             steps {
