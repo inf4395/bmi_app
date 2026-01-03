@@ -178,8 +178,8 @@ pipeline {
         // stage('Docker Build') {
         //     when {
         //         anyOf {
-        //             branch 'main'
-        //             branch 'develop'
+        //             branch 'origin/main'
+        //             branch 'orign/develop'
         //         }
         //     }
         //     steps {
