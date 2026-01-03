@@ -1,5 +1,3 @@
-# GitLab CI/CD Pipeline Configuration
-# Équivalent à GitHub Actions pour comparaison
 
 variables:
   NODE_VERSION: "20"
@@ -10,12 +8,12 @@ stages:
   - test
   - build
   - e2e
-  # - docker  # Désactivé car Docker-in-Docker n'est pas disponible sur ce runner
+
   - deploy
 
-# ============================================
+
 # BACKEND LINT
-# ============================================
+
 
 backend-lint:
   stage: lint
@@ -35,9 +33,9 @@ backend-lint:
     - merge_requests
     - /^feature\/.*$/
 
-# ============================================
+
 # FRONTEND LINT
-# ============================================
+
 
 frontend-lint:
   stage: lint
@@ -57,9 +55,9 @@ frontend-lint:
     - merge_requests
     - /^feature\/.*$/
 
-# ============================================
+
 # BACKEND TESTS
-# ============================================
+
 
 backend-test:
   stage: test
@@ -85,9 +83,9 @@ backend-test:
     - merge_requests
     - /^feature\/.*$/
 
-# ============================================
+
 # FRONTEND TESTS
-# ============================================
+
 
 frontend-test:
   stage: test
@@ -113,9 +111,9 @@ frontend-test:
     - merge_requests
     - /^feature\/.*$/
 
-# ============================================
+
 # BUILD FRONTEND
-# ============================================
+
 
 build-frontend:
   stage: build
@@ -142,9 +140,9 @@ build-frontend:
     - merge_requests
     - /^feature\/.*$/
 
-# ============================================
+
 # E2E TESTS
-# ============================================
+
 
 e2e-tests:
   stage: e2e
@@ -152,6 +150,8 @@ e2e-tests:
   dependencies:
     - build-frontend
   before_script:
+    # Install system dependencies (curl, bash) for equity across platforms
+    - apt-get update && apt-get install -y curl bash || true
     - npm ci
     - cd backend && npm ci
     - cd ../frontend && npm ci
@@ -160,7 +160,7 @@ e2e-tests:
   script:
     - cd backend && npm start &
     - export BACKEND_PID=$!
-    - cd frontend && npm run dev &
+    - cd frontend && npm run dev -- --host 0.0.0.0 --port 5173 &
     - export FRONTEND_PID=$!
     - |
       echo "Waiting for backend server..."
