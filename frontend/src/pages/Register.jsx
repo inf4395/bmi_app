@@ -10,7 +10,7 @@ const RegisterPage = () => {
   useEffect(() => {
     clearError();
     if (user) {
-      navigate("/dashboard");
+      navigate("/bmi");
     }
   }, [user, navigate, clearError]);
 
@@ -23,7 +23,7 @@ const RegisterPage = () => {
     event.preventDefault();
     try {
       await register(formData);
-      navigate("/dashboard");
+      navigate("/bmi");
     } catch {
       // Fehler bereits im Kontext gesetzt
     }

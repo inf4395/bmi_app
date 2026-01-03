@@ -167,107 +167,28 @@ pipeline {
             }
         }
 
-        // ============================================
-        // STAGE 5: DOCKER BUILD
-        // ============================================
-        // NOTE: Docker build désactivé pour comparaison équitable avec GitLab CI
-        // GitLab CI n'a pas Docker-in-Docker disponible sur le runner
-        // Pour une comparaison équitable, Docker Build est désactivé partout
-        // Ces jobs peuvent être réactivés si nécessaire pour un pipeline de production
-        
-        // stage('Docker Build') {
-        //     when {
-        //         anyOf {
-        //             branch 'origin/main'
-        //             branch 'orign/develop'
-        //         }
-        //     }
-        //     steps {
-        //         echo "Building Docker images..."
-        //         script {
-        //             def imageTag = "${env.BUILD_NUMBER}"
-        //             // Try to get Docker registry from credentials, fallback to localhost
-        //             def dockerRegistry = 'localhost:5000'
-        //             try {
-        //                 withCredentials([usernamePassword(credentialsId: 'docker-registry-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-        //                     dockerRegistry = "${DOCKER_USER}"
-        //                 }
-        //             } catch (Exception e) {
-        //                 echo "Docker registry credentials not found, using localhost:5000"
-        //             }
-        //             
-        //             // Build backend image
-        //             sh """
-        //                 docker build -t ${dockerRegistry}/bmi-app-backend:${imageTag} \\
-        //                              -t ${dockerRegistry}/bmi-app-backend:latest \\
-        //                              ./backend || echo 'Docker build failed, continuing...'
-        //             """
-        //             
-        //             // Build frontend image
-        //             sh """
-        //                 docker build -t ${dockerRegistry}/bmi-app-frontend:${imageTag} \\
-        //                              -t ${dockerRegistry}/bmi-app-frontend:latest \\
-        //                              ./frontend || echo 'Docker build failed, continuing...'
-        //             """
-        //         }
-        //     }
-        //     post {
-        //         success {
-        //             script {
-        //                 def imageTag = "${env.BUILD_NUMBER}"
-        //                 def dockerRegistry = 'localhost:5000'
-        //                 try {
-        //                     withCredentials([usernamePassword(credentialsId: 'docker-registry-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-        //                         dockerRegistry = "${DOCKER_USER}"
-        //                         // Push images if registry is configured
-        //                         sh """
-        //                             docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} || echo 'Docker login failed'
-        //                             docker push ${dockerRegistry}/bmi-app-backend:${imageTag} || echo 'Push skipped'
-        //                             docker push ${dockerRegistry}/bmi-app-backend:latest || echo 'Push skipped'
-        //                             docker push ${dockerRegistry}/bmi-app-frontend:${imageTag} || echo 'Push skipped'
-        //                             docker push ${dockerRegistry}/bmi-app-frontend:latest || echo 'Push skipped'
-        //                         """
-        //                     }
-        //                 } catch (Exception e) {
-        //                     echo "Docker registry credentials not found, skipping push"
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
 
         // ============================================
         // STAGE 6: DEPLOY
         // ============================================
         
         stage('Deploy') {
-            when {
-                anyOf {
-                    branch 'origin/main'
-                    branch 'origin/develop'
-                }
-            }
-            steps {
-                script {
-                    if (env.BRANCH_NAME == 'origin/develop') {
-                        echo "Deploying to staging..."
-                        echo "Add your deployment commands here"
-                        echo "Example: kubectl apply -f k8s/staging/"
-                        echo "Or: docker-compose -f docker-compose.staging.yml up -d"
-                        echo "Note: Deployment is simulated for CI/CD comparison purposes"
-                        // Deployment simulation - no actual deployment for comparison
-                    } else if (env.BRANCH_NAME == 'origin/main') {
-                        echo "Deploying to production..."
-                        echo "Add your deployment commands here"
-                        echo "Example: kubectl apply -f k8s/production/"
-                        echo "Or: docker-compose -f docker-compose.prod.yml up -d"
-                        echo "Note: Deployment is simulated for CI/CD comparison purposes"
-                        // Deployment simulation - no actual deployment for comparison
-                    }
-                }
-            }
-        }
+  when {
+    expression {
+      env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'develop' ||
+      env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'origin/develop'
     }
+  }
+  steps {
+    script {
+      if (env.BRANCH_NAME == 'develop' || env.GIT_BRANCH == 'origin/develop') {
+        echo "Deploying to staging (simulated)..."
+      } else if (env.BRANCH_NAME == 'main' || env.GIT_BRANCH == 'origin/main') {
+        echo "Deploying to production (simulated)..."
+      }
+    }
+  }
+}
 
     post {
         always {
