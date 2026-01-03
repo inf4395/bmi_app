@@ -196,7 +196,7 @@ jobs:
 
       - name: Start frontend server
         working-directory: frontend
-        run: npm run dev &
+        run: npm run dev -- --host 0.0.0.0 --port 5173 &
         env:
           PORT: 5173
 

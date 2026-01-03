@@ -68,6 +68,7 @@ const BmiCalculator = () => {
 
         <div className="intro-text">
           <h2>Bin ich wirklich zu dick?</h2>
+          
           <p>
             Oder schätze ich mein Gewicht ganz falsch ein? Der BMI (Body-Mass-Index) hilft, das
             Körpergewicht richtig zu deuten. Mit unserem BMI-Rechner lässt sich ganz einfach

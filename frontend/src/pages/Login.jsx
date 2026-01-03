@@ -9,7 +9,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/dashboard");
+      navigate("/bmi");
     }
   }, [user, navigate]);
 
@@ -20,12 +20,12 @@ const LoginPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    clearError(); // Clear any previous errors before submitting
+    clearError(); 
     try {
       await login(formData);
-      navigate("/dashboard");
+      navigate("/bmi");
     } catch {
-      // Fehler bereits im Kontext gesetzt
+      
     }
   };
 

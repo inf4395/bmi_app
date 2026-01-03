@@ -1,0 +1,27 @@
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile.jenkins
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      # Montage du workspace pour accéder au code
+      - .:/var/jenkins_home/workspace/bmi_app
+    environment:
+      - JENKINS_OPTS=--httpPort=8080
+    restart: unless-stopped
+    user: root
+    # Utiliser root pour permettre la correction des permissions au démarrage
+    # Note: Pour utiliser Docker depuis Jenkins sur Windows,
+    # vous pouvez soit:
+    # 1. Utiliser un agent Jenkins avec Docker installé
+    # 2. Utiliser Docker-in-Docker (dind) comme service séparé
+    # 3. Utiliser le socket Docker de Docker Desktop (nécessite une configuration spéciale)
+
+volumes:
+  jenkins_home:
+

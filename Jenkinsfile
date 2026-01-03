@@ -55,7 +55,7 @@ pipeline {
                     }
                     post {
                         always {
-                            junit 'backend/test-results.xml'
+                            junit testResults: 'backend/test-results.xml', allowEmptyResults: true
                             // publishHTML plugin not available - using archiveArtifacts instead
                             archiveArtifacts artifacts: 'backend/coverage/**/*', allowEmptyArchive: true
                         }
@@ -71,7 +71,7 @@ pipeline {
                     }
                     post {
                         always {
-                            junit 'frontend/test-results.xml'
+                            junit testResults: 'frontend/test-results.xml', allowEmptyResults: true
                             // publishHTML plugin not available - using archiveArtifacts instead
                             archiveArtifacts artifacts: 'frontend/coverage/**/*', allowEmptyArchive: true
                         }
@@ -121,7 +121,7 @@ pipeline {
                     }
                     
                     // Install Playwright browsers (all browsers like GitHub Actions and GitLab CI)
-                    sh "npx playwright install --with-deps chromium firefox webkit || true"
+                    sh "npx playwright install --with-deps chromium firefox webkit"
                     
                     // Start backend in background
                     sh """
@@ -130,10 +130,10 @@ pipeline {
                         echo \$! > ../backend.pid
                     """
                     
-                    // Start frontend in background
+                    // Start frontend in background with explicit host for Vite (equity with Docker/dev)
                     sh """
                         cd frontend
-                        npm run dev > ../frontend.log 2>&1 &
+                        npm run dev -- --host 0.0.0.0 > ../frontend.log 2>&1 &
                         echo \$! > ../frontend.pid
                     """
                     
@@ -143,8 +143,8 @@ pipeline {
                         timeout 60 bash -c 'until curl -f http://localhost:5173; do sleep 2; done'
                     """
                     
-                    // Run E2E tests
-                    sh "npm run test:e2e || true"
+                    // Run E2E tests (do not mask failures for fair comparison)
+                    sh "npm run test:e2e"
                 }
             }
             post {

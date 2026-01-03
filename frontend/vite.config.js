@@ -7,8 +7,17 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
+    strictPort: true,
     watch: {
       usePolling: true,
+      interval: 500,
+      binaryInterval: 1000,
+      ignored: ['**/node_modules/**', '**/.git/**'],
+    },
+    hmr: {
+      clientPort: 5173,
+      protocol: 'ws',
+      host: 'localhost',
     },
   },
   test: {
