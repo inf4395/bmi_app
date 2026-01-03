@@ -23,7 +23,8 @@ test.describe('Authentication Flow', () => {
     await page.click('button[type="submit"]');
     
     // Should redirect to dashboard after successful registration
-    await expect(page).toHaveURL(/.*dashboard/, { timeout: 10000 });
+   // await expect(page).toHaveURL(/.*dashboard/, { timeout: 10000 });
+      await expect(page).toHaveURL(/.*\/bmi/, { timeout: 10000 });
     await expect(page.locator('h1')).toContainText('Willkommen');
   });
 
