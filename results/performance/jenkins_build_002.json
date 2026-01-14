@@ -1,20 +1,32 @@
 {
   "platform": "jenkins",
   "execution_id": "build_002",
-  "timestamp": "2025-01-26T11:00:00Z",
-  "branch": "main",
+  "timestamp": "2025-01-04T01:15:00Z",
+  "branch": "develop",
   "trigger": "manual",
+  "commit": "ed7f76a9",
   "duration": {
-    "total": 0,
+    "total": 215,
+    "queue_time": 0,
     "stages": {
-      "lint_backend": 39,
-      "lint_frontend": 57,
-      "test_backend": 0,
-      "test_frontend": 0,
-      "build_frontend": 0,
-      "e2e_tests": 0,
-      "deploy": 0
+      "lint_backend": 25,
+      "lint_frontend": 30,
+      "test_backend": 46,
+      "test_frontend": 35,
+      "build_frontend": 16,
+      "e2e_tests": 101,
+      "deploy": 2
     }
+  },
+  "jobs": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  },
+  "tests": {
+    "total": 138,
+    "passed": 138,
+    "failed": 0
   },
   "resources": {
     "cpu_usage_percent": 0,
@@ -23,16 +35,14 @@
   },
   "success": true,
   "errors": [],
-  "queue_time": 0,
   "runner_type": "local",
   "artifacts": {
-    "count": 0,
+    "count": 5,
     "total_size_mb": 0
   },
   "cache": {
     "hit": false,
     "size_mb": 0
   },
-  "notes": "À remplir avec les données réelles"
+  "notes": "Jenkins build #002, commit ed7f76a9, branch develop"
 }
-

@@ -210,7 +210,6 @@ const Programs = () => {
         console.log("Success data:", data);
         setSuccessMessage(`Programm "${program.title}" erfolgreich gestartet!`);
         setSuccessProgramId(program.id);
-        // Masquer le message après 5 secondes
         setTimeout(() => {
           setSuccessMessage(null);
           setSuccessProgramId(null);

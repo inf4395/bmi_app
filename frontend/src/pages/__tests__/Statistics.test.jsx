@@ -101,7 +101,6 @@ describe("Statistics", () => {
     renderWithProviders(<Statistics />);
 
     await waitFor(() => {
-      // Vérifier que le message d'état vide est affiché ou que les statistiques sont vides
       const emptyMessage = screen.queryByText(/Noch keine/i) || screen.queryByText(/keine Daten/i);
       expect(emptyMessage || screen.queryByText(/0/i)).toBeTruthy();
     });

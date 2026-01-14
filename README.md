@@ -30,7 +30,7 @@ Die BMI-Rechner Anwendung ist eine Full-Stack Web-Anwendung, die es Benutzern er
 
 Die Anwendung besteht aus einem React-Frontend und einem Express.js-Backend mit SQLite-Datenbank.
 
-## ✨ Features
+##  Features
 
 ### Authentifizierung
 - ✅ Benutzerregistrierung mit E-Mail und Passwort
@@ -88,7 +88,7 @@ Die Anwendung besteht aus einem React-Frontend und einem Express.js-Backend mit 
 - **Playwright** - End-to-End-Tests
 - **Nginx** - Reverse Proxy (Production)
 
-## 📦 Voraussetzungen
+##  Voraussetzungen
 
 Bevor Sie beginnen, stellen Sie sicher, dass Sie folgende Software installiert haben:
 
@@ -97,7 +97,7 @@ Bevor Sie beginnen, stellen Sie sicher, dass Sie folgende Software installiert h
 - **Docker** (optional, für Containerisierung)
 - **Docker Compose** (optional, für Multi-Container-Setup)
 
-## 🚀 Installation
+##  Installation
 
 ### 1. Repository klonen
 
@@ -135,7 +135,7 @@ PORT=3000
 JWT_SECRET=your-secret-key-here
 ```
 
-## 💻 Verwendung
+##  Verwendung
 
 ### Entwicklungsumgebung
 
@@ -186,7 +186,7 @@ cd ../backend
 npm start
 ```
 
-## 📚 API-Dokumentation
+##  API-Dokumentation
 
 ### Authentifizierung
 
@@ -305,7 +305,7 @@ GET /api/health
 }
 ```
 
-## 📁 Projektstruktur
+##  Projektstruktur
 
 ```
 bmi_app/
@@ -343,6 +343,18 @@ bmi_app/
 │   └── ...
 │
 ├── scripts/               # Utility-Skripte
+│   ├── collect-developer-experience.js    # Entwickler-Erfahrungsmetriken sammeln
+│   ├── collect-resource-usage.js          # Ressourcennutzungsmetriken sammeln
+│   ├── collect-code-quality-metrics.js    # Code-Qualitätsmetriken sammeln
+│   ├── analyze_performance.py             # Leistungsanalyse der CI/CD-Pipelines
+│   ├── validate-data.py                   # Validierung der gesammelten Daten
+│   ├── generate_chapter6_graphs.py        # Grafiken für Kapitel 6 generieren
+│   └── ...                                # Weitere Analyse-Skripte
+├── results/               # Gesammelte Metriken und Ergebnisse
+│   ├── performance/       # CI/CD-Leistungsdaten
+│   ├── developer-experience/  # Entwickler-Erfahrungsmetriken
+│   ├── resource-usage/    # Ressourcennutzungsmetriken
+│   └── code-quality/      # Code-Qualitätsmetriken
 ├── docker-compose.yml     # Docker Compose Konfiguration
 ├── .github/               # GitHub Actions Workflows
 │   └── workflows/
@@ -352,7 +364,7 @@ bmi_app/
 └── README.md            # Diese Datei
 ```
 
-## 🧪 Tests
+##  Tests
 
 ### Backend-Tests ausführen
 
@@ -393,7 +405,7 @@ Die Test-Coverage-Berichte werden automatisch generiert:
 - Backend: `backend/coverage/`
 - Frontend: `frontend/coverage/`
 
-## 🐳 Docker
+##  Docker
 
 ### Docker-Images bauen
 
@@ -427,7 +439,7 @@ docker-compose -f docker-compose.staging.yml up
 docker-compose -f docker-compose.prod.yml up
 ```
 
-## 🔄 CI/CD
+##  CI/CD
 
 Die Anwendung unterstützt drei CI/CD-Plattformen für Continuous Integration und Continuous Deployment:
 
@@ -476,7 +488,7 @@ Detaillierte Informationen zu allen drei Plattformen finden Sie in:
 - `README-CICD-COMPARISON.md` - Vergleich der CI/CD-Plattformen
 - `JENKINS-SETUP.md` - Jenkins-Setup-Anleitung
 
-## 🔧 Entwicklung
+##  Entwicklung
 
 ### Code-Stil
 
@@ -487,6 +499,38 @@ Die Anwendung verwendet ESLint für Code-Linting:
 cd frontend
 npm run lint
 ```
+
+### Analyse-Skripte
+
+Das Projekt enthält verschiedene Skripte zur Analyse von CI/CD-Leistung und Metriken:
+
+#### Metriken sammeln
+
+```bash
+# Entwickler-Erfahrungsmetriken sammeln
+node scripts/collect-developer-experience.js
+
+# Ressourcennutzungsmetriken sammeln
+node scripts/collect-resource-usage.js
+
+# Code-Qualitätsmetriken sammeln
+node scripts/collect-code-quality-metrics.js [backend|frontend|all]
+```
+
+#### Daten analysieren
+
+```bash
+# CI/CD-Leistungsanalyse
+python scripts/analyze_performance.py
+
+# Daten validieren
+python scripts/validate-data.py results/performance/
+
+# Grafiken für Kapitel 6 generieren
+python scripts/generate_chapter6_graphs.py
+```
+
+Die Ergebnisse werden in den entsprechenden Unterordnern von `results/` gespeichert.
 
 ### Datenbank-Schema
 
@@ -512,34 +556,69 @@ cd backend
 npm run dev
 ```
 
-## 📊 Architektur
+##  Architektur
 
 Die Anwendung folgt einer klaren Trennung zwischen Frontend und Backend:
 
 - **Frontend**: React-basierte Single-Page-Application (SPA)
+  - React Router für Navigation
+  - Context API für State Management
+  - Recharts für Datenvisualisierung
+  - Vite als Build-Tool
+
 - **Backend**: RESTful API mit Express.js
-- **Datenbank**: SQLite für Datenspeicherung
-- **Authentifizierung**: JWT-basierte Authentifizierung
+  - Express.js 5.1.0 als Web-Framework
+  - SQLite für Datenspeicherung
+  - JWT-basierte Authentifizierung
+  - Middleware für Request-Validierung
 
-Detaillierte Architekturdiagramme finden Sie in `docs/ARCHITEKTUR-UML.puml`.
+- **CI/CD**: Multi-Plattform-Support
+  - GitHub Actions (Cloud)
+  - GitLab CI (Cloud/Self-hosted)
+  - Jenkins (Self-hosted)
 
-## 🔒 Sicherheit
+- **Testing**: Umfassende Test-Abdeckung
+  - Jest für Backend-Tests
+  - Vitest für Frontend-Tests
+  - Playwright für E2E-Tests
 
-- ✅ Passwörter werden mit bcrypt gehasht
-- ✅ JWT-Tokens für Authentifizierung
+Detaillierte Architekturdiagramme finden Sie in `docs/figures/`.
+
+##  Sicherheit
+
+- ✅ Passwörter werden mit bcrypt gehasht (keine Klartext-Speicherung)
+- ✅ JWT-Tokens für sichere Authentifizierung
 - ✅ CORS-Konfiguration für sichere Cross-Origin-Requests
 - ✅ Eingabevalidierung auf Backend-Seite
 - ✅ Geschützte Routen mit Middleware
+- ✅ SQL-Injection-Schutz durch Parameterized Queries
+- ✅ XSS-Schutz durch Input-Sanitization
+- ✅ Token-Validierung und Ablaufzeitprüfung
 
-## 📝 Weitere Dokumentation
+##  Weitere Dokumentation
 
-- `docs/ARCHITEKTUR-UML.puml` - Architekturdiagramme
-- `docs/ARCHITEKTUR-DIAGRAMM.md` - Architektur-Beschreibung
-- `README-CICD.md` - CI/CD-Dokumentation
-- `README-TESTS.md` - Test-Dokumentation
-- `README-DOCKER-SECRETS.md` - Docker Secrets Management
+### Projekt-Dokumentation
 
-## 🤝 Beitragen
+- `docs/THESIS-KAPITEL-*.md` - Thesis-Kapitel (1-7)
+- `docs/figures/` - Generierte Grafiken und Diagramme
+
+### Analyse-Ergebnisse
+
+Die gesammelten Metriken und Analysen befinden sich in:
+- `results/performance/` - CI/CD-Leistungsdaten (JSON)
+- `results/developer-experience/` - Entwickler-Erfahrungsmetriken
+- `results/resource-usage/` - Ressourcennutzungsmetriken
+- `results/code-quality/` - Code-Qualitätsmetriken
+- `results/STATISTIQUES_PERFORMANCE.md` - Generierter Leistungsbericht
+- `results/statistiques_performance.json` - Statistische Zusammenfassung
+
+### Skript-Dokumentation
+
+Alle Analyse-Skripte sind in deutscher Sprache dokumentiert:
+- JavaScript-Skripte: Kommentare im Code
+- Python-Skripte: Docstrings und Kommentare im Code
+
+##  Beitragen
 
 1. Forken Sie das Repository
 2. Erstellen Sie einen Feature-Branch (`git checkout -b feature/AmazingFeature`)
@@ -547,22 +626,24 @@ Detaillierte Architekturdiagramme finden Sie in `docs/ARCHITEKTUR-UML.puml`.
 4. Pushen Sie zum Branch (`git push origin feature/AmazingFeature`)
 5. Öffnen Sie einen Pull Request
 
-## 📄 Lizenz
+##  Lizenz
 
 Dieses Projekt ist Teil einer Bachelorarbeit und dient zu Bildungszwecken.
 
-## 👤 Autor
+##  Autor
+Ngaha Nana Josie Carine
 
 Entwickelt im Rahmen einer Bachelorarbeit.
-
-## 🙏 Danksagungen
-
-- React-Team für das großartige Framework
-- Express.js-Community für die umfassende Dokumentation
-- Alle Open-Source-Contributors der verwendeten Bibliotheken
 
 ---
 
 **Version**: 1.0.0  
-**Letzte Aktualisierung**: 2025
+**Letzte Aktualisierung**: Dezember 2025
+
+---
+
+##  Hinweise
+
+- Die CI/CD-Pipelines unterstützen drei Plattformen für Vergleichszwecke
+- Dieses Projekt dient als Beispielanwendung für eine Bachelorarbeit über CI/CD-Plattformen
 

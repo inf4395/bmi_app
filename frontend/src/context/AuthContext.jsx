@@ -47,7 +47,6 @@ export const AuthProvider = ({ children }) => {
           const errorData = await response.json();
           errorMessage = errorData.error || errorMessage;
         } catch {
-          // Si la réponse n'est pas du JSON, utiliser le statut
           errorMessage = `Fehler ${response.status}: ${response.statusText}`;
         }
         throw new Error(errorMessage);
@@ -55,7 +54,6 @@ export const AuthProvider = ({ children }) => {
 
       return await response.json();
     } catch (err) {
-      // Gestion des erreurs réseau
       if (err.name === "TypeError" && err.message.includes("fetch")) {
         setError("Verbindung zum Server fehlgeschlagen. Bitte überprüfen Sie, ob der Backend-Server läuft.");
       } else {

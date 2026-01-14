@@ -1,21 +1,33 @@
 {
   "platform": "github",
   "execution_id": "run_004",
-  "timestamp": "2025-01-26T13:00:00Z",
-  "branch": "main",
+  "timestamp": "2025-01-04T03:30:00Z",
+  "branch": "develop",
   "trigger": "push",
+  "commit": "ed7f76a9",
   "duration": {
-    "total": 0,
+    "total": 179,
+    "queue_time": 0,
     "stages": {
-      "lint_backend": 0,
-      "lint_frontend": 0,
-      "test_backend": 0,
-      "test_frontend": 0,
-      "build_frontend": 0,
-      "e2e_tests": 0,
-      "docker_build": 0,
-      "deploy": 0
+      "lint_backend": 11,
+      "lint_frontend": 13,
+      "test_backend": 25,
+      "test_frontend": 25,
+      "build_frontend": 17,
+      "e2e_tests": 120,
+      "deploy_staging": 4,
+      "deploy_production": 0
     }
+  },
+  "jobs": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0
+  },
+  "tests": {
+    "total": 138,
+    "passed": 138,
+    "failed": 0
   },
   "resources": {
     "cpu_usage_percent": 0,
@@ -24,16 +36,14 @@
   },
   "success": true,
   "errors": [],
-  "queue_time": 0,
   "runner_type": "ubuntu-latest",
   "artifacts": {
-    "count": 0,
+    "count": 4,
     "total_size_mb": 0
   },
   "cache": {
-    "hit": false,
+    "hit": true,
     "size_mb": 0
   },
-  "notes": "À remplir avec les données réelles"
+  "notes": "Data from user provided GitHub Actions output. Total duration calculated from parallel execution: max(11,13) + max(25,25) + 17 + 120 + 4 = 179s. Deploy to Production shows -1s (display error, set to 0)"
 }
-

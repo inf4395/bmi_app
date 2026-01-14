@@ -1,21 +1,33 @@
 {
   "platform": "github",
   "execution_id": "run_001",
-  "timestamp": "2025-01-26T10:00:00Z",
-  "branch": "main",
+  "timestamp": "2025-01-04T02:30:00Z",
+  "branch": "develop",
   "trigger": "push",
+  "commit": "ed7f76a9",
   "duration": {
-    "total": 297,
+    "total": 195,
+    "queue_time": 0,
     "stages": {
-      "lint_backend": 19,
-      "lint_frontend": 10,
-      "test_backend": 20,
-      "test_frontend": 19,
-      "build_frontend": 21,
-      "e2e_tests": 129,
-      "docker_build": 106,
-      "deploy": 7
+      "lint_backend": 13,
+      "lint_frontend": 16,
+      "test_backend": 33,
+      "test_frontend": 24,
+      "build_frontend": 22,
+      "e2e_tests": 120,
+      "deploy_staging": 4,
+      "deploy_production": 0
     }
+  },
+  "jobs": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0
+  },
+  "tests": {
+    "total": 138,
+    "passed": 138,
+    "failed": 0
   },
   "resources": {
     "cpu_usage_percent": 0,
@@ -24,16 +36,14 @@
   },
   "success": true,
   "errors": [],
-  "queue_time": 0,
   "runner_type": "ubuntu-latest",
   "artifacts": {
     "count": 4,
-    "total_size_mb": 15.3
+    "total_size_mb": 0
   },
   "cache": {
     "hit": true,
-    "size_mb": 250
+    "size_mb": 0
   },
-  "notes": "Remplacer avec les données réelles depuis GitHub Actions UI"
+  "notes": "Data from user provided GitHub Actions output. Total duration calculated from parallel execution: max(13,16) + max(33,24) + 22 + 120 + 4 = 195s"
 }
-

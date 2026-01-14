@@ -32,7 +32,6 @@ describe("Accessibility Tests", () => {
     
     expect(emailInput).toBeInTheDocument();
     expect(passwordInput).toBeInTheDocument();
-    // Les labels sont associés via le label parent
     expect(emailInput?.closest('label')).toBeInTheDocument();
     expect(passwordInput?.closest('label')).toBeInTheDocument();
   });
@@ -68,7 +67,6 @@ describe("Accessibility Tests", () => {
 
     const { container } = renderWithProviders(<Dashboard />);
     
-    // Attendre que le contenu soit chargé avec waitFor
     await waitFor(() => {
       const heading = container.querySelector('h1');
       expect(heading).toBeInTheDocument();

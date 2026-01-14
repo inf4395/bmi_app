@@ -11,7 +11,6 @@ let db;
 let token;
 
 beforeAll(async () => {
-  // Utiliser une base de données en mémoire pour éviter les conflits
   db = await initDB(":memory:");
   app = express();
   app.use(cors());
@@ -20,7 +19,6 @@ beforeAll(async () => {
   app.use("/api", bmiRoutes(db));
   app.use("/api", statsRoutes(db));
 
-  // Créer un utilisateur de test
   const testEmail = `testuser_${Date.now()}@example.com`;
   const password = "Secret123!";
 
@@ -45,7 +43,6 @@ beforeAll(async () => {
 
   token = loginResponse.body.token;
 
-  // Créer quelques enregistrements BMI pour les tests
   await request(app)
     .post("/api/bmi")
     .set("Authorization", `Bearer ${token}`)
@@ -70,7 +67,6 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // Attendre que toutes les opérations asynchrones soient terminées
   await new Promise(resolve => setTimeout(resolve, 100));
   if (db) {
     await db.close();
@@ -79,7 +75,7 @@ afterAll(async () => {
 
 describe("Statistics Routes", () => {
   // Test GET /api/stats/summary
-  test("GET /api/stats/summary retourne les statistiques résumées", async () => {
+  test("GET /api/stats/summary gibt die zusammengefassten Statistiken zurück", async () => {
     const response = await request(app)
       .get("/api/stats/summary")
       .set("Authorization", `Bearer ${token}`);
@@ -93,9 +89,8 @@ describe("Statistics Routes", () => {
     expect(response.body.averageBMI).toBeGreaterThan(0);
   });
 
-  // Test GET /api/stats/summary avec aucun enregistrement
-  test("GET /api/stats/summary retourne des valeurs nulles si aucun enregistrement", async () => {
-    // Créer un nouvel utilisateur sans enregistrements
+  // Test GET /api/stats/summary ohne Einträge
+  test("GET /api/stats/summary gibt Nullwerte zurück, wenn keine Einträge vorhanden sind", async () => {
     const testEmail2 = `testuser2_${Date.now()}@example.com`;
     await request(app).post("/api/auth/register").send({
       name: "Empty Stats",
@@ -120,7 +115,7 @@ describe("Statistics Routes", () => {
   });
 
   // Test GET /api/stats/detailed
-  test("GET /api/stats/detailed retourne les statistiques détaillées", async () => {
+  test("GET /api/stats/detailed gibt die detaillierten Statistiken zurück", async () => {
     const response = await request(app)
       .get("/api/stats/detailed")
       .set("Authorization", `Bearer ${token}`);
@@ -134,7 +129,7 @@ describe("Statistics Routes", () => {
   });
 
   // Test POST /api/programs/start
-  test("POST /api/programs/start crée un nouveau programme", async () => {
+  test("POST /api/programs/start erstellt ein neues Programm", async () => {
     const response = await request(app)
       .post("/api/programs/start")
       .set("Authorization", `Bearer ${token}`)
@@ -154,8 +149,7 @@ describe("Statistics Routes", () => {
     expect(response.body.program.status).toBe("active");
   });
 
-  // Test POST /api/programs/start avec données manquantes
-  test("POST /api/programs/start retourne une erreur si données manquantes", async () => {
+  test("POST /api/programs/start gibt einen Fehler zurück, wenn Daten fehlen", async () => {
     const response = await request(app)
       .post("/api/programs/start")
       .set("Authorization", `Bearer ${token}`)
@@ -170,7 +164,6 @@ describe("Statistics Routes", () => {
 
   // Test GET /api/programs
   test("GET /api/programs retourne les programmes de l'utilisateur", async () => {
-    // Créer d'abord un programme
     await request(app)
       .post("/api/programs/start")
       .set("Authorization", `Bearer ${token}`)
@@ -194,7 +187,7 @@ describe("Statistics Routes", () => {
   });
 
   // Test GET /api/stats/detailed avec startDate
-  test("GET /api/stats/detailed avec startDate filtre les résultats", async () => {
+  test("GET /api/stats/detailed mit startDate filtert die Ergebnisse", async () => {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 7);
     const startDateStr = startDate.toISOString().split('T')[0];
@@ -208,7 +201,7 @@ describe("Statistics Routes", () => {
   });
 
   // Test GET /api/stats/detailed avec endDate
-  test("GET /api/stats/detailed avec endDate filtre les résultats", async () => {
+  test("GET /api/stats/detailed mit endDate filtert die Ergebnisse", async () => {
     const endDate = new Date();
     const endDateStr = endDate.toISOString().split('T')[0];
 
@@ -221,7 +214,7 @@ describe("Statistics Routes", () => {
   });
 
   // Test GET /api/stats/detailed avec startDate et endDate
-  test("GET /api/stats/detailed avec startDate et endDate filtre les résultats", async () => {
+  test("GET /api/stats/detailed mit startDate und endDate filtert die Ergebnisse", async () => {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 7);
     const startDateStr = startDate.toISOString().split('T')[0];
@@ -249,7 +242,6 @@ describe("Statistics Routes", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty("id");
-    // endDate devrait être null si duration n'a pas de nombre
   });
 
   // Test POST /api/programs/start sans description
@@ -264,7 +256,6 @@ describe("Statistics Routes", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty("id");
-    // description peut être null ou undefined si non fournie
     expect(response.body.program.description === null || response.body.program.description === undefined).toBe(true);
   });
 

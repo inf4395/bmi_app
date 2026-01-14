@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * Script pour collecter les métriques d'utilisation des ressources
- * - CPU usage par stage
- * - Memory usage par stage
- * - Network bandwidth
- * - Storage usage
+ * Script zum Sammeln von Ressourcennutzungsmetriken
+ * - CPU-Nutzung pro Stage
+ * - Speichernutzung pro Stage
+ * - Netzwerkbandbreite
+ * - Speicherplatzverbrauch
  * 
- * Usage: node scripts/collect-resource-usage.js
+ * Verwendung: node scripts/collect-resource-usage.js
  */
 
 import { execSync } from 'child_process';
@@ -21,11 +21,9 @@ const ROOT_DIR = join(__dirname, '..');
 const OUTPUT_DIR = join(ROOT_DIR, 'results', 'resource-usage');
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 
-// Créer le répertoire de sortie
 try {
   execSync(`mkdir -p "${OUTPUT_DIR}"`, { stdio: 'inherit' });
 } catch (e) {
-  // Ignorer si le répertoire existe déjà
 }
 
 function runCommand(command) {
@@ -40,7 +38,7 @@ function runCommand(command) {
 }
 
 function getSystemResources() {
-  console.log('📊 Collecte des métriques système...');
+  console.log('📊 Sammeln von Systemmetriken...');
   
   const resources = {
     timestamp,
@@ -112,45 +110,44 @@ function getSystemResources() {
 }
 
 function estimatePipelineResources() {
-  console.log('📊 Estimation des ressources pour les pipelines CI/CD...');
+  console.log('📊 Schätzung der Ressourcen für CI/CD-Pipelines...');
   
-  // Estimations basées sur les tests de performance
   const stages = {
     lint: {
       estimatedCpu: '10-20%',
       estimatedMemory: '200-400 MB',
       estimatedDuration: '30-60s',
-      description: 'Analyse statique du code'
+      description: 'Statische Codeanalyse'
     },
     test: {
       estimatedCpu: '30-50%',
       estimatedMemory: '500-800 MB',
       estimatedDuration: '15-30s',
-      description: 'Exécution des tests unitaires'
+      description: 'Ausführung von Unit-Tests'
     },
     build: {
       estimatedCpu: '40-60%',
       estimatedMemory: '1-2 GB',
       estimatedDuration: '60-120s',
-      description: 'Compilation et build de l\'application'
+      description: 'Kompilierung und Build der Anwendung'
     },
     e2e: {
       estimatedCpu: '20-40%',
       estimatedMemory: '800 MB - 1.5 GB',
       estimatedDuration: '120-300s',
-      description: 'Tests end-to-end avec Playwright'
+      description: 'End-to-End-Tests mit Playwright'
     },
     docker: {
       estimatedCpu: '30-50%',
       estimatedMemory: '1-2 GB',
       estimatedDuration: '180-300s',
-      description: 'Build des images Docker'
+      description: 'Build von Docker-Images'
     },
     deploy: {
       estimatedCpu: '10-30%',
       estimatedMemory: '300-600 MB',
       estimatedDuration: '30-90s',
-      description: 'Déploiement de l\'application'
+      description: 'Bereitstellung der Anwendung'
     }
   };
   
@@ -158,15 +155,14 @@ function estimatePipelineResources() {
 }
 
 function calculateResourceCosts() {
-  console.log('💰 Calcul des coûts de ressources...');
+  console.log('💰 Berechnung der Ressourcenkosten...');
   
-  // Coûts estimés par type de runner (par minute)
   const costs = {
     github: {
       ubuntu_latest: {
-        cpu: 0.002, // $ par minute de CPU
-        memory: 0.001, // $ par GB-minute
-        network: 0.0001 // $ par GB transféré
+        cpu: 0.002,
+        memory: 0.001,
+        network: 0.0001
       }
     },
     gitlab: {
@@ -178,9 +174,9 @@ function calculateResourceCosts() {
     },
     jenkins: {
       self_hosted: {
-        infrastructure: 20, // $ par mois
-        maintenance: 200, // $ par mois (4h * $50/h)
-        variable: 0 // Coût variable négligeable
+        infrastructure: 20,
+        maintenance: 200,
+        variable: 0
       }
     }
   };
@@ -188,8 +184,7 @@ function calculateResourceCosts() {
   return costs;
 }
 
-// Collecter toutes les métriques
-console.log('🔍 Collecte des métriques d\'utilisation des ressources...\n');
+console.log('🔍 Sammeln von Ressourcennutzungsmetriken...\n');
 
 const systemResources = getSystemResources();
 const pipelineResources = estimatePipelineResources();
@@ -203,32 +198,31 @@ const report = {
     total: {
       estimatedCpu: '40-60%',
       estimatedMemory: '2-4 GB',
-      estimatedDuration: '6-10 minutes',
-      description: 'Pipeline complet'
+      estimatedDuration: '6-10 Minuten',
+      description: 'Vollständige Pipeline'
     }
   },
   costs: resourceCosts,
   recommendations: [
-    'Utiliser le cache npm pour réduire le temps de build',
-    'Exécuter les tests en parallèle quand possible',
-    'Optimiser les images Docker pour réduire la taille',
-    'Utiliser des runners plus puissants pour les builds lourds'
+    'npm-Cache verwenden, um Build-Zeit zu reduzieren',
+    'Tests parallel ausführen, wenn möglich',
+    'Docker-Images optimieren, um die Größe zu reduzieren',
+    'Leistungsstärkere Runner für schwere Builds verwenden'
   ]
 };
 
 const outputFile = join(OUTPUT_DIR, `resource-usage_${timestamp}.json`);
 writeFileSync(outputFile, JSON.stringify(report, null, 2));
 
-console.log(`\n✅ Rapport sauvegardé dans: ${outputFile}`);
+console.log(`\n✅ Bericht gespeichert in: ${outputFile}`);
 
-// Afficher un résumé
-console.log('\n📊 Résumé des ressources:');
-console.log('  Pipeline complet:');
+console.log('\n📊 Ressourcenzusammenfassung:');
+console.log('  Vollständige Pipeline:');
 console.log(`    CPU: ${report.pipeline.total.estimatedCpu}`);
-console.log(`    Mémoire: ${report.pipeline.total.estimatedMemory}`);
-console.log(`    Durée: ${report.pipeline.total.estimatedDuration}`);
+console.log(`    Speicher: ${report.pipeline.total.estimatedMemory}`);
+console.log(`    Dauer: ${report.pipeline.total.estimatedDuration}`);
 
-console.log('\n  Par stage:');
+console.log('\n  Pro Stage:');
 for (const [stage, metrics] of Object.entries(report.pipeline.stages)) {
   console.log(`    ${stage}:`);
   console.log(`      CPU: ${metrics.estimatedCpu}, Mémoire: ${metrics.estimatedMemory}, Durée: ${metrics.estimatedDuration}`);

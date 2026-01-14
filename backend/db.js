@@ -7,12 +7,10 @@ export const initDB = async (filename = "./bmi.db") => {
     driver: sqlite3.Database,
   });
   
-  // Configurer SQLite pour gérer mieux la concurrence
-  await db.exec("PRAGMA busy_timeout = 5000;"); // Attendre jusqu'à 5 secondes si la DB est verrouillée
+  await db.exec("PRAGMA busy_timeout = 5000;");
   
-  // Le mode WAL ne fonctionne pas avec les bases de données en mémoire
   if (filename !== ":memory:") {
-    await db.exec("PRAGMA journal_mode = WAL;"); // Mode WAL pour de meilleures performances en lecture
+    await db.exec("PRAGMA journal_mode = WAL;");
   }
 
   await db.exec(`
@@ -28,7 +26,6 @@ export const initDB = async (filename = "./bmi.db") => {
     );
   `);
 
-  // Ajouter les nouvelles colonnes si elles n'existent pas
   try {
     const userColumns = await db.all(`PRAGMA table_info(users);`);
     const columnNames = userColumns.map((col) => col.name);
@@ -73,7 +70,6 @@ export const initDB = async (filename = "./bmi.db") => {
     console.warn("Konnte user_id Spalte nicht hinzufügen:", error.message);
   }
 
-  // Table pour les objectifs de poids
   await db.exec(`
     CREATE TABLE IF NOT EXISTS weight_goals (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -87,7 +83,6 @@ export const initDB = async (filename = "./bmi.db") => {
     );
   `);
 
-  // Table pour les programmes
   await db.exec(`
     CREATE TABLE IF NOT EXISTS user_programs (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

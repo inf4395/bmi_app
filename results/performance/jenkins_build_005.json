@@ -1,20 +1,32 @@
 {
   "platform": "jenkins",
   "execution_id": "build_005",
-  "timestamp": "2025-01-26T14:00:00Z",
-  "branch": "main",
+  "timestamp": "2025-01-04T02:00:00Z",
+  "branch": "develop",
   "trigger": "manual",
+  "commit": "ed7f76a9",
   "duration": {
-    "total": 0,
+    "total": 218,
+    "queue_time": 0,
     "stages": {
-      "lint_backend": 0,
-      "lint_frontend": 0,
-      "test_backend": 0,
-      "test_frontend": 0,
-      "build_frontend": 0,
-      "e2e_tests": 0,
-      "deploy": 0
+      "lint_backend": 10,
+      "lint_frontend": 10,
+      "test_backend": 26,
+      "test_frontend": 18,
+      "build_frontend": 11,
+      "e2e_tests": 163,
+      "deploy": 2
     }
+  },
+  "jobs": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  },
+  "tests": {
+    "total": 138,
+    "passed": 138,
+    "failed": 0
   },
   "resources": {
     "cpu_usage_percent": 0,
@@ -23,16 +35,14 @@
   },
   "success": true,
   "errors": [],
-  "queue_time": 0,
   "runner_type": "local",
   "artifacts": {
-    "count": 0,
+    "count": 5,
     "total_size_mb": 0
   },
   "cache": {
-    "hit": false,
+    "hit": true,
     "size_mb": 0
   },
-  "notes": "À remplir avec les données réelles"
+  "notes": "Jenkins build #005, commit ed7f76a9, branch develop. E2E tests took significantly longer (163s vs ~90s average)"
 }
-

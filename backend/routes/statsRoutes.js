@@ -4,13 +4,11 @@ import { requireAuth } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 export default (db) => {
-  // GET — Statistiques résumées
   router.get("/stats/summary", requireAuth, async (req, res) => {
     try {
       const userId = req.user.id;
       console.log(`[Stats] Fetching summary for user_id: ${userId}`);
 
-      // Récupérer toutes les mesures de l'utilisateur
       const records = await db.all(
         `SELECT * FROM bmi_records 
          WHERE user_id = ?
@@ -31,16 +29,12 @@ export default (db) => {
         });
       }
 
-      // Calculer la moyenne du BMI
       const totalBMI = records.reduce((sum, record) => sum + parseFloat(record.bmi), 0);
       const averageBMI = totalBMI / records.length;
 
-      // Dernière mesure (la plus récente est records[0] car tri DESC)
       const latest = records[0];
-      // Plus ancienne mesure (la plus ancienne est à la fin car tri DESC)
       const oldest = records[records.length - 1];
 
-      // Changement de poids (poids actuel - poids initial)
       const weightChange =
         records.length > 1
           ? parseFloat(latest.weight) - parseFloat(oldest.weight)
@@ -63,7 +57,6 @@ export default (db) => {
     }
   });
 
-  // GET — Statistiques détaillées pour graphiques
   router.get("/stats/detailed", requireAuth, async (req, res) => {
     try {
       const userId = req.user.id;
@@ -93,7 +86,6 @@ export default (db) => {
     }
   });
 
-  // POST — Programme starten (sauvegarder un programme pour l'utilisateur)
   router.post("/programs/start", requireAuth, async (req, res) => {
     try {
       const userId = req.user.id;
@@ -103,7 +95,6 @@ export default (db) => {
         return res.status(400).json({ error: "Programmtyp und Programmname sind erforderlich." });
       }
 
-      // Calculer la date de fin basée sur la durée
       const startDate = new Date().toISOString().split('T')[0];
       let endDate = null;
       
@@ -150,7 +141,6 @@ export default (db) => {
     }
   });
 
-  // GET — Programme de l'utilisateur
   router.get("/programs", requireAuth, async (req, res) => {
     try {
       const userId = req.user.id;

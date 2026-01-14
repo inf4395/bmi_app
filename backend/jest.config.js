@@ -1,8 +1,8 @@
 export default {
   testEnvironment: "node",
   transform: {},
-  maxWorkers: 1, // Exécuter les tests en série pour éviter les conflits SQLite
-  testTimeout: 30000, // Timeout de 30 secondes par test (augmenté pour les tests de performance)
+  maxWorkers: 1,
+  testTimeout: 30000,
   reporters: [
     "default",
     [

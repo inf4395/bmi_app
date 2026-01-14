@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * Script pour collecter les métriques d'expérience développeur
- * - Temps de feedback (commit → résultat)
- * - Facilité de debugging
- * - Temps de résolution d'erreurs
- * - Satisfaction développeur
+ * Script zum Sammeln von Entwickler-Erfahrungsmetriken
+ * - Feedback-Zeit (Commit → Ergebnis)
+ * - Debugging-Leichtigkeit
+ * - Fehlerbehebungszeit
+ * - Entwicklerzufriedenheit
  * 
- * Usage: node scripts/collect-developer-experience.js
+ * Verwendung: node scripts/collect-developer-experience.js
  */
 
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
@@ -21,11 +21,9 @@ const ROOT_DIR = join(__dirname, '..');
 const OUTPUT_DIR = join(ROOT_DIR, 'results', 'developer-experience');
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 
-// Créer le répertoire de sortie
 try {
   execSync(`mkdir -p "${OUTPUT_DIR}"`, { stdio: 'inherit' });
 } catch (e) {
-  // Ignorer si le répertoire existe déjà
 }
 
 function runCommand(command) {
@@ -40,19 +38,17 @@ function runCommand(command) {
 }
 
 function analyzeFeedbackTime() {
-  console.log('⏱️  Analyse du temps de feedback...');
+  console.log('⏱️  Analyse der Feedback-Zeit...');
   
-  // Analyser les résultats de performance pour estimer le temps de feedback
   const resultsDir = join(ROOT_DIR, 'results', 'performance');
   
   if (!existsSync(resultsDir)) {
     return {
       average: 'N/A',
-      note: 'Aucune donnée de performance disponible'
+      note: 'Keine Leistungsdaten verfügbar'
     };
   }
   
-  // Lire les fichiers de résultats JSON
   const files = readdirSync(resultsDir).filter(f => f.endsWith('.json'));
   
   const durations = [];
@@ -70,7 +66,6 @@ function analyzeFeedbackTime() {
         }
       }
       
-      // Si c'est un tableau d'exécutions
       if (Array.isArray(data)) {
         data.forEach(exec => {
           if (exec.duration) {
@@ -91,7 +86,7 @@ function analyzeFeedbackTime() {
   if (durations.length === 0) {
     return {
       average: 'N/A',
-      note: 'Aucune donnée de durée disponible'
+      note: 'Keine Dauerdaten verfügbar'
     };
   }
   
@@ -105,7 +100,7 @@ function analyzeFeedbackTime() {
     max: `${(max / 1000).toFixed(2)}s`,
     samples: durations.length,
     breakdown: {
-      commit_to_start: '5-30s', // Temps de queue
+      commit_to_start: '5-30s', // Wartezeit
       execution: `${(average / 1000).toFixed(2)}s`,
       notification: '1-5s'
     }
@@ -113,130 +108,130 @@ function analyzeFeedbackTime() {
 }
 
 function analyzeDebuggingEase() {
-  console.log('🐛 Analyse de la facilité de debugging...');
+  console.log('🐛 Analyse der Debugging-Leichtigkeit...');
   
   return {
     logQuality: {
       score: 8,
-      description: 'Logs structurés avec timestamps et contextes',
+      description: 'Strukturierte Logs mit Timestamps und Kontexten',
       improvements: [
-        'Ajouter des logs de niveau DEBUG pour le développement',
-        'Implémenter un système de tracing distribué'
+        'DEBUG-Level-Logs für die Entwicklung hinzufügen',
+        'Verteiltes Tracing-System implementieren'
       ]
     },
     errorMessages: {
       score: 7,
-      description: 'Messages d\'erreur clairs avec codes HTTP appropriés',
+      description: 'Klare Fehlermeldungen mit angemessenen HTTP-Codes',
       improvements: [
-        'Ajouter des codes d\'erreur personnalisés',
-        'Inclure des liens vers la documentation dans les erreurs'
+        'Benutzerdefinierte Fehlercodes hinzufügen',
+        'Links zur Dokumentation in Fehlermeldungen einfügen'
       ]
     },
     testOutput: {
       score: 9,
-      description: 'Sortie de tests détaillée avec coverage',
+      description: 'Detaillierte Testausgabe mit Coverage',
       improvements: [
-        'Ajouter des snapshots pour les tests visuels',
-        'Implémenter des tests de régression automatiques'
+        'Snapshots für visuelle Tests hinzufügen',
+        'Automatische Regressions-Tests implementieren'
       ]
     },
     ciLogs: {
       score: 8,
-      description: 'Logs CI/CD structurés par stage',
+      description: 'Strukturierte CI/CD-Logs nach Stages',
       improvements: [
-        'Ajouter des annotations dans les PRs',
-        'Implémenter des dashboards de monitoring'
+        'Annotationen in PRs hinzufügen',
+        'Monitoring-Dashboards implementieren'
       ]
     }
   };
 }
 
 function analyzeErrorResolution() {
-  console.log('🔧 Analyse du temps de résolution d\'erreurs...');
+  console.log('🔧 Analyse der Fehlerbehebungszeit...');
   
   return {
     averageResolutionTime: {
-      critical: '15-30 minutes',
-      high: '1-2 heures',
-      medium: '2-4 heures',
-      low: '1 jour'
+      critical: '15-30 Minuten',
+      high: '1-2 Stunden',
+      medium: '2-4 Stunden',
+      low: '1 Tag'
     },
     factors: {
       testCoverage: {
         impact: 'high',
-        description: 'Couverture de code élevée permet de détecter les erreurs rapidement'
+        description: 'Hohe Code-Abdeckung ermöglicht schnelle Fehlererkennung'
       },
       logging: {
         impact: 'high',
-        description: 'Logs détaillés facilitent l\'identification des problèmes'
+        description: 'Detaillierte Logs erleichtern die Problemidentifikation'
       },
       documentation: {
         impact: 'medium',
-        description: 'Documentation claire réduit le temps de compréhension'
+        description: 'Klare Dokumentation reduziert das Verständnis'
       },
       ciFeedback: {
         impact: 'high',
-        description: 'Feedback rapide du CI permet de corriger immédiatement'
+        description: 'Schnelles CI-Feedback ermöglicht sofortige Korrektur'
       }
     },
     recommendations: [
-      'Implémenter des alertes automatiques pour les erreurs critiques',
-      'Créer un runbook pour les erreurs courantes',
-      'Ajouter des métriques de temps de résolution',
-      'Organiser des sessions de post-mortem pour les erreurs importantes'
+      'Automatische Warnungen für kritische Fehler implementieren',
+      'Runbook für häufige Fehler erstellen',
+      'Metriken für Behebungszeit hinzufügen',
+      'Post-Mortem-Sitzungen für wichtige Fehler organisieren'
     ]
   };
 }
 
 function generateDeveloperSurvey() {
-  console.log('📋 Génération du questionnaire de satisfaction...');
+  console.log('📋 Generierung des Zufriedenheitsfragebogens...');
   
   return {
     questions: [
       {
         id: 1,
-        question: 'À quel point le pipeline CI/CD facilite-t-il votre travail quotidien ?',
+        question: 'Wie sehr erleichtert die CI/CD-Pipeline Ihre tägliche Arbeit?',
         type: 'scale',
         scale: '1-10',
         category: 'productivity'
       },
       {
         id: 2,
-        question: 'Quelle est la qualité des messages d\'erreur du pipeline ?',
+        question: 'Wie ist die Qualität der Fehlermeldungen der Pipeline?',
         type: 'scale',
         scale: '1-10',
         category: 'debugging'
       },
       {
         id: 3,
-        question: 'Le temps de feedback du pipeline est-il acceptable ?',
+        question: 'Ist die Feedback-Zeit der Pipeline akzeptabel?',
         type: 'scale',
         scale: '1-10',
         category: 'feedback'
       },
       {
         id: 4,
-        question: 'À quel point est-il facile de déboguer les problèmes dans le pipeline ?',
+        question: 'Wie einfach ist es, Probleme in der Pipeline zu debuggen?',
         type: 'scale',
         scale: '1-10',
         category: 'debugging'
       },
       {
         id: 5,
-        question: 'La documentation du pipeline est-elle suffisante ?',
+        question: 'Ist die Dokumentation der Pipeline ausreichend?',
         type: 'scale',
         scale: '1-10',
         category: 'documentation'
       },
       {
         id: 6,
-        question: 'Quels sont les principaux points d\'amélioration du pipeline ?',
+        question: 'Was sind die Hauptverbesserungspunkte der Pipeline?',
         type: 'text',
         category: 'improvements'
       },
       {
         id: 7,
-        question: 'Quelle plateforme CI/CD préférez-vous et pourquoi ?',
+        question: 'Welche CI/CD-Plattform bevorzugen Sie und warum?',
         type: 'text',
         category: 'preference'
       }
@@ -245,8 +240,7 @@ function generateDeveloperSurvey() {
   };
 }
 
-// Collecter toutes les métriques
-console.log('🔍 Collecte des métriques d\'expérience développeur...\n');
+console.log('🔍 Sammeln von Entwickler-Erfahrungsmetriken...\n');
 
 const feedbackTime = analyzeFeedbackTime();
 const debuggingEase = analyzeDebuggingEase();
@@ -267,22 +261,21 @@ const report = {
     average: 7.5
   },
   recommendations: [
-    'Réduire le temps de feedback en optimisant les tests',
-    'Améliorer les messages d\'erreur avec plus de contexte',
-    'Créer des guides de debugging pour les erreurs courantes',
-    'Implémenter des notifications en temps réel pour les builds',
-    'Organiser des sessions de feedback avec l\'équipe'
+    'Feedback-Zeit durch Testoptimierung reduzieren',
+    'Fehlermeldungen mit mehr Kontext verbessern',
+    'Debugging-Leitfäden für häufige Fehler erstellen',
+    'Echtzeit-Benachrichtigungen für Builds implementieren',
+    'Feedback-Sitzungen mit dem Team organisieren'
   ]
 };
 
 const outputFile = join(OUTPUT_DIR, `developer-experience_${timestamp}.json`);
 writeFileSync(outputFile, JSON.stringify(report, null, 2));
 
-console.log(`\n✅ Rapport sauvegardé dans: ${outputFile}`);
+console.log(`\n✅ Bericht gespeichert in: ${outputFile}`);
 
-// Afficher un résumé
-console.log('\n📊 Résumé de l\'expérience développeur:');
-console.log(`  Temps de feedback moyen: ${feedbackTime.average}`);
-console.log(`  Score global: ${report.overallScore.average}/10`);
-console.log(`  Facilité de debugging: ${debuggingEase.logQuality.score}/10`);
+console.log('\n📊 Zusammenfassung der Entwickler-Erfahrung:');
+console.log(`  Durchschnittliche Feedback-Zeit: ${feedbackTime.average}`);
+console.log(`  Gesamtbewertung: ${report.overallScore.average}/10`);
+console.log(`  Debugging-Leichtigkeit: ${debuggingEase.logQuality.score}/10`);
 

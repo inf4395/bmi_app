@@ -11,7 +11,6 @@ let db;
 let token;
 
 beforeAll(async () => {
-  // Utiliser une base de données en mémoire pour éviter les conflits
   db = await initDB(":memory:");
   app = express();
   app.use(cors());
@@ -46,7 +45,6 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // Attendre que toutes les opérations asynchrones soient terminées
   await new Promise(resolve => setTimeout(resolve, 100));
   if (db) {
     await db.close();
@@ -81,7 +79,6 @@ test("GET /api/history gibt Liste der letzten Berechnungen zurück", async () =>
 
 //  Test 3 : PUT /api/bmi/:id
 test("PUT /api/bmi/:id aktualisiert einen Datensatz", async () => {
-  // d’abord on crée un enregistrement
   const create = await request(app)
     .post("/api/bmi")
     .set("Authorization", `Bearer ${token}`)
@@ -109,7 +106,6 @@ test("PUT /api/bmi/:id aktualisiert einen Datensatz", async () => {
 
 // Test 4 : DELETE /api/bmi/:id
 test("DELETE /api/bmi/:id löscht einen Datensatz", async () => {
-  // Crée d'abord un nouvel enregistrement à supprimer
   const create = await request(app)
     .post("/api/bmi")
     .set("Authorization", `Bearer ${token}`)

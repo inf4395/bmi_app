@@ -57,7 +57,6 @@ const Profile = () => {
     setMessage(null);
 
     try {
-      // Préparer les données pour l'envoi
       const profileData = {
         ...profile,
         height: profile.height ? parseFloat(profile.height) : null,
@@ -87,17 +86,14 @@ const Profile = () => {
       const data = await response.json();
       console.log("Profile updated successfully:", data);
 
-      // Mettre à jour le contexte avec les nouvelles données
       if (data.user) {
         updateUser(data.user);
       }
 
-      // Recharger les données du profil depuis le serveur pour être sûr
       await fetchProfile();
       
       setMessage({ type: "success", text: "Profil erfolgreich aktualisiert!" });
       
-      // Effacer le message après 3 secondes
       setTimeout(() => {
         setMessage(null);
       }, 3000);

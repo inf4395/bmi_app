@@ -1,19 +1,20 @@
 {
   "platform": "gitlab",
   "execution_id": "pipeline_008",
-  "timestamp": "2025-01-26T17:00:00Z",
-  "branch": "main",
-  "trigger": "push",
+  "timestamp": "2025-01-04T05:00:00Z",
+  "branch": "develop",
+  "trigger": "manual",
+  "commit": "ed7f76a9",
   "duration": {
-    "total": 0,
+    "total": 503,
     "stages": {
-      "lint_backend": 0,
-      "lint_frontend": 0,
-      "test_backend": 0,
-      "test_frontend": 0,
-      "build_frontend": 0,
-      "e2e_tests": 0,
-      "deploy": 0
+      "lint_backend": 32,
+      "lint_frontend": 44,
+      "test_backend": 42,
+      "test_frontend": 56,
+      "build_frontend": 42,
+      "e2e_tests": 344,
+      "deploy": 15
     }
   },
   "resources": {
@@ -23,7 +24,7 @@
   },
   "success": true,
   "errors": [],
-  "queue_time": 0,
+  "queue_time": 2,
   "runner_type": "shared",
   "artifacts": {
     "count": 0,
@@ -33,6 +34,15 @@
     "hit": false,
     "size_mb": 0
   },
-  "notes": "À remplir avec les données réelles"
+  "jobs": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0
+  },
+  "tests": {
+    "total": 138,
+    "passed": 138,
+    "failed": 0
+  },
+  "notes": "Data from user provided GitLab CI output. E2E tests took 344s (5:44), similar to pipeline_007"
 }
-

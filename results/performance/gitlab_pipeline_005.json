@@ -1,20 +1,32 @@
 {
   "platform": "gitlab",
   "execution_id": "pipeline_005",
-  "timestamp": "2025-01-26T14:00:00Z",
-  "branch": "main",
+  "timestamp": "2025-01-04T00:50:00Z",
+  "branch": "develop",
   "trigger": "push",
+  "commit": "ed7f76a9",
   "duration": {
-    "total": 0,
+    "total": 536,
+    "queue_time": 1,
     "stages": {
-      "lint_backend": 0,
-      "lint_frontend": 0,
-      "test_backend": 0,
-      "test_frontend": 0,
-      "build_frontend": 0,
-      "e2e_tests": 0,
-      "deploy": 0
+      "lint_backend": 30,
+      "lint_frontend": 50,
+      "test_backend": 44,
+      "test_frontend": 54,
+      "build_frontend": 43,
+      "e2e_tests": 344,
+      "deploy": 43
     }
+  },
+  "jobs": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0
+  },
+  "tests": {
+    "total": 138,
+    "passed": 138,
+    "failed": 0
   },
   "resources": {
     "cpu_usage_percent": 0,
@@ -23,16 +35,14 @@
   },
   "success": true,
   "errors": [],
-  "queue_time": 0,
   "runner_type": "shared",
   "artifacts": {
-    "count": 0,
+    "count": 7,
     "total_size_mb": 0
   },
   "cache": {
-    "hit": false,
+    "hit": true,
     "size_mb": 0
   },
-  "notes": "À remplir avec les données réelles"
+  "notes": "Pipeline #32034-32040, commit ed7f76a9, branch develop"
 }
-

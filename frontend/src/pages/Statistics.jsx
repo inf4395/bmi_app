@@ -60,7 +60,7 @@ const Statistics = () => {
       console.log("Records data:", data);
       console.log("Stats data:", statsData);
 
-      setRecords(data.reverse()); // Plus ancien au plus récent pour le graphique
+      setRecords(data.reverse());
       setStats(statsData);
     } catch (error) {
       console.error("Fehler beim Laden der Statistiken:", error);
@@ -70,7 +70,6 @@ const Statistics = () => {
     }
   };
 
-  // Préparer les données pour les graphiques
   const chartData = records.map((record) => ({
     date: new Date(record.created_at).toLocaleDateString("de-DE", {
       month: "short",

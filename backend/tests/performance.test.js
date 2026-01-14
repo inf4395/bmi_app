@@ -11,7 +11,6 @@ let db;
 let token;
 
 beforeAll(async () => {
-  // Utiliser une base de données en mémoire pour éviter les conflits
   db = await initDB(":memory:");
   app = express();
   app.use(cors());
@@ -20,7 +19,6 @@ beforeAll(async () => {
   app.use("/api", bmiRoutes(db));
   app.use("/api", statsRoutes(db));
 
-  // Créer un utilisateur de test
   const testEmail = `perftest_${Date.now()}@example.com`;
   const password = "Secret123!";
 
@@ -45,7 +43,6 @@ beforeAll(async () => {
 
   token = loginResponse.body.token;
 
-  // Créer quelques enregistrements pour les tests de performance
   for (let i = 0; i < 10; i++) {
     const response = await request(app)
       .post("/api/bmi")
@@ -57,15 +54,13 @@ beforeAll(async () => {
         weight: 75 + i,
       });
     
-    // Attendre que la réponse soit complète
     if (response.statusCode !== 200) {
       console.warn(`Warning: BMI record creation failed for iteration ${i}: ${response.statusCode}`);
     }
   }
-}, 60000); // Timeout de 60 secondes pour beforeAll
+}, 60000); // Timeout von 60 Sekunden für beforeAll
 
 afterAll(async () => {
-  // Attendre que toutes les opérations asynchrones soient terminées
   await new Promise(resolve => setTimeout(resolve, 100));
   if (db) {
     await db.close();
@@ -73,9 +68,9 @@ afterAll(async () => {
 }, 10000);
 
 describe("Performance Tests", () => {
-  const MAX_RESPONSE_TIME = 1000; // 1 seconde en millisecondes
+  const MAX_RESPONSE_TIME = 1000; // 1 Sekunde in Millisekunden
 
-  test("POST /api/bmi répond en moins de 1 seconde", async () => {
+  test("POST /api/bmi antwortet in weniger als 1 Sekunde", async () => {
     const startTime = Date.now();
 
     const response = await request(app)
@@ -94,7 +89,7 @@ describe("Performance Tests", () => {
     expect(responseTime).toBeLessThan(MAX_RESPONSE_TIME);
   });
 
-  test("GET /api/history répond en moins de 1 seconde", async () => {
+  test("GET /api/history antwortet in weniger als 1 Sekunde", async () => {
     const startTime = Date.now();
 
     const response = await request(app)
@@ -107,7 +102,7 @@ describe("Performance Tests", () => {
     expect(responseTime).toBeLessThan(MAX_RESPONSE_TIME);
   });
 
-  test("GET /api/stats/summary répond en moins de 1 seconde", async () => {
+  test("GET /api/stats/summary antwortet in weniger als 1 Sekunde", async () => {
     const startTime = Date.now();
 
     const response = await request(app)
@@ -120,7 +115,7 @@ describe("Performance Tests", () => {
     expect(responseTime).toBeLessThan(MAX_RESPONSE_TIME);
   });
 
-  test("GET /api/stats/detailed répond en moins de 1 seconde", async () => {
+  test("GET /api/stats/detailed antwortet in weniger als 1 Sekunde", async () => {
     const startTime = Date.now();
 
     const response = await request(app)
@@ -133,7 +128,7 @@ describe("Performance Tests", () => {
     expect(responseTime).toBeLessThan(MAX_RESPONSE_TIME);
   });
 
-  test("POST /api/auth/login répond en moins de 1 seconde", async () => {
+  test("POST /api/auth/login antwortet in weniger als 1 Sekunde", async () => {
     const testEmail = `perflogin_${Date.now()}@example.com`;
     await request(app).post("/api/auth/register").send({
       name: "Login Perf Test",
@@ -154,7 +149,7 @@ describe("Performance Tests", () => {
     expect(responseTime).toBeLessThan(MAX_RESPONSE_TIME);
   });
 
-  test("GET /api/auth/me répond en moins de 500ms", async () => {
+  test("GET /api/auth/me antwortet in weniger als 500ms", async () => {
     const startTime = Date.now();
 
     const response = await request(app)
@@ -164,10 +159,10 @@ describe("Performance Tests", () => {
     const responseTime = Date.now() - startTime;
 
     expect(response.statusCode).toBe(200);
-    expect(responseTime).toBeLessThan(500); // Plus rapide car simple requête
+    expect(responseTime).toBeLessThan(500);
   });
 
-  test("PUT /api/auth/profile répond en moins de 1 seconde", async () => {
+  test("PUT /api/auth/profile antwortet in weniger als 1 Sekunde", async () => {
     const startTime = Date.now();
 
     const response = await request(app)
@@ -185,7 +180,7 @@ describe("Performance Tests", () => {
     expect(responseTime).toBeLessThan(MAX_RESPONSE_TIME);
   });
 
-  test("peut gérer plusieurs requêtes simultanées", async () => {
+  test("kann mehrere gleichzeitige Anfragen verarbeiten", async () => {
     const requests = Array(5)
       .fill(null)
       .map(() =>
@@ -202,16 +197,15 @@ describe("Performance Tests", () => {
       expect(response.statusCode).toBe(200);
     });
 
-    // Toutes les requêtes devraient être complétées en moins de 2 secondes
     expect(totalTime).toBeLessThan(2000);
   });
 });
 
-describe("Load Testing - Tests de charge", () => {
+describe("Load Testing - Lasttests", () => {
   const LOAD_TEST_ITERATIONS = 20;
   const MAX_AVERAGE_RESPONSE_TIME = 500; // ms
 
-  test("Load test: POST /api/bmi avec 20 requêtes séquentielles", async () => {
+  test("Load test: POST /api/bmi mit 20 sequenziellen Anfragen", async () => {
     const responseTimes = [];
     const errors = [];
 
@@ -246,11 +240,11 @@ describe("Load Testing - Tests de charge", () => {
     console.log(`[Load Test] POST /api/bmi - Avg: ${averageTime.toFixed(2)}ms, Min: ${minTime}ms, Max: ${maxTime}ms`);
 
     expect(errors.length).toBe(0);
-    expect(averageTime).toBeLessThan(MAX_AVERAGE_RESPONSE_TIME * 2); // Tolérance pour charge
+    expect(averageTime).toBeLessThan(MAX_AVERAGE_RESPONSE_TIME * 2);
     expect(responseTimes.length).toBe(LOAD_TEST_ITERATIONS);
   });
 
-  test("Load test: GET /api/stats/summary avec 20 requêtes parallèles", async () => {
+  test("Load test: GET /api/stats/summary mit 20 parallelen Anfragen", async () => {
     const startTime = Date.now();
     const requests = Array(LOAD_TEST_ITERATIONS)
       .fill(null)
@@ -271,10 +265,10 @@ describe("Load Testing - Tests de charge", () => {
 
     expect(errors.length).toBe(0);
     expect(successCount).toBe(LOAD_TEST_ITERATIONS);
-    expect(averageTime).toBeLessThan(MAX_AVERAGE_RESPONSE_TIME * 3); // Tolérance pour parallélisme
+    expect(averageTime).toBeLessThan(MAX_AVERAGE_RESPONSE_TIME * 3);
   });
 
-  test("Load test: GET /api/history avec différentes limites", async () => {
+  test("Load test: GET /api/history mit verschiedenen Limits", async () => {
     const limits = [10, 50, 100];
     const results = [];
 
@@ -291,20 +285,19 @@ describe("Load Testing - Tests de charge", () => {
       expect(response.body.length).toBeLessThanOrEqual(limit);
     }
 
-    console.log(`[Load Test] GET /api/history avec limites:`, results);
+    console.log(`[Load Test] GET /api/history mit Limits:`, results);
     
-    // Les temps de réponse devraient augmenter proportionnellement mais rester raisonnables
     results.forEach(result => {
       expect(result.responseTime).toBeLessThan(MAX_AVERAGE_RESPONSE_TIME * 2);
     });
   });
 });
 
-describe("Stress Testing - Tests de stress", () => {
+describe("Stress Testing - Stresstests", () => {
   const STRESS_TEST_ITERATIONS = 50;
-  const MAX_FAILURE_RATE = 0.1; // 10% de taux d'échec acceptable
+  const MAX_FAILURE_RATE = 0.1;
 
-  test("Stress test: Création massive de records BMI", async () => {
+  test("Stress test: Massenerstellung von BMI-Datensätzen", async () => {
     const startTime = Date.now();
     const results = {
       success: 0,
@@ -345,7 +338,7 @@ describe("Stress Testing - Tests de stress", () => {
     const totalTime = Date.now() - startTime;
     const failureRate = results.failures / STRESS_TEST_ITERATIONS;
     const avgResponseTime = results.responseTimes.reduce((a, b) => a + b, 0) / results.responseTimes.length;
-    const throughput = STRESS_TEST_ITERATIONS / (totalTime / 1000); // requêtes par seconde
+    const throughput = STRESS_TEST_ITERATIONS / (totalTime / 1000);
 
     console.log(`[Stress Test] POST /api/bmi - Total: ${totalTime}ms, Success: ${results.success}, Failures: ${results.failures}, Avg: ${avgResponseTime.toFixed(2)}ms, Throughput: ${throughput.toFixed(2)} req/s`);
 
@@ -353,7 +346,7 @@ describe("Stress Testing - Tests de stress", () => {
     expect(results.success).toBeGreaterThan(STRESS_TEST_ITERATIONS * (1 - MAX_FAILURE_RATE));
   });
 
-  test("Stress test: Requêtes simultanées sur /api/stats/summary", async () => {
+  test("Stress test: Gleichzeitige Anfragen auf /api/stats/summary", async () => {
     const concurrentRequests = 30;
     const startTime = Date.now();
 
@@ -379,9 +372,8 @@ describe("Stress Testing - Tests de stress", () => {
   });
 });
 
-describe("Scalability Testing - Tests de scalabilité", () => {
-  test("Scalabilité: Performance avec différents volumes de données", async () => {
-    // Créer un utilisateur séparé pour ce test
+describe("Scalability Testing - Skalierbarkeitstests", () => {
+  test("Skalierbarkeit: Leistung mit verschiedenen Datenvolumen", async () => {
     const testEmail = `scalability_${Date.now()}@example.com`;
     await request(app).post("/api/auth/register").send({
       name: "Scalability Test",
@@ -395,12 +387,10 @@ describe("Scalability Testing - Tests de scalabilité", () => {
     });
     const testToken = loginResponse.body.token;
 
-    // Créer différents volumes de données
     const volumes = [10, 25, 50];
     const results = [];
 
     for (const volume of volumes) {
-      // Créer volume de données
       for (let i = 0; i < volume; i++) {
         await request(app)
           .post("/api/bmi")
@@ -413,7 +403,6 @@ describe("Scalability Testing - Tests de scalabilité", () => {
           });
       }
 
-      // Mesurer le temps de réponse pour stats/summary
       const startTime = Date.now();
       const response = await request(app)
         .get("/api/stats/summary")
@@ -430,15 +419,14 @@ describe("Scalability Testing - Tests de scalabilité", () => {
       expect(response.statusCode).toBe(200);
     }
 
-    console.log(`[Scalability Test] Résultats avec différents volumes:`, results);
+    console.log(`[Scalability Test] Ergebnisse mit verschiedenen Volumen:`, results);
 
-    // Vérifier que les temps de réponse restent raisonnables même avec plus de données
     results.forEach(result => {
-      expect(result.responseTime).toBeLessThan(1000); // Moins de 1 seconde même avec 50 records
+      expect(result.responseTime).toBeLessThan(1000);
     });
   });
 
-  test("Scalabilité: Performance avec requêtes parallèles croissantes", async () => {
+  test("Skalierbarkeit: Leistung mit steigenden parallelen Anfragen", async () => {
     const parallelLevels = [5, 10, 20, 30];
     const results = [];
 
@@ -469,20 +457,18 @@ describe("Scalability Testing - Tests de scalabilité", () => {
       expect(successCount).toBe(level);
     }
 
-    console.log(`[Scalability Test] Performance avec différents niveaux de parallélisme:`, results);
+    console.log(`[Scalability Test] Leistung mit verschiedenen Parallelitätsstufen:`, results);
 
-    // Vérifier que le throughput reste stable ou augmente avec le parallélisme
     const throughputs = results.map(r => r.throughput);
     const minThroughput = Math.min(...throughputs);
     const maxThroughput = Math.max(...throughputs);
 
-    // Le throughput ne devrait pas diminuer de plus de 50% avec plus de parallélisme
     expect(maxThroughput / minThroughput).toBeGreaterThan(0.5);
   });
 });
 
-describe("Performance Metrics - Métriques de performance", () => {
-  test("Métriques: Temps de réponse pour toutes les routes principales", async () => {
+describe("Performance Metrics - Leistungsmetriken", () => {
+  test("Metriken: Antwortzeit für alle Hauptrouten", async () => {
     const routes = [
       { method: "GET", path: "/api/stats/summary", name: "Stats Summary" },
       { method: "GET", path: "/api/stats/detailed", name: "Stats Detailed" },
@@ -521,7 +507,7 @@ describe("Performance Metrics - Métriques de performance", () => {
       });
     }
 
-    console.log(`[Performance Metrics] Temps de réponse (ms):`, metrics);
+    console.log(`[Performance Metrics] Antwortzeit (ms):`, metrics);
 
     // Toutes les routes devraient avoir un temps moyen raisonnable
     metrics.forEach(metric => {
@@ -529,7 +515,7 @@ describe("Performance Metrics - Métriques de performance", () => {
     });
   });
 
-  test("Métriques: Throughput pour POST /api/bmi", async () => {
+  test("Metriken: Durchsatz für POST /api/bmi", async () => {
     const iterations = 20;
     const startTime = Date.now();
 
@@ -549,17 +535,17 @@ describe("Performance Metrics - Métriques de performance", () => {
 
     const responses = await Promise.all(requests);
     const totalTime = (Date.now() - startTime) / 1000; // en secondes
-    const throughput = iterations / totalTime; // requêtes par seconde
+    const throughput = iterations / totalTime;
     const successCount = responses.filter(r => r.statusCode === 200).length;
     const successRate = successCount / iterations;
 
     console.log(`[Performance Metrics] POST /api/bmi - Throughput: ${throughput.toFixed(2)} req/s, Success Rate: ${(successRate * 100).toFixed(2)}%`);
 
-    expect(successRate).toBeGreaterThan(0.95); // 95% de succès minimum
-    expect(throughput).toBeGreaterThan(5); // Au moins 5 requêtes par seconde
+    expect(successRate).toBeGreaterThan(0.95);
+    expect(throughput).toBeGreaterThan(5);
   });
 
-  test("Métriques: Latence p50, p95, p99 pour GET /api/stats/summary", async () => {
+  test("Metriken: Latenz p50, p95, p99 für GET /api/stats/summary", async () => {
     const iterations = 100;
     const responseTimes = [];
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * Script pour collecter les métriques de qualité de code
- * - Code coverage
- * - Code complexity
- * - Security vulnerabilities (npm audit)
- * - Code smells
+ * Script zum Sammeln von Code-Qualitätsmetriken
+ * - Code-Abdeckung
+ * - Code-Komplexität
+ * - Sicherheitslücken (npm audit)
+ * - Code-Smells
  * 
- * Usage: node scripts/collect-code-quality-metrics.js [backend|frontend|all]
+ * Verwendung: node scripts/collect-code-quality-metrics.js [backend|frontend|all]
  */
 
 import { execSync } from 'child_process';
@@ -22,11 +22,9 @@ const TARGET = process.argv[2] || 'all';
 const OUTPUT_DIR = join(ROOT_DIR, 'results', 'code-quality');
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 
-// Créer le répertoire de sortie
 try {
   execSync(`mkdir -p "${OUTPUT_DIR}"`, { stdio: 'inherit' });
 } catch (e) {
-  // Ignorer si le répertoire existe déjà
 }
 
 function runCommand(command, cwd = ROOT_DIR) {
@@ -42,21 +40,20 @@ function runCommand(command, cwd = ROOT_DIR) {
 }
 
 function getCodeCoverage(project) {
-  console.log(`📊 Collecte du code coverage pour ${project}...`);
+  console.log(`📊 Sammeln der Code-Abdeckung für ${project}...`);
   
   const projectDir = join(ROOT_DIR, project);
   const coverageFile = join(projectDir, 'coverage', 'coverage-final.json');
   
   if (!existsSync(coverageFile)) {
-    console.log(`⚠️  Fichier de coverage non trouvé: ${coverageFile}`);
-    console.log(`   Exécutez d'abord: cd ${project} && npm test -- --coverage`);
+    console.log(`⚠️  Coverage-Datei nicht gefunden: ${coverageFile}`);
+    console.log(`   Führen Sie zuerst aus: cd ${project} && npm test -- --coverage`);
     return null;
   }
   
   try {
     const coverage = JSON.parse(readFileSync(coverageFile, 'utf-8'));
     
-    // Calculer les métriques globales
     let totalStatements = 0;
     let coveredStatements = 0;
     let totalBranches = 0;
@@ -104,13 +101,13 @@ function getCodeCoverage(project) {
       }
     };
   } catch (error) {
-    console.error(`❌ Erreur lors de la lecture du coverage: ${error.message}`);
+    console.error(`❌ Fehler beim Lesen der Coverage: ${error.message}`);
     return null;
   }
 }
 
 function getSecurityVulnerabilities(project) {
-  console.log(`🔒 Analyse des vulnérabilités de sécurité pour ${project}...`);
+  console.log(`🔒 Analyse der Sicherheitslücken für ${project}...`);
   
   const projectDir = join(ROOT_DIR, project);
   const packageJson = join(projectDir, 'package.json');
@@ -135,7 +132,6 @@ function getSecurityVulnerabilities(project) {
       }
     };
   } catch (error) {
-    // npm audit peut échouer si aucune vulnérabilité n'est trouvée
     return {
       vulnerabilities: {},
       summary: {
@@ -151,7 +147,7 @@ function getSecurityVulnerabilities(project) {
 }
 
 function getCodeComplexity(project) {
-  console.log(`📈 Analyse de la complexité du code pour ${project}...`);
+  console.log(`📈 Analyse der Code-Komplexität für ${project}...`);
   
   const projectDir = join(ROOT_DIR, project);
   const srcDir = join(projectDir, 'src');
@@ -160,7 +156,7 @@ function getCodeComplexity(project) {
     return null;
   }
   
-  // Compter les fichiers et lignes de code
+  // Dateien und Codezeilen zählen
   try {
     const findOutput = runCommand(`find "${srcDir}" -type f \\( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \\)`, projectDir);
     const files = findOutput.trim().split('\n').filter(f => f);
@@ -175,19 +171,19 @@ function getCodeComplexity(project) {
         const lines = content.split('\n');
         totalLines += lines.length;
         
-        // Compter les fonctions (approximation)
+        // Funktionen zählen (Näherung)
         const functionMatches = content.match(/(?:function|const|let|var)\s+\w+\s*[=:]\s*(?:async\s+)?\(/g);
         if (functionMatches) {
           totalFunctions += functionMatches.length;
         }
         
-        // Compter les classes
+        // Klassen zählen
         const classMatches = content.match(/class\s+\w+/g);
         if (classMatches) {
           totalClasses += classMatches.length;
         }
       } catch (e) {
-        // Ignorer les erreurs de lecture
+        // Lesefehler ignorieren
       }
     });
     
@@ -200,14 +196,14 @@ function getCodeComplexity(project) {
       averageFunctionsPerFile: files.length > 0 ? (totalFunctions / files.length).toFixed(2) : 0
     };
   } catch (error) {
-    console.error(`❌ Erreur lors de l'analyse de complexité: ${error.message}`);
+    console.error(`❌ Fehler bei der Komplexitätsanalyse: ${error.message}`);
     return null;
   }
 }
 
 function collectMetrics(project) {
   console.log(`\n${'='.repeat(60)}`);
-  console.log(`📦 Collecte des métriques pour: ${project}`);
+  console.log(`📦 Sammeln von Metriken für: ${project}`);
   console.log('='.repeat(60));
   
   const metrics = {
@@ -221,24 +217,22 @@ function collectMetrics(project) {
   const outputFile = join(OUTPUT_DIR, `${project}_code-quality_${timestamp}.json`);
   writeFileSync(outputFile, JSON.stringify(metrics, null, 2));
   
-  console.log(`\n✅ Métriques sauvegardées dans: ${outputFile}`);
+  console.log(`\n✅ Metriken gespeichert in: ${outputFile}`);
   
-  // Afficher un résumé
-  console.log('\n📊 Résumé:');
+  console.log('\n📊 Zusammenfassung:');
   if (metrics.coverage) {
-    console.log(`  Coverage: ${metrics.coverage.lines.percentage}% (lignes)`);
+    console.log(`  Coverage: ${metrics.coverage.lines.percentage}% (Zeilen)`);
   }
   if (metrics.security) {
-    console.log(`  Vulnérabilités: ${metrics.security.summary.total} (${metrics.security.summary.critical} critiques, ${metrics.security.summary.high} élevées)`);
+    console.log(`  Sicherheitslücken: ${metrics.security.summary.total} (${metrics.security.summary.critical} kritisch, ${metrics.security.summary.high} hoch)`);
   }
   if (metrics.complexity) {
-    console.log(`  Fichiers: ${metrics.complexity.files}, Lignes: ${metrics.complexity.totalLines}`);
+    console.log(`  Dateien: ${metrics.complexity.files}, Zeilen: ${metrics.complexity.totalLines}`);
   }
   
   return metrics;
 }
 
-// Collecter les métriques
 const projects = TARGET === 'all' ? ['backend', 'frontend'] : [TARGET];
 const allMetrics = {};
 
@@ -246,7 +240,6 @@ for (const project of projects) {
   allMetrics[project] = collectMetrics(project);
 }
 
-// Générer un rapport consolidé
 const consolidatedReport = {
   timestamp,
   projects: allMetrics,
@@ -263,5 +256,5 @@ const consolidatedReport = {
 const consolidatedFile = join(OUTPUT_DIR, `consolidated_code-quality_${timestamp}.json`);
 writeFileSync(consolidatedFile, JSON.stringify(consolidatedReport, null, 2));
 
-console.log(`\n✅ Rapport consolidé sauvegardé dans: ${consolidatedFile}`);
+console.log(`\n✅ Konsolidierter Bericht gespeichert in: ${consolidatedFile}`);
 

@@ -52,7 +52,7 @@ describe("Programs", () => {
 
   it("displays programs for overweight BMI", async () => {
     const mockStats = {
-      latestBMI: 27.0, // Übergewicht
+      latestBMI: 27.0,
     };
 
     global.fetch.mockResolvedValueOnce({

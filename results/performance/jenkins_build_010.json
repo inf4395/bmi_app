@@ -1,20 +1,32 @@
 {
   "platform": "jenkins",
   "execution_id": "build_010",
-  "timestamp": "2025-01-26T19:00:00Z",
-  "branch": "main",
+  "timestamp": "2025-01-04T06:00:00Z",
+  "branch": "develop",
   "trigger": "manual",
+  "commit": "ed7f76a9",
   "duration": {
-    "total": 0,
+    "total": 283,
+    "queue_time": 0,
     "stages": {
-      "lint_backend": 0,
-      "lint_frontend": 0,
-      "test_backend": 0,
-      "test_frontend": 0,
-      "build_frontend": 0,
-      "e2e_tests": 0,
-      "deploy": 0
+      "lint_backend": 33,
+      "lint_frontend": 35,
+      "test_backend": 31,
+      "test_frontend": 22,
+      "build_frontend": 17,
+      "e2e_tests": 190,
+      "deploy": 1
     }
+  },
+  "jobs": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  },
+  "tests": {
+    "total": 138,
+    "passed": 138,
+    "failed": 0
   },
   "resources": {
     "cpu_usage_percent": 0,
@@ -23,16 +35,14 @@
   },
   "success": true,
   "errors": [],
-  "queue_time": 0,
   "runner_type": "local",
   "artifacts": {
-    "count": 0,
+    "count": 5,
     "total_size_mb": 0
   },
   "cache": {
     "hit": false,
     "size_mb": 0
   },
-  "notes": "À remplir avec les données réelles"
+  "notes": "Jenkins build #010, commit ed7f76a9, branch develop. E2E tests took 190s (3:10), significantly longer than average. Lint stages also took longer (33s, 35s) suggesting cache miss or system load"
 }
-

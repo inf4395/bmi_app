@@ -8,7 +8,6 @@ let app;
 let db;
 
 beforeAll(async () => {
-  // Utiliser une base de données en mémoire pour éviter les conflits
   db = await initDB(":memory:");
   app = express();
   app.use(cors());
@@ -17,7 +16,6 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // Attendre que toutes les opérations asynchrones soient terminées
   await new Promise(resolve => setTimeout(resolve, 100));
   if (db) {
     await db.close();
@@ -34,8 +32,8 @@ describe("Authentication Routes", () => {
     testEmail = `testuser_${Date.now()}@example.com`;
   });
 
-  // Test d'inscription
-  test("POST /api/auth/register crée un nouvel utilisateur", async () => {
+  // Test der Registrierung
+  test("POST /api/auth/register erstellt einen neuen Benutzer", async () => {
     const response = await request(app).post("/api/auth/register").send({
       name: "Test User",
       email: testEmail,
@@ -50,8 +48,8 @@ describe("Authentication Routes", () => {
     userId = response.body.user.id;
   });
 
-  // Test d'inscription avec email existant
-  test("POST /api/auth/register rejette un email déjà utilisé", async () => {
+  // Test der Registrierung mit bereits verwendeter E-Mail
+  test("POST /api/auth/register lehnt eine bereits verwendete E-Mail ab", async () => {
     await request(app).post("/api/auth/register").send({
       name: "First User",
       email: testEmail,
@@ -68,8 +66,8 @@ describe("Authentication Routes", () => {
     expect(response.body.error).toContain("existiert bereits");
   });
 
-  // Test de connexion
-  test("POST /api/auth/login connecte un utilisateur valide", async () => {
+  // Test der Anmeldung
+  test("POST /api/auth/login meldet einen gültigen Benutzer an", async () => {
     await request(app).post("/api/auth/register").send({
       name: "Login Test",
       email: testEmail,
@@ -88,8 +86,8 @@ describe("Authentication Routes", () => {
     token = response.body.token;
   });
 
-  // Test de connexion avec mauvais mot de passe
-  test("POST /api/auth/login rejette un mauvais mot de passe", async () => {
+  // Test der Anmeldung mit falschem Passwort
+  test("POST /api/auth/login lehnt ein falsches Passwort ab", async () => {
     await request(app).post("/api/auth/register").send({
       name: "Login Test",
       email: testEmail,
@@ -126,7 +124,7 @@ describe("Authentication Routes", () => {
   });
 
   // Test PUT /api/auth/profile
-  test("PUT /api/auth/profile met à jour le profil utilisateur", async () => {
+  test("PUT /api/auth/profile aktualisiert das Benutzerprofil", async () => {
     const registerResponse = await request(app).post("/api/auth/register").send({
       name: "Profile Test",
       email: testEmail,

@@ -14,13 +14,12 @@ export default (db) => {
         return res.status(400).json({ error: "Name, E-Mail und Passwort sind erforderlich." });
       }
 
-      // Validation de l'email
+      
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({ error: "Ungültige E-Mail-Adresse." });
       }
 
-      // Validation du mot de passe
       if (password.length < 6) {
         return res.status(400).json({ error: "Das Passwort muss mindestens 6 Zeichen lang sein." });
       }
@@ -97,7 +96,7 @@ export default (db) => {
   router.put("/auth/profile", requireAuth, async (req, res) => {
     try {
       const { name, email, gender, birthDate, height } = req.body;
-      const userId = parseInt(req.user.id); // S'assurer que c'est un nombre
+      const userId = parseInt(req.user.id);
 
       console.log(`[Profile] Updating profile for user_id: ${userId} (type: ${typeof userId})`);
       console.log(`[Profile] Request user object:`, req.user);
@@ -108,7 +107,6 @@ export default (db) => {
         return res.status(400).json({ error: "Ungültige Benutzer-ID." });
       }
 
-      // Vérifier d'abord que l'utilisateur existe
       const existingUser = await db.get(`SELECT id, name, email FROM users WHERE id = ?`, [userId]);
       
       if (!existingUser) {
@@ -123,16 +121,13 @@ export default (db) => {
         return res.status(400).json({ error: "Name und E-Mail sind erforderlich." });
       }
 
-      // Validation de l'email
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({ error: "Ungültige E-Mail-Adresse." });
       }
 
-      // Convertir height en nombre ou null
       let heightValue = height ? parseFloat(height) : null;
       
-      // Validation de la hauteur si fournie
       if (heightValue !== null && !isNaN(heightValue)) {
         if (heightValue < 0) {
           return res.status(400).json({ error: "Die Höhe muss eine positive Zahl sein." });
@@ -142,7 +137,6 @@ export default (db) => {
         }
       }
       
-      // Vérifier que birthDate est valide si fourni
       let birthDateValue = birthDate || null;
       if (birthDateValue && typeof birthDateValue === 'string' && birthDateValue.trim() === "") {
         birthDateValue = null;
@@ -169,7 +163,6 @@ export default (db) => {
 
       if (result.changes === 0) {
         console.warn(`[Profile] No rows updated for user_id: ${userId}`);
-        // Vérifier à nouveau si l'utilisateur existe
         const checkUser = await db.get(`SELECT id FROM users WHERE id = ?`, [userId]);
         if (!checkUser) {
           return res.status(404).json({ error: "Benutzer nicht gefunden." });

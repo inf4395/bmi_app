@@ -4,7 +4,6 @@ import { requireAuth } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 export default (db) => {
-  // POST — calculer et enregistrer un BMI
   router.post("/bmi", requireAuth, async (req, res) => {
     try {
       const { name, email, age, height, weight } = req.body;
@@ -13,7 +12,6 @@ export default (db) => {
         return res.status(400).json({ error: "Fehlende Eingabedaten." });
       }
 
-      // Validation des valeurs numériques
       const heightNum = parseFloat(height);
       const weightNum = parseFloat(weight);
 
@@ -25,7 +23,6 @@ export default (db) => {
         return res.status(400).json({ error: "Das Gewicht muss eine positive Zahl sein." });
       }
 
-      // Limites réalistes
       if (heightNum < 50 || heightNum > 300) {
         return res.status(400).json({ error: "Die Höhe muss zwischen 50 und 300 cm liegen." });
       }
@@ -66,7 +63,6 @@ export default (db) => {
     }
   });
 
-  //  GET — récupérer l'historique des calculs BMI
   router.get("/history", requireAuth, async (req, res) => {
     try {
       const userId = req.user.id;
@@ -89,7 +85,6 @@ export default (db) => {
     }
   });
 
-  //  PUT — mettre à jour un calcul existant
   router.put("/bmi/:id", requireAuth, async (req, res) => {
     try {
       const { id } = req.params;
@@ -99,7 +94,6 @@ export default (db) => {
         return res.status(400).json({ error: "Höhe und Gewicht sind erforderlich." });
       }
 
-      // Validation des valeurs numériques
       const heightNum = parseFloat(height);
       const weightNum = parseFloat(weight);
 
@@ -111,7 +105,6 @@ export default (db) => {
         return res.status(400).json({ error: "Das Gewicht muss eine positive Zahl sein." });
       }
 
-      // Limites réalistes
       if (heightNum < 50 || heightNum > 300) {
         return res.status(400).json({ error: "Die Höhe muss zwischen 50 und 300 cm liegen." });
       }
@@ -145,7 +138,6 @@ export default (db) => {
     }
   });
 
-  //  DELETE — supprimer un calcul
   router.delete("/bmi/:id", requireAuth, async (req, res) => {
     try {
       const { id } = req.params;

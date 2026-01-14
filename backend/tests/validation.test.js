@@ -10,7 +10,6 @@ let db;
 let token;
 
 beforeAll(async () => {
-  // Utiliser une base de données en mémoire pour éviter les conflits
   db = await initDB(":memory:");
   app = express();
   app.use(cors());
@@ -18,7 +17,6 @@ beforeAll(async () => {
   app.use("/api", authRoutes(db));
   app.use("/api", bmiRoutes(db));
 
-  // Créer un utilisateur de test
   const testEmail = `testuser_${Date.now()}@example.com`;
   const password = "Secret123!";
 
@@ -50,7 +48,7 @@ afterAll(async () => {
 
 describe("Validation Tests", () => {
   describe("Email Validation", () => {
-    test("rejette un email invalide lors de l'inscription", async () => {
+    test("lehnt eine ungültige E-Mail bei der Registrierung ab", async () => {
       const response = await request(app).post("/api/auth/register").send({
         name: "Test User",
         email: "invalid-email",
@@ -61,7 +59,7 @@ describe("Validation Tests", () => {
       expect(response.body.error).toContain("E-Mail");
     });
 
-    test("rejette un email vide lors de l'inscription", async () => {
+    test("lehnt eine leere E-Mail bei der Registrierung ab", async () => {
       const response = await request(app).post("/api/auth/register").send({
         name: "Test User",
         email: "",
@@ -71,7 +69,7 @@ describe("Validation Tests", () => {
       expect(response.statusCode).toBe(400);
     });
 
-    test("rejette un email invalide lors de la connexion", async () => {
+    test("lehnt eine ungültige E-Mail bei der Anmeldung ab", async () => {
       const response = await request(app).post("/api/auth/login").send({
         email: "not-an-email",
         password: "password123",
@@ -82,18 +80,18 @@ describe("Validation Tests", () => {
   });
 
   describe("Password Validation", () => {
-    test("rejette un mot de passe trop court", async () => {
+    test("lehnt ein zu kurzes Passwort ab", async () => {
       const response = await request(app).post("/api/auth/register").send({
         name: "Test User",
         email: `test${Date.now()}@example.com`,
-        password: "12345", // Moins de 6 caractères
+        password: "12345",
       });
 
       expect(response.statusCode).toBe(400);
       expect(response.body.error).toContain("Passwort");
     });
 
-    test("rejette un mot de passe vide", async () => {
+    test("lehnt ein leeres Passwort ab", async () => {
       const response = await request(app).post("/api/auth/register").send({
         name: "Test User",
         email: `test${Date.now()}@example.com`,
@@ -105,7 +103,7 @@ describe("Validation Tests", () => {
   });
 
   describe("BMI Input Validation", () => {
-    test("rejette un poids négatif", async () => {
+    test("lehnt ein negatives Gewicht ab", async () => {
       const response = await request(app)
         .post("/api/bmi")
         .set("Authorization", `Bearer ${token}`)
@@ -113,14 +111,14 @@ describe("Validation Tests", () => {
           name: "Test User",
           email: "test@example.com",
           height: 180,
-          weight: -10, // Poids négatif
+          weight: -10,
         });
 
       expect(response.statusCode).toBe(400);
       expect(response.body.error).toContain("Gewicht");
     });
 
-    test("rejette un poids de zéro", async () => {
+    test("lehnt ein Gewicht von null ab", async () => {
       const response = await request(app)
         .post("/api/bmi")
         .set("Authorization", `Bearer ${token}`)
@@ -134,7 +132,7 @@ describe("Validation Tests", () => {
       expect(response.statusCode).toBeGreaterThanOrEqual(400);
     });
 
-    test("rejette une hauteur négative", async () => {
+    test("lehnt eine negative Größe ab", async () => {
       const response = await request(app)
         .post("/api/bmi")
         .set("Authorization", `Bearer ${token}`)
@@ -149,7 +147,7 @@ describe("Validation Tests", () => {
       expect(response.body.error).toContain("Höhe");
     });
 
-    test("rejette une hauteur de zéro", async () => {
+    test("lehnt eine Größe von null ab", async () => {
       const response = await request(app)
         .post("/api/bmi")
         .set("Authorization", `Bearer ${token}`)
@@ -163,14 +161,14 @@ describe("Validation Tests", () => {
       expect(response.statusCode).toBeGreaterThanOrEqual(400);
     });
 
-    test("rejette une hauteur trop grande (limite réaliste)", async () => {
+    test("lehnt eine zu große Größe ab (realistische Grenze)", async () => {
       const response = await request(app)
         .post("/api/bmi")
         .set("Authorization", `Bearer ${token}`)
         .send({
           name: "Test User",
           email: "test@example.com",
-          height: 350, // 3.5 mètres - au-delà de la limite
+          height: 350,
           weight: 75,
         });
 
@@ -178,7 +176,7 @@ describe("Validation Tests", () => {
       expect(response.body.error).toContain("Höhe");
     });
 
-    test("rejette un poids trop élevé (limite réaliste)", async () => {
+    test("lehnt ein zu hohes Gewicht ab (realistische Grenze)", async () => {
       const response = await request(app)
         .post("/api/bmi")
         .set("Authorization", `Bearer ${token}`)
@@ -186,14 +184,14 @@ describe("Validation Tests", () => {
           name: "Test User",
           email: "test@example.com",
           height: 180,
-          weight: 600, // 600 kg - au-delà de la limite
+          weight: 600,
         });
 
       expect(response.statusCode).toBe(400);
       expect(response.body.error).toContain("Gewicht");
     });
 
-    test("rejette des valeurs manquantes", async () => {
+    test("lehnt fehlende Werte ab", async () => {
       const response = await request(app)
         .post("/api/bmi")
         .set("Authorization", `Bearer ${token}`)
@@ -208,7 +206,7 @@ describe("Validation Tests", () => {
   });
 
   describe("Name Validation", () => {
-    test("rejette un nom vide lors de l'inscription", async () => {
+    test("lehnt einen leeren Namen bei der Registrierung ab", async () => {
       const response = await request(app).post("/api/auth/register").send({
         name: "",
         email: `test${Date.now()}@example.com`,
@@ -218,7 +216,7 @@ describe("Validation Tests", () => {
       expect(response.statusCode).toBe(400);
     });
 
-    test("rejette un nom manquant lors de l'inscription", async () => {
+    test("lehnt einen fehlenden Namen bei der Registrierung ab", async () => {
       const response = await request(app).post("/api/auth/register").send({
         email: `test${Date.now()}@example.com`,
         password: "password123",
@@ -229,7 +227,7 @@ describe("Validation Tests", () => {
   });
 
   describe("Profile Validation", () => {
-    test("rejette un email invalide lors de la mise à jour du profil", async () => {
+    test("lehnt eine ungültige E-Mail bei der Profilaktualisierung ab", async () => {
       const response = await request(app)
         .put("/api/auth/profile")
         .set("Authorization", `Bearer ${token}`)
@@ -242,7 +240,7 @@ describe("Validation Tests", () => {
       expect(response.body.error).toContain("E-Mail");
     });
 
-    test("rejette une hauteur négative dans le profil", async () => {
+    test("lehnt eine negative Größe im Profil ab", async () => {
       const response = await request(app)
         .put("/api/auth/profile")
         .set("Authorization", `Bearer ${token}`)
